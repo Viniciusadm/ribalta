@@ -336,6 +336,10 @@ pub struct IconElement {
 pub struct Meta {
     pub title: Option<String>,
     pub author: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub date: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub description: Option<String>,
     pub page: PageSize,
     #[serde(skip_serializing_if = "Mode::is_default")]
     pub mode: Mode,

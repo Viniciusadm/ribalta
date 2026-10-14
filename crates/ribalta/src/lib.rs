@@ -120,7 +120,7 @@ fn compile_inner(prelude: &str, source: &str, options: CompileOptions) -> Compil
     let (page, mode, random) = (lowerer.page, lowerer.mode, lowerer.uses_random);
     let document = Document {
         version: LANGUAGE_VERSION,
-        meta: Meta { title: preamble.title.clone(), author: preamble.author.clone(), page, mode, random },
+        meta: Meta { title: preamble.title.clone(), author: preamble.author.clone(), date: preamble.date.clone(), description: preamble.description.clone(), page, mode, random },
         theme,
         state,
         externs: std::mem::take(&mut lowerer.externs),
@@ -146,7 +146,7 @@ fn check_prelude_inner(prelude: &str) -> Vec<Diagnostic> {
     let lines = lines_of(prelude);
     let (preamble_lines, page_sources) = document::split(&lines);
     let preamble = document::parse_preamble(&preamble_lines, &mut diags);
-    for (name, value) in [("title", &preamble.title), ("author", &preamble.author)] {
+    for (name, value) in [("title", &preamble.title), ("author", &preamble.author), ("date", &preamble.date), ("description", &preamble.description)] {
         if value.is_some()
             && let Some(line) = preamble_lines.iter().find(|line| line.trimmed().starts_with(&format!("@{name}"))) {
                 diags.warning("R520", line.full_span(), tr(format!("`@{name}` no tema base é ignorado; defina-o em cada documento"), format!("`@{name}` in the base theme is ignored; set it in each document")));

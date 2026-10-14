@@ -9,7 +9,7 @@ Field names are camelCase. Optional fields are left out when empty. Colors are h
 | Field | Meaning |
 | --- | --- |
 | `version` | Language version the source was written for. |
-| `meta` | `title`, `author`, `page` (the default size `{width, height}`, `height` `null` for automatic); for `@mode game`, `mode: "game"` (see [Behavior](#behavior)); `random: true` when some action draws with `random` or `pick`. |
+| `meta` | `title`, `author`, `date` (from `@date`, `YYYY-MM-DD`) and `description` (from `@description`), both omitted when absent, `page` (the default size `{width, height}`, `height` `null` for automatic); for `@mode game`, `mode: "game"` (see [Behavior](#behavior)); `random: true` when some action draws with `random` or `pick`. |
 | `theme` | Colors, fonts, text styles and every default the renderer needs (see [Theme](#theme)). |
 | `state` | Global variables with their initial values: `bool`, `number`, `string`, a list of strings (a set: no repeated items, in insertion order) or, only for `externs`, a list of records (objects whose fields are `bool`, `number` or `string`; every record has the fields and field types of the first). |
 | `icons` | Drawing of every icon the document uses, by name (see the `icon` block). |

@@ -7,7 +7,7 @@ import { snippetsFor } from "./snippets";
 
 const attributeNames = ["color", "bg", "image", "font", "size", "weight", "italic", "uppercase", "align", "valign", "pad", "gap", "radius", "border", "shadow", "w", "h", "x", "y", "opacity", "leading", "tracking", "step", "fit", "widths", "cols", "type", "header", "footer", "overlay", "cover", "enter", "if", "click", "data", "label", "series", "columns", "hidden", "next", "steps", "transition", "on-enter", "nav", "width", "height"];
 
-const directives: Completion[] = ["title", "author", "theme", "version", "page", "color", "font", "style", "component", "let", "data", "state", "extern", "transition", "mode", "persist", "scorm", "header", "footer", "overlay", "end"].map(
+const directives: Completion[] = ["title", "author", "date", "description", "theme", "version", "page", "color", "font", "style", "component", "let", "data", "state", "extern", "transition", "mode", "persist", "scorm", "header", "footer", "overlay", "end"].map(
   (label) => ({ label, type: "keyword" }),
 );
 

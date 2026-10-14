@@ -1205,6 +1205,18 @@ O item foi validado com um tipo que o compilador não conhece. Os tipos válidos
 
 **Como corrigir:** use `@mode default` (o padrão) ou `@mode game`.
 
+### R535 · Data inválida
+
+**Erro.** Mensagem: data inválida: `14/10/2026`.
+
+```ribalta
+@date 14/10/2026
+
+# Abertura
+```
+
+**Como corrigir:** escreva a data no formato `AAAA-MM-DD`, com um dia que exista no calendário, como `@date 2026-10-14`.
+
 ## F6xx: variáveis, expressões e estado
 
 ### R601 · Variável desconhecida
