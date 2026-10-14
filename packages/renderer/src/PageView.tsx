@@ -2,6 +2,7 @@ import { memo, useEffect, useMemo, useRef, useState, type CSSProperties, type Re
 import type { Action, Document, ImageSource, Page, Paint, Scalar } from "@ribaltalang/compiler";
 import { useResolveSource } from "./assets";
 import { Blocks, IconsContext, ThemeContext } from "./Blocks";
+import { scrollToAnchor } from "./anchors";
 import { columnFlow, elementVars, solidColor, visualCss } from "./css";
 import { InteractionContext } from "./interaction";
 import { MotionStyles } from "./motion";
@@ -21,9 +22,14 @@ export interface PageViewProps {
   state?: Record<string, Scalar>;
   elapsed?: number;
   onAction?: (actions: Action[]) => void;
+  anchor?: string;
 }
 
-export const PageView = memo(function PageView({ doc, page, step = Number.POSITIVE_INFINITY, state, elapsed = 0, onAction }: PageViewProps) {
+export const PageView = memo(function PageView({ doc, page, step = Number.POSITIVE_INFINITY, state, elapsed = 0, onAction, anchor }: PageViewProps) {
+  const root = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    if (anchor && root.current) scrollToAnchor(root.current, anchor);
+  }, [anchor, page]);
   const { theme } = doc;
   const fixed = page.height !== null;
   const resolve = useResolveSource();
@@ -72,7 +78,7 @@ export const PageView = memo(function PageView({ doc, page, step = Number.POSITI
         <InteractionContext.Provider value={interaction}>
           <StepContext.Provider value={step}>
             <MotionStyles motion={theme.motion} />
-            <div className="ribalta-page" data-page={page.id} style={style}>
+            <div ref={root} className="ribalta-page" data-page={page.id} style={style}>
               {banded ? (
                 <>
                   <div className="ribalta-band ribalta-header" style={{ minHeight: page.header ? bandHeight : 0 }}>

@@ -42,6 +42,7 @@ export interface Session {
   rng: number;
   elapsed: number;
   cues: Cue[];
+  anchor?: string;
 }
 
 export interface Cue {
@@ -74,7 +75,8 @@ function place(doc: Document, session: Session, index: number, step: number, res
   const steps = doc.pages[target]?.steps ?? 0;
   const globals = withoutLocals(doc, session.index, session.state);
   const state = { ...globals, ...(doc.pages[target]?.state ?? {}), ...(restored ?? {}) };
-  return { ...session, index: target, step: clamp(step, 0, steps), state, elapsed: 0 };
+  const { anchor: _anchor, ...rest } = session;
+  return { ...rest, index: target, step: clamp(step, 0, steps), state, elapsed: 0 };
 }
 
 function changeState(session: Session, action: Action): Session {
@@ -147,12 +149,19 @@ function linear(doc: Document, from: number, direction: -1 | 1) {
   return -1;
 }
 
+export function anchorPage(doc: Document, id: string) {
+  const index = doc.anchors?.[id];
+  return index === undefined || indexOf(doc, id) >= 0 ? -1 : index;
+}
+
 export function goTo(doc: Document, session: Session, target: string | number, step = 0): Session {
-  const index = typeof target === "number" ? target : indexOf(doc, target);
+  const pageIndex = typeof target === "number" ? target : indexOf(doc, target);
+  const anchorIndex = typeof target === "string" && pageIndex < 0 ? anchorPage(doc, target) : -1;
+  const index = pageIndex >= 0 ? pageIndex : anchorIndex;
   if (index < 0 || index >= doc.pages.length) return session;
   const entry: HistoryEntry = { index: session.index, step: session.step, locals: locals(doc, session.index, session.state) };
   const moved = arrive(doc, place(doc, session, index, step));
-  return { ...moved, history: [...session.history, entry] };
+  return { ...moved, history: [...session.history, entry], ...(anchorIndex >= 0 ? { anchor: target as string } : {}) };
 }
 
 export function back(doc: Document, session: Session): Session {

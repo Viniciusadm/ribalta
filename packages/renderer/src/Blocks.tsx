@@ -75,6 +75,7 @@ function ListItemView({ item }: { item: ListItem }) {
   return (
     <li
       data-line={item.line}
+      data-anchor={item.id}
       className={enterClass(itemStyle.enter, item.when !== undefined).trim() || undefined}
       style={{ ...visualCss(itemStyle, resolve), ...itemReveal, ...behaviorCss(item.variants, Boolean(itemClick), itemReveal, theme.motion) }}
       {...itemClickable}
@@ -115,21 +116,21 @@ function BlockView({ block }: { block: Block }) {
       const defaults = visualCss(theme.headings[block.level - 1] ?? {}, resolve);
       const Tag = `h${Math.min(block.level, 6)}` as "h1";
       return (
-        <Tag data-line={line} data-block={range} data-editable={block.source ? "heading" : undefined} data-source={sourceAttr(block.source)} className={`ribalta-heading${enter}`} style={{ ...defaults, ...base }} {...interactive}>
+        <Tag data-line={line} data-anchor={block.id} data-block={range} data-editable={block.source ? "heading" : undefined} data-source={sourceAttr(block.source)} className={`ribalta-heading${enter}`} style={{ ...defaults, ...base }} {...interactive}>
           <Inlines nodes={block.content} />
         </Tag>
       );
     }
     case "paragraph":
       return (
-        <p data-line={line} data-block={range} data-editable={block.source ? "paragraph" : undefined} data-source={sourceAttr(block.source)} className={`ribalta-paragraph${enter}`} style={base} {...interactive}>
+        <p data-line={line} data-anchor={block.id} data-block={range} data-editable={block.source ? "paragraph" : undefined} data-source={sourceAttr(block.source)} className={`ribalta-paragraph${enter}`} style={base} {...interactive}>
           <Inlines nodes={block.content} />
         </p>
       );
     case "list": {
       const Tag = block.ordered ? "ol" : "ul";
       return (
-        <Tag data-line={line} data-block={range} className={`ribalta-list${enter}`} start={block.ordered ? block.start : undefined} style={base} {...interactive}>
+        <Tag data-line={line} data-anchor={block.id} data-block={range} className={`ribalta-list${enter}`} start={block.ordered ? block.start : undefined} style={base} {...interactive}>
           {block.items.map((item, index) => (
             <ListItemView key={index} item={item} />
           ))}
@@ -138,14 +139,14 @@ function BlockView({ block }: { block: Block }) {
     }
     case "quote":
       return (
-        <blockquote data-line={line} data-block={range} className={`ribalta-quote${enter}`} style={base} {...interactive}>
+        <blockquote data-line={line} data-anchor={block.id} data-block={range} className={`ribalta-quote${enter}`} style={base} {...interactive}>
           <Blocks blocks={block.children} />
         </blockquote>
       );
     case "code": {
       const { syntax } = theme.elements.code;
       return (
-        <pre data-line={line} data-block={range} className="ribalta-code" style={base}>
+        <pre data-line={line} data-anchor={block.id} data-block={range} className="ribalta-code" style={base}>
           {block.lines.map((tokens, index) => (
             <div key={index}>
               {tokens.length
@@ -162,7 +163,7 @@ function BlockView({ block }: { block: Block }) {
     }
     case "table":
       return (
-        <table data-line={line} data-block={range} className={`ribalta-table${enter}`} style={base} {...interactive}>
+        <table data-line={line} data-anchor={block.id} data-block={range} className={`ribalta-table${enter}`} style={base} {...interactive}>
           <thead>
             <tr>
               {block.header.map((cell, index) => (
@@ -188,7 +189,7 @@ function BlockView({ block }: { block: Block }) {
     case "image":
       return (
         <img
-          data-line={line}
+          data-line={line} data-anchor={block.id}
           data-block={range}
           className={`ribalta-image${enter}`}
           src={resolve(block.src)}
@@ -202,7 +203,7 @@ function BlockView({ block }: { block: Block }) {
     case "layout":
       return (
         <div
-          data-line={line}
+          data-line={line} data-anchor={block.id}
           data-block={range}
           className={`ribalta-layout ribalta-${block.layout}${enter}`}
           style={{ ...layoutCss(block.layout, style, block.cols, block.wrap, theme.layout), ...base }}
@@ -224,7 +225,7 @@ function BlockView({ block }: { block: Block }) {
       );
     case "chart":
       return (
-        <div data-line={line} data-block={range} className={`ribalta-chart${enter}`} style={{ width: "100%", ...base }} {...interactive}>
+        <div data-line={line} data-anchor={block.id} data-block={range} className={`ribalta-chart${enter}`} style={{ width: "100%", ...base }} {...interactive}>
           <Chart block={block} />
         </div>
       );
@@ -234,7 +235,7 @@ function BlockView({ block }: { block: Block }) {
       return (
         <IconSvg
           node={iconNode(elements)}
-          data-line={line}
+          data-line={line} data-anchor={block.id}
           data-block={range}
           className={`ribalta-icon${enter}`}
           size={style.size ?? theme.elements.icon.size}
@@ -246,9 +247,9 @@ function BlockView({ block }: { block: Block }) {
       );
     }
     case "spacer":
-      return <div data-line={line} data-block={range} style={{ flex: `0 0 ${block.size}px` }} />;
+      return <div data-line={line} data-anchor={block.id} data-block={range} style={{ flex: `0 0 ${block.size}px` }} />;
     case "divider":
-      return <hr data-line={line} data-block={range} className={`ribalta-divider${enter}`} style={base} />;
+      return <hr data-line={line} data-anchor={block.id} data-block={range} className={`ribalta-divider${enter}`} style={base} />;
     case "sound":
       return null;
     case "input": {
@@ -256,7 +257,7 @@ function BlockView({ block }: { block: Block }) {
       const write = (raw: string) => run?.([{ type: "set", name: block.name, value: { op: "lit", value: block.numeric ? Number(raw) || 0 : raw } }]);
       return (
         <input
-          data-line={line}
+          data-line={line} data-anchor={block.id}
           data-block={range}
           data-interactive=""
           data-submit={block.onSubmit?.length ? "" : undefined}

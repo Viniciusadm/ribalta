@@ -48,6 +48,11 @@
       "types": "./dist/StaticPage.d.ts",
       "default": "./dist/StaticPage.js"
     },
+    "./anchors": {
+      "source": "./src/anchors.ts",
+      "types": "./dist/anchors.d.ts",
+      "default": "./dist/anchors.js"
+    },
     "./assets": {
       "source": "./src/assets.ts",
       "types": "./dist/assets.d.ts",
@@ -108,6 +113,7 @@
       "PageView": "src/PageView.tsx",
       "PrintPages": "src/PrintPages.tsx",
       "StaticPage": "src/StaticPage.tsx",
+      "anchors": "src/anchors.ts",
       "assets": "src/assets.ts",
       "css": "src/css.ts",
       "expr": "src/expr.ts",
