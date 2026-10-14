@@ -1,6 +1,6 @@
 {
   "name": "@ribaltalang/player",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "description": "Headless runtime for Ribalta documents: page navigation, steps, state actions, timers, keys, sounds, persistence, SCORM and host values (@extern).",
   "keywords": [
     "ribalta",
@@ -97,8 +97,8 @@
     "target": "es2022"
   },
   "dependencies": {
-    "@ribaltalang/compiler": "^0.3.0",
-    "@ribaltalang/renderer": "^0.3.0"
+    "@ribaltalang/compiler": "^0.4.0",
+    "@ribaltalang/renderer": "^0.4.0"
   },
   "peerDependencies": {
     "react": "^18.3.0 || ^19.0.0"

@@ -1,6 +1,6 @@
 {
   "name": "@ribaltalang/compiler",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "description": "Ribalta compiler for the browser: compiles Ribalta source into the JSON IR with localized diagnostics (WebAssembly).",
   "keywords": [
     "ribalta",
