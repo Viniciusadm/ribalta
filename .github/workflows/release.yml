@@ -1,0 +1,36 @@
+name: Release
+
+on:
+  push:
+    tags: ["v*"]
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@1.94
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+      - run: cargo build --release --locked -p ribalta-cli --target x86_64-unknown-linux-gnu
+      - name: Check lesson examples with the release binary
+        run: |
+          for example in docs/llm/lesson-examples/*.ribalta; do
+            target/x86_64-unknown-linux-gnu/release/ribalta check "$example" --profile lesson
+          done
+      - run: node scripts/lesson-guide.mjs
+      - name: Prepare assets
+        run: |
+          mkdir -p release-assets
+          cp target/x86_64-unknown-linux-gnu/release/ribalta release-assets/ribalta-x86_64-linux
+          cp dist/lesson-guide.md release-assets/lesson-guide.md
+      - uses: softprops/action-gh-release@v2.3.2
+        with:
+          files: |
+            release-assets/ribalta-x86_64-linux
+            release-assets/lesson-guide.md
+          generate_release_notes: true

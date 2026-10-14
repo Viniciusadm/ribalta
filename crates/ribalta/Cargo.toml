@@ -1,6 +1,6 @@
 [package]
 name = "ribalta"
-version = "0.2.0"
+version = "0.3.0"
 description = "Compiler for Ribalta, a text language for themed visuals: source in, JSON IR and diagnostics out"
 readme = "README.md"
 keywords = ["ribalta", "visual", "documents", "compiler", "dsl"]

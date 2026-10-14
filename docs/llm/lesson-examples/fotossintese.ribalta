@@ -1,0 +1,50 @@
+@title Fotossíntese
+
+# Fotossíntese {#fotossintese}
+
+A fotossíntese converte energia luminosa em energia química, armazenada em moléculas de glicose. {#definicao}
+
+Ela acontece nos **cloroplastos**, organelas das células vegetais e das algas. {#onde-ocorre}
+
+## Equação geral {#equacao-geral}
+
+6 CO2 + 6 H2O + luz -> C6H12O6 + 6 O2 {#equacao}
+
+| Entra | Sai |
+| --- | --- |
+| Gás carbônico (CO2) | Glicose (C6H12O6) |
+| Água (H2O) | Oxigênio (O2) |
+| Luz | |
+
+--- {#fase-clara-pagina}
+
+# Fase clara {#fase-clara}
+
+A fase clara acontece nos **tilacoides** e depende diretamente da luz. {#fase-clara-local}
+
+- Clorofila absorve luz {#clorofila}
+- A água é quebrada e libera oxigênio {#fotolise}
+- Produz ATP e NADPH {#atp-nadph}
+
+> O oxigênio liberado pelas plantas vem da água, não do gás carbônico.
+
+--- {#fase-escura-pagina}
+
+# Fase escura {#fase-escura}
+
+A fase escura, ou ciclo de Calvin, acontece no **estroma** e usa o ATP e o NADPH da fase clara. {#ciclo-de-calvin}
+
+::: steps
+- O CO2 é fixado em moléculas orgânicas {#fixacao}
+- ATP e NADPH fornecem energia e poder redutor {#reducao}
+- A glicose é formada {#glicose}
+:::
+
+--- {#resumo-pagina}
+
+# Resumo {#resumo}
+
+::: box {.card}
+## Para lembrar {#para-lembrar}
+Luz, água e CO2 entram; glicose e oxigênio saem. {#balanco}
+:::
