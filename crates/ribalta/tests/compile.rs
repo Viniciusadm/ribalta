@@ -863,3 +863,26 @@ fn profile_is_read_from_the_options_json() {
     let value: Value = serde_json::from_str(&json).unwrap();
     assert!(value["diagnostics"].as_array().unwrap().is_empty());
 }
+
+#[test]
+fn lesson_profile_catches_external_images_from_styles_and_classes() {
+    assert!(lesson_codes("@style foto {image=https://a.com/b.png}\n\n# Oi {.foto}").contains(&"R212"));
+    assert!(lesson_codes("@style foto {image=https://a.com/b.png}\n\n# Oi").contains(&"R212"));
+    assert!(lesson_codes("# Oi {image=https://a.com/b.png}").contains(&"R212"));
+    assert!(lesson_codes("--- {image=https://a.com/b.png}\n# Oi").contains(&"R212"));
+}
+
+#[test]
+fn lesson_profile_catches_external_images_from_the_base_theme() {
+    let options = ribalta::CompileOptions { profile: ribalta::Profile::Lesson, ..Default::default() };
+    let compilation = ribalta::compile_with_options("@style foto {image=https://a.com/b.png}", "# Oi {.foto}", ribalta::Locale::Pt, options);
+    assert!(codes(&compilation).contains(&"R212"), "{:?}", compilation.diagnostics);
+}
+
+#[test]
+fn unknown_profile_keeps_the_other_options_and_reports_r213() {
+    let json = ribalta::compile_with_options_to_json("", "# Oi", ribalta::Locale::Pt, "{\"page\":{\"width\":800,\"height\":null},\"profile\":\"aula\"}");
+    let value: Value = serde_json::from_str(&json).unwrap();
+    assert_eq!(value["diagnostics"][0]["code"], "R213");
+    assert_eq!(value["document"]["pages"][0]["width"], 800);
+}

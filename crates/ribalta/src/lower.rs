@@ -1810,9 +1810,6 @@ impl<'d> Lowerer<'d> {
                     Ok(())
                 }
             };
-            if key == "image" && outcome.is_ok() && matches!(resolved.style.bg_image, Some(ImageSource::Url { .. })) {
-                self.forbid_in_lesson("external images", span);
-            }
             if let Err(invalid) = outcome {
                 self.report(span, invalid);
             }
@@ -2415,6 +2412,27 @@ impl<'d> Lowerer<'d> {
         }
         let resolved = self.resolve(directive.attrs.as_ref(), Kind::Text);
         Some(self.make(BlockKind::Icon { name: value.value.clone() }, resolved, directive.line))
+    }
+
+    pub fn forbid_external_backgrounds_in_lesson(&mut self, preamble: &Preamble, pages: &[Page]) {
+        if self.profile != Profile::Lesson {
+            return;
+        }
+        for (_, attrs) in &preamble.styles {
+            for pair in attrs.pairs.iter().filter(|pair| pair.key.value == "image") {
+                if let Some(value) = pair.value.as_ref().filter(|value| is_external_url(&value.value)) {
+                    self.forbid_in_lesson("external images", value.span);
+                }
+            }
+        }
+        let mut lines = Vec::new();
+        for page in pages {
+            let document = serde_json::to_value(page).unwrap_or_default();
+            collect_external_backgrounds(&document, page.line, &mut lines);
+        }
+        for line in lines {
+            self.forbid_in_lesson("external images", Span::new(line, 0, 1));
+        }
     }
 
     pub fn forbid_persist_in_lesson(&mut self, preamble: &Preamble) {
@@ -3167,5 +3185,25 @@ fn shortcut(value: &str) -> Option<String> {
     match (chars.next(), chars.next()) {
         (Some(char), None) if char.is_ascii_alphanumeric() => Some(char.to_ascii_lowercase().to_string()),
         _ => None,
+    }
+}
+
+fn is_external_url(value: &str) -> bool {
+    let lower = value.trim().to_ascii_lowercase();
+    lower.starts_with("http://") || lower.starts_with("https://")
+}
+
+fn collect_external_backgrounds(value: &serde_json::Value, line: usize, lines: &mut Vec<usize>) {
+    match value {
+        serde_json::Value::Array(items) => items.iter().for_each(|item| collect_external_backgrounds(item, line, lines)),
+        serde_json::Value::Object(map) => {
+            let line = map.get("line").and_then(serde_json::Value::as_u64).map_or(line, |found| found as usize);
+            let external = map.get("bgImage").is_some_and(|image| image["kind"] == "url");
+            if external && !lines.contains(&line) {
+                lines.push(line);
+            }
+            map.values().for_each(|child| collect_external_backgrounds(child, line, lines));
+        }
+        _ => {}
     }
 }

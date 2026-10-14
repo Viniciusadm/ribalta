@@ -81,16 +81,6 @@ pub enum Profile {
     Lesson,
 }
 
-impl Profile {
-    pub fn from_name(name: &str) -> Option<Self> {
-        match name {
-            "default" => Some(Self::Default),
-            "lesson" => Some(Self::Lesson),
-            _ => None,
-        }
-    }
-}
-
 pub fn parse_page_size(text: &str) -> Option<PageSize> {
     lower::page_size(text, PageSize::DEFAULT)
 }
@@ -123,6 +113,7 @@ fn compile_inner(prelude: &str, source: &str, options: CompileOptions) -> Compil
         pages.push(lowerer.page(index, source));
     }
     lowerer.check_regions();
+    lowerer.forbid_external_backgrounds_in_lesson(&preamble, &pages);
     lowerer.finish(&pages);
     let theme = lowerer.theme_ir();
     let state = lowerer.document_state();
@@ -183,8 +174,29 @@ pub fn compile_localized_to_json(prelude: &str, source: &str, locale: Locale) ->
 }
 
 pub fn compile_with_options_to_json(prelude: &str, source: &str, locale: Locale, options_json: &str) -> String {
-    let options = serde_json::from_str(options_json).unwrap_or_default();
-    serde_json::to_string(&compile_with_options(prelude, source, locale, options)).expect("compilation output is always serializable")
+    let raw: serde_json::Value = serde_json::from_str(options_json).unwrap_or_default();
+    let page = raw.get("page").and_then(|page| serde_json::from_value(page.clone()).ok()).unwrap_or_default();
+    let requested = raw.get("profile").and_then(serde_json::Value::as_str);
+    let profile = match requested {
+        Some("lesson") => Profile::Lesson,
+        _ => Profile::Default,
+    };
+    let mut compilation = compile_with_options(prelude, source, locale, CompileOptions { page, profile });
+    if let Some(name) = requested.filter(|name| !matches!(*name, "default" | "lesson")) {
+        compilation.diagnostics.insert(
+            0,
+            Diagnostic {
+                severity: Severity::Error,
+                code: "R213",
+                message: text::with_locale(locale, || tr(format!("perfil desconhecido: `{name}`"), format!("unknown profile: `{name}`"))),
+                line: 1,
+                column: 1,
+                end_column: 1,
+                hint: Some(text::with_locale(locale, || tr("Use `default` ou `lesson`", "Use `default` or `lesson`"))),
+            },
+        );
+    }
+    serde_json::to_string(&compilation).expect("compilation output is always serializable")
 }
 
 pub fn check_prelude_to_json(prelude: &str, locale: Locale) -> String {

@@ -420,6 +420,14 @@ Uma aula é só texto. O perfil recusa imagens de endereços `http://` ou `https
 
 **Como corrigir:** guarde a imagem no programa em que você escreve (`asset:`) ou remova o recurso.
 
+### R213 · Perfil desconhecido
+
+**Erro.** Só aparece quando o programa que compila passa um perfil inexistente nas opções. Mensagem: perfil desconhecido: `aula`.
+
+As outras opções, como `page`, continuam valendo e o documento é compilado sem perfil.
+
+**Como corrigir:** use `"profile": "lesson"` ou omita o campo.
+
 ### R301 · Valor inválido
 
 **Erro.** Mensagem: depende do atributo, por exemplo tamanho inválido: `gigante` ou cor desconhecida: `corall`.

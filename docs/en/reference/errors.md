@@ -420,6 +420,14 @@ A lesson is text only. The profile rejects images from `http://` or `https://` a
 
 **How to fix:** store the image in the program you write in (`asset:`) or remove the feature.
 
+### R213 · Unknown profile
+
+**Error.** Only appears when the program that compiles passes a nonexistent profile in the options. Message: unknown profile: `class`.
+
+The other options, such as `page`, still apply and the document is compiled without a profile.
+
+**How to fix:** use `"profile": "lesson"` or omit the field.
+
 ### R301 · Invalid value
 
 **Error.** Message: depends on the attribute, for example invalid size: `huge` or unknown color: `corall`.
