@@ -95,7 +95,7 @@ Atributos ficam entre chaves e configuram o bloco, o trecho ou a página em que 
 | Forma | Exemplo | Significado |
 | --- | --- | --- |
 | `.estilo` | `{.card}` | Aplica um estilo embutido, um `@style` ou um token de cor (`{.coral}` equivale a `{color=coral}`). |
-| `#id` | `--- {#resumo}` | Id da página. Só tem efeito no separador. |
+| `#id` | `--- {#resumo}` | Id da página no separador, ou âncora de bloco no fim da linha de abertura (`Texto. {#fase-clara}`). Links `[ver](#fase-clara)` e `go #fase-clara` levam até ela. O id de um bloco não pode se repetir nem coincidir com o de uma página. |
 | `chave=valor` | `{size=5xl}` | Valor sem espaços. |
 | `chave="valor"` | `{pad="sm lg"}` | Valor com espaços, entre aspas duplas ou simples. Use `\"` para uma aspa dentro do valor. |
 | `chave` | `{italic}` | Liga um atributo booleano. Para desligar: `italic=false`. |

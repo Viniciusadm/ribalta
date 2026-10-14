@@ -95,7 +95,7 @@ Attributes go in braces and configure the block, span or page they belong to.
 | Form | Example | Meaning |
 | --- | --- | --- |
 | `.style` | `{.card}` | Applies a built-in style, a `@style` or a color token (`{.coral}` is the same as `{color=coral}`). |
-| `#id` | `--- {#summary}` | Page id. Only works on the separator. |
+| `#id` | `--- {#summary}` | Page id on the separator, or a block anchor at the end of the block's opening line (`Text. {#light-phase}`). Links such as `[see](#light-phase)` and `go #light-phase` lead to it. A block id cannot repeat or match a page id. |
 | `key=value` | `{size=5xl}` | Value without spaces. |
 | `key="value"` | `{pad="sm lg"}` | Value with spaces, in double or single quotes. Use `\"` for a quote inside the value. |
 | `key` | `{italic}` | Turns a boolean attribute on. To turn it off: `italic=false`. |

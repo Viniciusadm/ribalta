@@ -311,17 +311,17 @@ Text {@highlight}
 
 **How to fix:** use the right form, here `{.highlight}`. Attribute names start with a letter.
 
-### R205 · Id outside the page separator
+### R205 · Id outside a page or block
 
-**Warning.** Message: `#id` only works on the page separator (--- {#id}).
+**Warning.** Message: `#id` only works on the page separator and at the end of blocks.
 
-Ids identify pages, for links such as `[back](#opening)`. On other blocks, the id is ignored.
+Ids identify pages and blocks, for links such as `[back](#opening)`. On inline spans, the id is ignored.
 
 ```ribalta
-# Opening {#start}
+Text [highlight]{#start}
 ```
 
-**How to fix:** put the id on the page separator, as in `--- {#start}`.
+**How to fix:** put the id on the page separator, as in `--- {#start}`, or at the end of the block's line.
 
 ### R206 · Style that references itself
 
@@ -391,6 +391,20 @@ The key runs the element's `click` actions; without them, pressing the key chang
 ```
 
 **How to fix:** say what the key does with `click`: `[North]{click="$y = $y - 1" key=up}`.
+
+### R211 · Repeated block id
+
+**Error.** Message: another block already uses the id `#phase`, or the id `#phase` already belongs to a page.
+
+A block id (`{#phase}` at the end of the opening line) must lead to a single place. It cannot repeat or equal a page id.
+
+```ribalta
+First {#phase}
+
+Second {#phase}
+```
+
+**How to fix:** give each block a different id.
 
 ### R301 · Invalid value
 

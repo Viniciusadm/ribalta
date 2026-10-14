@@ -162,6 +162,7 @@ export interface SourceRange {
 export interface ListItem extends Behavior {
   content: Inline[];
   children: Block[];
+  id?: string;
   style: Style;
   step?: number;
   line: number;
@@ -195,7 +196,7 @@ export type BlockKind =
   | { type: "input"; name: string; numeric?: boolean; placeholder?: string; onSubmit?: Action[] }
   | { type: "sound"; name?: string; src: ImageSource; autoplay?: boolean; loop?: boolean; volume?: number };
 
-export type Block = BlockKind & Behavior & { style: Style; step?: number; line: number; endLine?: number; source?: SourceRange };
+export type Block = BlockKind & Behavior & { id?: string; style: Style; step?: number; line: number; endLine?: number; source?: SourceRange };
 
 export interface Scorm {
   score?: string;
@@ -264,6 +265,7 @@ export interface Document {
   icons?: Record<string, IconElement[]>;
   persist?: string[];
   scorm?: Scorm;
+  anchors?: Record<string, number>;
   pages: Page[];
 }
 

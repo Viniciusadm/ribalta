@@ -308,6 +308,8 @@ pub struct Document {
     pub persist: Vec<String>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub scorm: Option<Scorm>,
+    #[serde(skip_serializing_if = "BTreeMap::is_empty")]
+    pub anchors: BTreeMap<String, usize>,
     pub pages: Vec<Page>,
 }
 
@@ -569,6 +571,8 @@ pub struct Page {
 pub struct Block {
     #[serde(flatten)]
     pub kind: BlockKind,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub id: Option<String>,
     pub style: Style,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub step: Option<u32>,
@@ -758,6 +762,8 @@ pub struct ChartScene {
 pub struct ListItem {
     pub content: Vec<Inline>,
     pub children: Vec<Block>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub id: Option<String>,
     pub style: Style,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub step: Option<u32>,

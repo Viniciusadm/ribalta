@@ -311,17 +311,17 @@ Texto {@destaque}
 
 **Como corrigir:** use a forma certa, aqui `{.destaque}`. Nomes de atributos começam com uma letra.
 
-### R205 · Id fora do separador de página
+### R205 · Id fora de página ou bloco
 
-**Aviso.** Mensagem: `#id` só tem efeito no separador de página (--- {#id}).
+**Aviso.** Mensagem: `#id` só tem efeito no separador de página e no fim de blocos.
 
-Ids identificam páginas, para links como `[voltar](#abertura)`. Em outros blocos, o id é ignorado.
+Ids identificam páginas e blocos, para links como `[voltar](#abertura)`. Em trechos dentro de uma linha, o id é ignorado.
 
 ```ribalta
-# Abertura {#inicio}
+Texto [destaque]{#inicio}
 ```
 
-**Como corrigir:** coloque o id no separador da página, como `--- {#inicio}`.
+**Como corrigir:** coloque o id no separador da página, como `--- {#inicio}`, ou no fim da linha do bloco.
 
 ### R206 · Estilo que referencia a si mesmo
 
@@ -391,6 +391,20 @@ A tecla aciona as ações de `click` do elemento; sem elas, apertar a tecla não
 ```
 
 **Como corrigir:** diga o que a tecla faz com `click`: `[Norte]{click="$y = $y - 1" key=up}`.
+
+### R211 · Id de bloco repetido
+
+**Erro.** Mensagem: já existe outro bloco com o id `#fase`, ou o id `#fase` já pertence a uma página.
+
+Um id de bloco (`{#fase}` no fim da linha de abertura) precisa levar a um único lugar. Ele não pode se repetir nem ser igual ao id de uma página.
+
+```ribalta
+Primeiro {#fase}
+
+Segundo {#fase}
+```
+
+**Como corrigir:** dê um id diferente a cada bloco.
 
 ### R301 · Valor inválido
 

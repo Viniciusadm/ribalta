@@ -115,6 +115,7 @@ fn compile_inner(prelude: &str, source: &str, options: CompileOptions) -> Compil
         icons: icons::used_by(&pages),
         persist: std::mem::take(&mut lowerer.persist),
         scorm: lowerer.scorm.take(),
+        anchors: lowerer.anchor_pages(),
         pages,
     };
     Compilation { document, diagnostics: diags.finish(source) }

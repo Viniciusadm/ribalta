@@ -766,3 +766,55 @@ fn invalid_page_sizes_are_reported() {
         assert_eq!(codes(&compilation), ["R515"], "{source}");
     }
 }
+
+#[test]
+fn block_anchors_are_emitted_on_blocks_and_collected_per_page() {
+    let value = clean("# Fotossíntese {#fotossintese}\n\nA fase clara acontece nos tilacoides. {#fase-clara}\n\n- Clorofila absorve luz {#clorofila}\n- Outro\n---\nSegunda {#segunda}");
+    let document = &value["document"];
+    assert_eq!(document["pages"][0]["children"][0]["id"], "fotossintese");
+    assert_eq!(document["pages"][0]["children"][1]["id"], "fase-clara");
+    assert_eq!(document["pages"][0]["children"][2]["items"][0]["id"], "clorofila");
+    assert!(document["pages"][0]["children"][2]["items"][1].get("id").is_none());
+    assert_eq!(document["anchors"], json!({ "fotossintese": 0, "fase-clara": 0, "clorofila": 0, "segunda": 1 }));
+}
+
+#[test]
+fn documents_without_anchors_do_not_emit_the_anchors_field() {
+    let value = clean("# Oi");
+    assert!(value["document"].get("anchors").is_none());
+    assert!(value["document"]["pages"][0]["children"][0].get("id").is_none());
+}
+
+#[test]
+fn repeated_block_anchor_is_an_error() {
+    let (_, compilation) = output("Um {#a}\n\nDois {#a}");
+    assert_eq!(codes(&compilation), vec!["R211"]);
+    assert_eq!(compilation.diagnostics[0].severity, Severity::Error);
+}
+
+#[test]
+fn block_anchor_equal_to_a_page_id_is_an_error() {
+    let (_, compilation) = output("--- {#a}\nUm\n--- {#b}\nDois {#a}");
+    assert_eq!(codes(&compilation), vec!["R211"]);
+}
+
+#[test]
+fn links_and_go_resolve_block_anchors() {
+    let (_, compilation) = output("Alvo {#a}\n---\n[x](#a)\n\n[ir]{click=\"go #a\"}");
+    assert!(compilation.diagnostics.is_empty(), "{:#?}", compilation.diagnostics);
+}
+
+#[test]
+fn unknown_link_target_still_reports_r701() {
+    let (_, compilation) = output("[x](#nada)");
+    assert_eq!(codes(&compilation), vec!["R701"]);
+}
+
+#[test]
+fn anchor_syntax_in_the_middle_of_a_line_stays_literal() {
+    let value = clean("Texto {#a} mais texto");
+    let block = &value["document"]["pages"][0]["children"][0];
+    assert!(block.get("id").is_none());
+    assert!(value["document"].get("anchors").is_none());
+    assert_eq!(block["content"][0]["value"], "Texto {#a} mais texto");
+}

@@ -196,6 +196,8 @@ pub struct Lowerer<'d> {
     max_step: u32,
     notes: Vec<String>,
     page_ids: HashSet<String>,
+    current_page: usize,
+    anchors: Vec<(String, usize, Span)>,
     header: Option<RegionSource>,
     footer: Option<RegionSource>,
     overlay: Option<RegionSource>,
@@ -301,6 +303,8 @@ impl<'d> Lowerer<'d> {
             max_step: 0,
             notes: Vec::new(),
             page_ids: HashSet::new(),
+            current_page: 0,
+            anchors: Vec::new(),
             header: None,
             footer: None,
             overlay: None,
@@ -722,6 +726,7 @@ impl<'d> Lowerer<'d> {
         self.sound_refs.clear();
         self.notes.clear();
         let attrs = source.separator.and_then(|line| separator_attrs(line, self.diags));
+        self.current_page = index;
         let mut resolved = self.resolve(attrs.as_ref(), Kind::Page);
         let (definitions, body) = split_definitions(&source.lines);
         self.frames.push(Frame::default());
@@ -1003,10 +1008,25 @@ impl<'d> Lowerer<'d> {
 
     pub fn finish(&mut self, pages: &[Page]) {
         let ids: Vec<&str> = pages.iter().map(|page| page.id.as_str()).collect();
+        let mut seen_anchors = HashSet::new();
+        for (anchor, _, span) in &self.anchors {
+            if ids.contains(&anchor.as_str()) {
+                self.diags
+                    .error("R211", *span, tr(format!("o id `#{anchor}` já pertence a uma página"), format!("the id `#{anchor}` already belongs to a page")))
+                    .hint(tr("Use um id diferente para o bloco", "Use a different id for the block"));
+            } else if !seen_anchors.insert(anchor.as_str()) {
+                self.diags
+                    .error("R211", *span, tr(format!("já existe outro bloco com o id `#{anchor}`"), format!("another block already uses the id `#{anchor}`")))
+                    .hint(tr("Use um id diferente para cada bloco", "Use a different id for each block"));
+            }
+        }
         let mut reached = HashSet::new();
         for (target, span, strict) in std::mem::take(&mut self.targets) {
             if ids.contains(&target.as_str()) {
                 reached.insert(target);
+                continue;
+            }
+            if seen_anchors.contains(target.as_str()) {
                 continue;
             }
             let message = (tr(format!("não existe página com o id `#{target}`"), format!("there is no page with the id `#{target}`")),);
@@ -1136,7 +1156,7 @@ impl<'d> Lowerer<'d> {
             }
         }
         let line = if source.from_prelude { 0 } else { source.def.keyword.line };
-        let mut block = Block { kind: BlockKind::Layout { layout: LayoutKind::Stack, cols: None, widths: None, wrap: false, children }, style, step: None, behavior: Behavior::default(), line, end_line: None, source: None };
+        let mut block = Block { kind: BlockKind::Layout { layout: LayoutKind::Stack, cols: None, widths: None, wrap: false, children }, id: None, style, step: None, behavior: Behavior::default(), line, end_line: None, source: None };
         if source.from_prelude {
             relocate(&mut block);
         }
@@ -1635,10 +1655,10 @@ impl<'d> Lowerer<'d> {
         }
         self.check_key(&resolved);
         if let Some(id) = &attrs.id {
-            if kind == Kind::Page {
+            if !matches!(kind, Kind::Span | Kind::Any) {
                 resolved.id = Some(id.clone());
             } else {
-                self.diags.warning("R205", id.span, tr("`#id` só tem efeito no separador de página (--- {#id})", "`#id` only works on the page separator (--- {#id})"));
+                self.diags.warning("R205", id.span, tr("`#id` só tem efeito no separador de página e no fim de blocos", "`#id` only works on the page separator and at the end of blocks"));
             }
         }
         resolved
@@ -1805,7 +1825,22 @@ impl<'d> Lowerer<'d> {
         if resolved.dropped {
             behavior.when = Some(dropped());
         }
-        Block { kind, style: resolved.style, step: resolved.step, behavior, line, end_line: None, source: None }
+        let id = if resolved.dropped { None } else { self.register_anchor(resolved.id.as_ref()) };
+        Block { kind, id, style: resolved.style, step: resolved.step, behavior, line, end_line: None, source: None }
+    }
+
+    fn register_anchor(&mut self, id: Option<&Text>) -> Option<String> {
+        let id = id?;
+        self.anchors.push((id.value.clone(), self.current_page, id.span));
+        Some(id.value.clone())
+    }
+
+    pub fn anchor_pages(&self) -> BTreeMap<String, usize> {
+        let mut pages = BTreeMap::new();
+        for (id, page, _) in &self.anchors {
+            pages.entry(id.clone()).or_insert(*page);
+        }
+        pages
     }
 
     fn source_of(&self, lines: &[Text]) -> Option<SourceRange> {
@@ -2175,9 +2210,10 @@ impl<'d> Lowerer<'d> {
             let (content, changed) = self.inline_lines(&item.lines);
             let children = item.children.iter().map(|nested| self.list(nested)).collect();
             let source = if changed { None } else { self.source_of(&item.lines) };
-            items.push(ListItem { content, children, style: resolved.style, step: resolved.step, behavior: resolved.behavior, line: item.line, source });
+            let id = self.register_anchor(resolved.id.as_ref());
+            items.push(ListItem { content, children, id, style: resolved.style, step: resolved.step, behavior: resolved.behavior, line: item.line, source });
         }
-        Block { kind: BlockKind::List { ordered: list.ordered, start: list.start, items }, style: Style::default(), step: None, behavior: Behavior::default(), line: list.line, end_line: None, source: None }
+        Block { kind: BlockKind::List { ordered: list.ordered, start: list.start, items }, id: None, style: Style::default(), step: None, behavior: Behavior::default(), line: list.line, end_line: None, source: None }
     }
 
     fn table(&mut self, table: &Table) -> Block {
@@ -2185,6 +2221,7 @@ impl<'d> Lowerer<'d> {
         let rows = table.rows.iter().map(|row| row.iter().map(|cell| self.inline_lines(std::slice::from_ref(cell)).0).collect()).collect();
         Block {
             kind: BlockKind::Table { header, aligns: table.aligns.clone(), rows },
+            id: None,
             style: Style::default(),
             step: None,
             behavior: Behavior::default(),

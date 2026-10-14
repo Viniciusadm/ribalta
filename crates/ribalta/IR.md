@@ -16,6 +16,7 @@ Field names are camelCase. Optional fields are left out when empty. Colors are h
 | `externs` | Names of global state variables that the host sets (`@extern`). Their entries in `state` are preview values: a host replaces them whenever it wants, actions never change them, and they are not stored in shared addresses or persisted state. |
 | `persist` | Names of global state variables to keep on the viewer's device between visits. A viewer may store them (by address and title) whenever they change and use them instead of the initial values when a new session starts; a session restored from saved state such as a URL ignores them. |
 | `scorm` | Present when the document has `@scorm`: `score` (name of a numeric global state variable, optional), `complete` (page ids that complete the course, may be empty), `max` (highest score, default `100`) and `pass` (passing score, optional). A viewer packaged for an LMS reports the score clamped to `0..max` whenever it changes, and completion ("passed"/"failed" against `pass`, or "completed") once one of the `complete` pages is reached; without `scorm`, completion is the last page. |
+| `anchors` | Present when some block has an `id`: maps each block id to the index of the page that holds it. Ids are unique across blocks and page ids. |
 | `pages` | The pages in order. |
 
 ## Page
@@ -42,7 +43,7 @@ Field names are camelCase. Optional fields are left out when empty. Colors are h
 
 ## Blocks
 
-Every block has `type`, `style`, `line` and may have `step`, `when`, `variants` and `click` (see [Behavior](#behavior)). `endLine` and `source` are editor metadata.
+Every block has `type`, `style`, `line` and may have `id` (anchor a link can scroll to; list items can have one too), `step`, `when`, `variants` and `click` (see [Behavior](#behavior)). `endLine` and `source` are editor metadata.
 
 | `type` | Fields | Drawing |
 | --- | --- | --- |
