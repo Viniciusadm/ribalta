@@ -172,6 +172,7 @@ fun BlockView(block: Block, env: TextEnv, absolute: Boolean = false) {
     }
     val shrinkable = block.kind is BlockKind.Layout || block.kind is BlockKind.Image
     val box = Modifier
+        .anchored(block.id)
         .then(if (shrinkable) Modifier.layoutId(Shrinkable) else Modifier)
         .reveal(block.step, style.enter, theme.motion, interaction.step)
         .entrance(enter)
@@ -340,7 +341,7 @@ private fun ListItemView(item: ListItem, env: TextEnv, marker: String, markerPad
                 }
             }
         },
-        modifier = Modifier.reveal(item.step, style.enter, render.theme.motion, interaction.step),
+        modifier = Modifier.anchored(item.id).reveal(item.step, style.enter, render.theme.motion, interaction.step),
     ) { measurables, constraints ->
         val markerPlaceable = measurables[0].measure(Constraints())
         val body = measurables[1].measure(constraints.copy(minHeight = 0))
