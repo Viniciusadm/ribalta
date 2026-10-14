@@ -43,6 +43,7 @@ export interface Session {
   elapsed: number;
   cues: Cue[];
   anchor?: string;
+  anchorToken?: number;
 }
 
 export interface Cue {
@@ -75,8 +76,7 @@ function place(doc: Document, session: Session, index: number, step: number, res
   const steps = doc.pages[target]?.steps ?? 0;
   const globals = withoutLocals(doc, session.index, session.state);
   const state = { ...globals, ...(doc.pages[target]?.state ?? {}), ...(restored ?? {}) };
-  const { anchor: _anchor, ...rest } = session;
-  return { ...rest, index: target, step: clamp(step, 0, steps), state, elapsed: 0 };
+  return { ...session, anchor: undefined, index: target, step: clamp(step, 0, steps), state, elapsed: 0 };
 }
 
 function changeState(session: Session, action: Action): Session {
@@ -161,7 +161,7 @@ export function goTo(doc: Document, session: Session, target: string | number, s
   if (index < 0 || index >= doc.pages.length) return session;
   const entry: HistoryEntry = { index: session.index, step: session.step, locals: locals(doc, session.index, session.state) };
   const moved = arrive(doc, place(doc, session, index, step));
-  return { ...moved, history: [...session.history, entry], ...(anchorIndex >= 0 ? { anchor: target as string } : {}) };
+  return { ...moved, history: [...session.history, entry], ...(anchorIndex >= 0 ? { anchor: target as string, anchorToken: (session.anchorToken ?? 0) + 1 } : {}) };
 }
 
 export function back(doc: Document, session: Session): Session {

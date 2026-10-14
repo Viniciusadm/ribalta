@@ -1,3 +1,9 @@
+import type { Document } from "@ribaltalang/compiler";
+
+export function isAnchorTarget(doc: Document, target: string): boolean {
+  return doc.anchors?.[target] !== undefined && !doc.pages.some((page) => page.id === target);
+}
+
 export function findAnchor(root: ParentNode, id: string): Element | null {
   return root.querySelector(`[data-anchor="${CSS.escape(id)}"]`);
 }

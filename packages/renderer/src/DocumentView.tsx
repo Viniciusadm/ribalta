@@ -1,6 +1,6 @@
 import { useCallback, useRef } from "react";
 import type { Action, Document, Scalar } from "@ribaltalang/compiler";
-import { scrollToAnchor } from "./anchors";
+import { isAnchorTarget, scrollToAnchor } from "./anchors";
 import { PageView, ScaledPage } from "./PageView";
 
 export function DocumentView({
@@ -17,16 +17,13 @@ export function DocumentView({
   className?: string;
 }) {
   const root = useRef<HTMLDivElement>(null);
+  const scrollTo = useCallback((id: string) => Boolean(root.current) && scrollToAnchor(root.current!, id), []);
   const run = useCallback(
     (actions: Action[]) => {
-      const forwarded = actions.filter((action) => {
-        if (action.type !== "go" || !root.current) return true;
-        const isAnchor = doc.anchors?.[action.target] !== undefined && !doc.pages.some((page) => page.id === action.target);
-        return !(isAnchor && scrollToAnchor(root.current, action.target));
-      });
+      const forwarded = actions.filter((action) => !(action.type === "go" && isAnchorTarget(doc, action.target) && scrollTo(action.target)));
       if (forwarded.length) onAction?.(forwarded);
     },
-    [doc, onAction],
+    [doc, onAction, scrollTo],
   );
   return (
     <div ref={root} className={className} style={{ display: "flex", flexDirection: "column", gap }}>
@@ -34,7 +31,7 @@ export function DocumentView({
         .filter((page) => !page.hidden)
         .map((page, index) => (
           <ScaledPage key={`${page.id}-${index}`} width={page.width} height={page.height} fit="width">
-            <PageView doc={doc} page={page} state={state} onAction={run} />
+            <PageView doc={doc} page={page} state={state} onAction={onAction ? run : undefined} scrollTo={scrollTo} />
           </ScaledPage>
         ))}
     </div>

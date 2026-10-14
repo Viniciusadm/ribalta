@@ -30,7 +30,7 @@ function Today() {
 function InlineNode({ node }: { node: Inline }) {
   const step = useStep();
   const resolve = useResolveSource();
-  const { scope, run } = useInteraction();
+  const { scope, run, scrollTo } = useInteraction();
   const hover = useHover(node.type === "span" ? node.variants : undefined);
   const { motion } = useTheme();
   switch (node.type) {
@@ -64,7 +64,13 @@ function InlineNode({ node }: { node: Inline }) {
       return <code className="ribalta-inline-code">{node.value}</code>;
     case "link": {
       if (node.href.startsWith("#")) {
-        const onClick = clickHandler([{ type: "go", target: node.href.slice(1) }], run) ?? ((event: MouseEvent) => event.preventDefault());
+        const target = node.href.slice(1);
+        const onClick =
+          clickHandler([{ type: "go", target }], run) ??
+          ((event: MouseEvent) => {
+            event.preventDefault();
+            scrollTo?.(target);
+          });
         return (
           <a href={node.href} className="ribalta-link" onClick={onClick} data-interactive="">
             <Inlines nodes={node.children} />

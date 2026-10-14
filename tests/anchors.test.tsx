@@ -65,6 +65,16 @@ describe("block anchors", () => {
     expect(scrolled).toEqual([]);
   });
 
+  it("keeps interaction disabled without onAction while links still scroll", () => {
+    const interactive = compiler("@state name = \"\"\n\n[jump](#target)\n\n:: input {bind=$name}\n\nClick me {click=\"toggle $flag\"}\n\n# Title {#target}\n").document!;
+    const { container } = render(<DocumentView doc={interactive} />);
+    const input = container.querySelector("input");
+    expect(input!.disabled).toBe(true);
+    expect(container.querySelector("[data-interactive]:not(a):not(input)")).toBeNull();
+    fireEvent.click(container.querySelector("a.ribalta-link")!);
+    expect(scrolled).toEqual([container.querySelector('[data-anchor="target"]')]);
+  });
+
   it("scrolls a paged view to the requested anchor", () => {
     const { container, rerender } = render(<PageView doc={doc} page={doc.pages[1]!} />);
     expect(scrolled).toEqual([]);
@@ -74,6 +84,16 @@ describe("block anchors", () => {
 });
 
 describe("navigation to anchors", () => {
+  it("re-scrolls a paged view on repeated navigation to the same anchor", () => {
+    const first = goTo(doc, startSession(doc), "chlorophyll");
+    const { container, rerender } = render(<PageView doc={doc} page={doc.pages[first.index]!} anchor={first.anchor} anchorToken={first.anchorToken} />);
+    expect(scrolled).toHaveLength(1);
+    const second = goTo(doc, first, "chlorophyll");
+    expect(second.anchorToken).not.toBe(first.anchorToken);
+    rerender(<PageView doc={doc} page={doc.pages[second.index]!} anchor={second.anchor} anchorToken={second.anchorToken} />);
+    expect(scrolled).toEqual(Array(2).fill(container.querySelector('[data-anchor="chlorophyll"]')));
+  });
+
   it("go to an anchor moves to its page and records the anchor", () => {
     const session = goTo(doc, startSession(doc), "chlorophyll");
     expect(session.index).toBe(1);

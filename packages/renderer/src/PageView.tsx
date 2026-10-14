@@ -23,13 +23,15 @@ export interface PageViewProps {
   elapsed?: number;
   onAction?: (actions: Action[]) => void;
   anchor?: string;
+  anchorToken?: number;
+  scrollTo?: (id: string) => boolean;
 }
 
-export const PageView = memo(function PageView({ doc, page, step = Number.POSITIVE_INFINITY, state, elapsed = 0, onAction, anchor }: PageViewProps) {
+export const PageView = memo(function PageView({ doc, page, step = Number.POSITIVE_INFINITY, state, elapsed = 0, onAction, anchor, anchorToken, scrollTo }: PageViewProps) {
   const root = useRef<HTMLDivElement>(null);
   useEffect(() => {
     if (anchor && root.current) scrollToAnchor(root.current, anchor);
-  }, [anchor, page]);
+  }, [anchor, anchorToken, page]);
   const { theme } = doc;
   const fixed = page.height !== null;
   const resolve = useResolveSource();
@@ -37,8 +39,9 @@ export const PageView = memo(function PageView({ doc, page, step = Number.POSITI
     () => ({
       scope: { state: { ...doc.state, ...page.state, ...state }, step: Number.isFinite(step) ? step : page.steps, elapsed },
       run: onAction ?? null,
+      scrollTo,
     }),
-    [doc.state, page.state, page.steps, state, step, elapsed, onAction],
+    [doc.state, page.state, page.steps, state, step, elapsed, onAction, scrollTo],
   );
   const merged = { ...theme.page, ...page.style };
   const pad = merged.pad ?? [0, 0];

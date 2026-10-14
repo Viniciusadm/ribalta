@@ -189,7 +189,8 @@ function BlockView({ block }: { block: Block }) {
     case "image":
       return (
         <img
-          data-line={line} data-anchor={block.id}
+          data-line={line}
+          data-anchor={block.id}
           data-block={range}
           className={`ribalta-image${enter}`}
           src={resolve(block.src)}
@@ -203,7 +204,8 @@ function BlockView({ block }: { block: Block }) {
     case "layout":
       return (
         <div
-          data-line={line} data-anchor={block.id}
+          data-line={line}
+          data-anchor={block.id}
           data-block={range}
           className={`ribalta-layout ribalta-${block.layout}${enter}`}
           style={{ ...layoutCss(block.layout, style, block.cols, block.wrap, theme.layout), ...base }}
@@ -235,7 +237,8 @@ function BlockView({ block }: { block: Block }) {
       return (
         <IconSvg
           node={iconNode(elements)}
-          data-line={line} data-anchor={block.id}
+          data-line={line}
+          data-anchor={block.id}
           data-block={range}
           className={`ribalta-icon${enter}`}
           size={style.size ?? theme.elements.icon.size}
@@ -257,7 +260,8 @@ function BlockView({ block }: { block: Block }) {
       const write = (raw: string) => run?.([{ type: "set", name: block.name, value: { op: "lit", value: block.numeric ? Number(raw) || 0 : raw } }]);
       return (
         <input
-          data-line={line} data-anchor={block.id}
+          data-line={line}
+          data-anchor={block.id}
           data-block={range}
           data-interactive=""
           data-submit={block.onSubmit?.length ? "" : undefined}

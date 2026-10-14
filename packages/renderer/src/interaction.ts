@@ -6,6 +6,7 @@ import { timingCss } from "./motion";
 export interface Interaction {
   scope: Scope;
   run: ((actions: Action[]) => void) | null;
+  scrollTo?: (id: string) => boolean;
 }
 
 export const InteractionContext = createContext<Interaction>({ scope: { state: {}, step: Number.POSITIVE_INFINITY }, run: null });
