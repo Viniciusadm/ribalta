@@ -1,0 +1,32 @@
+---
+import Default from "@astrojs/starlight/components/PageTitle.astro";
+
+const { entry, lang } = Astro.locals.starlightRoute;
+const english = lang === "en";
+const base = import.meta.env.BASE_URL.replace(/\/$/, "");
+const slug = entry.id.replace(/^en\/?/, "") || "index";
+const markdownHref = `${base}/${slug}.md`;
+const llmsHref = `${base}/llms.txt`;
+const labels = english
+  ? { copy: "Copy as Markdown", copied: "Copied!", view: "View Markdown", llms: "llms.txt" }
+  : { copy: "Copiar Markdown (em inglês)", copied: "Copiado!", view: "Markdown para LLMs (em inglês)", llms: "llms.txt" };
+---
+
+<Default />
+<div class="page-actions not-content">
+  <button type="button" data-copy-markdown={markdownHref} data-copied={labels.copied}>{labels.copy}</button>
+  <a href={markdownHref}>{labels.view}</a>
+  <a href={llmsHref}>{labels.llms}</a>
+</div>
+
+<script>
+  for (const button of document.querySelectorAll<HTMLButtonElement>("[data-copy-markdown]")) {
+    button.addEventListener("click", async () => {
+      const response = await fetch(button.dataset["copyMarkdown"] ?? "");
+      await navigator.clipboard.writeText(await response.text());
+      const original = button.textContent;
+      button.textContent = button.dataset["copied"] ?? original;
+      setTimeout(() => (button.textContent = original), 1600);
+    });
+  }
+</script>

@@ -11,13 +11,13 @@ fn find(code: &str, lang: &str, text: &str) -> TokenKind {
 
 #[test]
 fn javascript_tokens_get_their_kinds() {
-    let code = "// soma\nconst total = add(1, 2.5e-3) + `x ${y}`;\nclass Deck extends Base {}";
+    let code = "// soma\nconst total = add(1, 2.5e-3) + `x ${y}`;\nclass Page extends Base {}";
     assert_eq!(find(code, "js", "// soma"), Comment);
     assert_eq!(find(code, "js", "const"), Keyword);
     assert_eq!(find(code, "js", "add"), Function);
     assert_eq!(find(code, "js", "2.5e-3"), Number);
     assert_eq!(find(code, "js", "`x ${y}`"), String);
-    assert_eq!(find(code, "js", "Deck"), Type);
+    assert_eq!(find(code, "js", "Page"), Type);
     assert_eq!(find(code, "js", "total"), Plain);
     assert_eq!(find(code, "js", "+"), Operator);
 }
@@ -41,9 +41,9 @@ fn languages_with_their_own_rules() {
     assert_eq!(find("fn f<'a>(x: &'a str) -> char { 'x' }", "rust", "'x'"), String);
     assert_eq!(find("echo $HOME # casa", "bash", "$HOME"), Variable);
     assert_eq!(find("SELECT id FROM users", "sql", "FROM"), Keyword);
-    assert_eq!(find("{\"name\": \"Folio\", \"ok\": true}", "json", "\"name\""), Property);
-    assert_eq!(find("{\"name\": \"Folio\", \"ok\": true}", "json", "\"Folio\""), String);
-    assert_eq!(find("title: Folio\nlist:\n  - one", "yaml", "title"), Property);
+    assert_eq!(find("{\"name\": \"Ribalta\", \"ok\": true}", "json", "\"name\""), Property);
+    assert_eq!(find("{\"name\": \"Ribalta\", \"ok\": true}", "json", "\"Ribalta\""), String);
+    assert_eq!(find("title: Ribalta\nlist:\n  - one", "yaml", "title"), Property);
     assert_eq!(find("#include <stdio.h>\nint main() {}", "c", "#include"), Keyword);
 }
 
@@ -65,7 +65,7 @@ fn markup_and_css() {
 
 #[test]
 fn unknown_languages_are_plain_text() {
-    let lines = highlight("qualquer coisa\naqui", Some("folio"));
+    let lines = highlight("qualquer coisa\naqui", Some("ribalta-desconhecida"));
     assert_eq!(lines.len(), 2);
     assert!(lines.iter().flatten().all(|token| token.kind == Plain));
     assert_eq!(highlight("x", None)[0][0].kind, Plain);

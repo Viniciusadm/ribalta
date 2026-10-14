@@ -59,7 +59,7 @@ fun ChartView(scene: ChartScene, fixedHeight: Length?, maxHeight: Float, env: Te
 
 private fun ink(ink: Ink, env: TextEnv, render: RenderContext): Color = when (ink) {
     Ink.Text -> env.color
-    Ink.Background -> render.slideBackground
+    Ink.Background -> render.pageBackground
     is Ink.Color -> color(ink.color)
 }
 

@@ -52,7 +52,7 @@ Todos os temas têm estas cores:
 | `coral`, `blue`, `green`, `yellow`, `violet` | Cores de apoio |
 | `white`, `black`, `ink`, `paper`, `transparent` | Neutros |
 
-Os valores exatos de cada tema estão em [Temas](/docs/reference/themes/).
+Os valores exatos de cada tema estão em [Temas](/reference/themes/).
 
 ### Gradientes
 
@@ -160,7 +160,7 @@ Transparente
 
 ## Imagem de fundo
 
-`image` coloca uma imagem de fundo que cobre todo o bloco ou a página. O endereço precisa começar com `https://` ou ser uma imagem do projeto (`asset:`):
+`image` coloca uma imagem de fundo que cobre todo o bloco ou a página. O endereço precisa começar com `https://` ou ser uma imagem guardada (`asset:`):
 
 ```ribalta preview
 --- {image=https://images.unsplash.com/photo-1501785888041-af3ef285b470?w=1200 color=white}
@@ -237,6 +237,6 @@ Responsável: equipe de produto {.marca}
 
 ## Próximos passos
 
-- [Temas](/docs/guides/themes/): escolha um tema e defina cores e fontes próprias.
-- [Componentes](/docs/guides/components/): combine estilos e layouts em blocos reutilizáveis.
-- [Referência de atributos](/docs/reference/attributes/): todos os atributos e onde cada um vale.
+- [Temas](/guides/themes/): escolha um tema e defina cores e fontes próprias.
+- [Componentes](/guides/components/): combine estilos e layouts em blocos reutilizáveis.
+- [Referência de atributos](/reference/attributes/): todos os atributos e onde cada um vale.

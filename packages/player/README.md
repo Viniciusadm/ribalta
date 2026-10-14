@@ -1,6 +1,6 @@
 # @ribaltalang/player
 
-Headless runtime for [Ribalta](https://folioslides.com.br/docs/) documents: page navigation and reveal steps, `@state` actions, timers, keyboard and swipe, sounds, saved progress, SCORM and values that the hosting page provides with `@extern`. It has no UI of its own; pair it with [`@ribaltalang/renderer`](https://www.npmjs.com/package/@ribaltalang/renderer).
+Headless runtime for [Ribalta](https://viniciusadm.github.io/ribalta/) documents: page navigation and reveal steps, `@state` actions, timers, keyboard and swipe, sounds, saved progress, SCORM and values that the hosting page provides with `@extern`. It has no UI of its own; pair it with [`@ribaltalang/renderer`](https://www.npmjs.com/package/@ribaltalang/renderer).
 
 ```sh
 npm install @ribaltalang/player

@@ -1,6 +1,6 @@
 # @ribaltalang/renderer
 
-React renderer for [Ribalta](https://folioslides.com.br/docs/) documents. It draws the JSON IR produced by [`@ribaltalang/compiler`](https://www.npmjs.com/package/@ribaltalang/compiler) or the [`ribalta`](https://crates.io/crates/ribalta) crate: themes, layouts, charts, icons, reveal steps and state.
+React renderer for [Ribalta](https://viniciusadm.github.io/ribalta/) documents. It draws the JSON IR produced by [`@ribaltalang/compiler`](https://www.npmjs.com/package/@ribaltalang/compiler) or the [`ribalta`](https://crates.io/crates/ribalta) crate: themes, layouts, charts, icons, reveal steps and state.
 
 ```sh
 npm install @ribaltalang/renderer react

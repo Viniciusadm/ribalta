@@ -1,6 +1,6 @@
 # ribalta
 
-The compiler of [Ribalta](https://folioslides.com.br/docs/), a text language for themed visuals. It turns Ribalta source into an intermediate representation (the IR, a JSON-serializable document) plus diagnostics in Portuguese or English.
+The compiler of [Ribalta](https://viniciusadm.github.io/ribalta/), a text language for themed visuals. It turns Ribalta source into an intermediate representation (the IR, a JSON-serializable document) plus diagnostics in Portuguese or English.
 
 ```toml
 [dependencies]
@@ -32,7 +32,7 @@ let json = serde_json::to_string(&compilation.document)?;
 
 An error does not stop compilation: the result always carries everything the compiler could build. `document.externs` lists the values declared with `@extern`, which the host that shows the document provides at run time.
 
-Page size: every page has a `width` and a `height` (`None` means the height follows the content). The host sets the default through `CompileOptions` (without it, pages are 1920 wide with automatic height); the source can change it with `@page 1920x1080` or `@page width=800 height=auto`, and a single page with `--- {width=1080 height=1920}`. A presentation app, for example, passes 1920 by 1080 to get slides.
+Page size: every page has a `width` and a `height` (`None` means the height follows the content). The host sets the default through `CompileOptions` (without it, pages are 1920 wide with automatic height); the source can change it with `@page 1920x1080` or `@page width=800 height=auto`, and a single page with `--- {width=1080 height=1920}`. A host that wants fixed 16:9 pages, for example, passes 1920 by 1080.
 
 The IR is specified in [IR.md](IR.md). Draw it in the browser with [`@ribaltalang/renderer`](https://www.npmjs.com/package/@ribaltalang/renderer); compile in the browser with [`@ribaltalang/compiler`](https://www.npmjs.com/package/@ribaltalang/compiler), the same crate built as WebAssembly (`cargo build --release --target wasm32-unknown-unknown -p ribalta`).
 

@@ -5,7 +5,7 @@ description: Crie blocos reutilizáveis com parâmetros, conteúdo e espaços no
 
 Um componente é um trecho de página com nome, que você define uma vez e usa quantas vezes quiser. Ele recebe parâmetros, como um molde: muda o texto, o visual continua o mesmo.
 
-Dentro de um componente valem os mesmos recursos de qualquer página, inclusive `::: if`, `::: for` e expressões sobre os parâmetros. Veja [Variáveis, dados e repetição](/docs/guides/data/#componentes-que-recebem-dados).
+Dentro de um componente valem os mesmos recursos de qualquer página, inclusive `::: if`, `::: for` e expressões sobre os parâmetros. Veja [Variáveis, dados e repetição](/guides/data/#componentes-que-recebem-dados).
 
 ## Definindo um componente
 
@@ -168,7 +168,7 @@ O atributo `step` também vale na chamada do componente. O componente inteiro ap
 :: metrica {valor=94 rotulo="novos clientes" step=2}
 ```
 
-Veja mais em [Revelação por etapas](/docs/guides/reveal/).
+Veja mais em [Revelação por etapas](/guides/reveal/).
 
 ## Estilizando um componente
 
@@ -183,12 +183,12 @@ Componentes recebem apenas parâmetros. Estilos como `.card` e `#id` na chamada 
 Se a mudança deve valer sempre, prefira criar um parâmetro, como o `cor=accent` do exemplo `metrica`.
 
 :::tip
-Para usar os mesmos componentes em todos os documentos de um projeto, defina-os no tema do projeto. Veja [Temas](/docs/guides/themes/).
+Para usar os mesmos componentes em vários documentos, defina-os no tema base. Veja [Temas](/guides/themes/).
 :::
 
 ## Parâmetros com valores aceitos
 
-Separe os valores aceitos com `|` no valor padrão. O primeiro é o padrão, e qualquer outro valor é erro ([R418](/docs/reference/errors/)). Combine com um estilo por variante, como `.botao-$tipo`, para não repetir propriedades:
+Separe os valores aceitos com `|` no valor padrão. O primeiro é o padrão, e qualquer outro valor é erro ([R418](/reference/errors/)). Combine com um estilo por variante, como `.botao-$tipo`, para não repetir propriedades:
 
 ```ribalta preview
 @style botao-primary {bg=accent color=white}
@@ -231,4 +231,4 @@ Um parâmetro pode receber um registro de `@data` inteiro: `:: cartao {p=$pessoa
 | R504 | `@component` sem o `@end` correspondente. |
 | R511 | Nome de componente inválido (use letras minúsculas, números e hífens). |
 
-Erros dentro do corpo de um componente aparecem na linha em que ele é **usado**, com a indicação "(no componente `nome`)". A lista completa está em [Mensagens de erro](/docs/reference/errors/).
+Erros dentro do corpo de um componente aparecem na linha em que ele é **usado**, com a indicação "(no componente `nome`)". A lista completa está em [Mensagens de erro](/reference/errors/).

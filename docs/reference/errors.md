@@ -21,7 +21,7 @@ Erros dentro de um componente são indicados na linha onde o componente é **usa
 | [F2xx](#f2xx-atributos) | Atributos: sintaxe das chaves, estilos e nomes de atributos. |
 | [F3xx](#f3xx-valores) | Valores de atributos. |
 | [F4xx](#f4xx-componentes) | Componentes e espaços nomeados. |
-| [F5xx](#f5xx-definições-e-tema-do-projeto) | Definições do preâmbulo e tema do projeto. |
+| [F5xx](#f5xx-definições-e-tema-base) | Definições do preâmbulo e tema base. |
 | [F6xx](#f6xx-variáveis-expressões-e-estado) | Variáveis, dados, expressões, repetição e estado. |
 | [F7xx](#f7xx-navegação) | Navegação entre páginas. |
 
@@ -129,7 +129,7 @@ Uma linha da tabela tem mais ou menos células que o cabeçalho.
 
 **Erro.** Mensagem: bloco desconhecido: `colums`.
 
-O nome depois de `:::` ou `::` não é um bloco embutido nem um componente definido no documento ou no tema do projeto. A dica sugere o nome mais parecido.
+O nome depois de `:::` ou `::` não é um bloco embutido nem um componente definido no documento ou no tema base. A dica sugere o nome mais parecido.
 
 ```ribalta
 ::: colums
@@ -137,7 +137,7 @@ Texto
 :::
 ```
 
-**Como corrigir:** corrija o nome (aqui, `columns`) ou defina o componente com `@component`. Veja a lista em [Blocos](/docs/reference/blocks/).
+**Como corrigir:** corrija o nome (aqui, `columns`) ou defina o componente com `@component`. Veja a lista em [Blocos](/reference/blocks/).
 
 ### R109 · Bloco de uma linha com conteúdo
 
@@ -181,7 +181,7 @@ Vendas por mês
 :::
 ```
 
-**Como corrigir:** coloque uma tabela dentro do bloco. A primeira coluna são os rótulos e as demais são as séries. Veja [Gráficos](/docs/guides/charts/).
+**Como corrigir:** coloque uma tabela dentro do bloco. A primeira coluna são os rótulos e as demais são as séries. Veja [Gráficos](/guides/charts/).
 
 ### R112 · Valor do gráfico não é número
 
@@ -223,7 +223,7 @@ A tabela tem só a coluna de rótulos, então não há o que desenhar.
 :: icon {size=3xl}
 ```
 
-**Como corrigir:** escreva o nome depois de `icon`, como `:: icon rocket {size=3xl}`. Os nomes estão em [Ícones](/docs/reference/icons/).
+**Como corrigir:** escreva o nome depois de `icon`, como `:: icon rocket {size=3xl}`. Os nomes estão em [Ícones](/reference/icons/).
 
 ### R115 · Ícone desconhecido
 
@@ -235,7 +235,7 @@ O nome não está na lista de ícones embutidos. Quando há um nome parecido, a 
 :: icon foguete
 ```
 
-**Como corrigir:** use um nome da lista em [Ícones](/docs/reference/icons/), como `rocket`.
+**Como corrigir:** use um nome da lista em [Ícones](/reference/icons/), como `rocket`.
 
 ### R116 · Campo sem variável
 
@@ -347,7 +347,7 @@ O nome depois do `.` não é um estilo embutido, um `@style` nem um token de cor
 Texto {.destaqe}
 ```
 
-**Como corrigir:** corrija o nome ou declare o estilo no início do documento com `@style nome {atributos}`. Veja os [estilos embutidos](/docs/reference/themes/#estilos-embutidos).
+**Como corrigir:** corrija o nome ou declare o estilo no início do documento com `@style nome {atributos}`. Veja os [estilos embutidos](/reference/themes/#estilos-embutidos).
 
 ### R208 · Id de página repetido
 
@@ -375,7 +375,7 @@ O nome não é um atributo de estilo nem um atributo próprio do bloco em que ap
 # Título {colr=coral}
 ```
 
-**Como corrigir:** corrija o nome. Atributos próprios, como `cols` ou `fit`, só valem nos blocos certos. Veja [Atributos](/docs/reference/attributes/).
+**Como corrigir:** corrija o nome. Atributos próprios, como `cols` ou `fit`, só valem nos blocos certos. Veja [Atributos](/reference/attributes/).
 
 ## F3xx: valores
 
@@ -425,7 +425,7 @@ Situações comuns:
 | Tamanho de `spacer` inválido | `:: spacer enorme` | `:: spacer 3xl` |
 | Etapa fora de 1 a 99 | `step=0` | `step=1` |
 
-**Como corrigir:** use um dos valores indicados na dica. As escalas e faixas completas estão em [Atributos](/docs/reference/attributes/).
+**Como corrigir:** use um dos valores indicados na dica. As escalas e faixas completas estão em [Atributos](/reference/attributes/).
 
 ### R302 · `widths` não bate com as colunas
 
@@ -637,7 +637,7 @@ Promoção
 @end
 ```
 
-**Como corrigir:** remova uma das definições ou renomeie uma delas. Redefinir no documento um componente do tema do projeto é permitido e não gera este erro.
+**Como corrigir:** remova uma das definições ou renomeie uma delas. Redefinir no documento um componente do tema base é permitido e não gera este erro.
 
 ### R414 · Espaço nomeado inexistente
 
@@ -753,7 +753,7 @@ O parâmetro declara os valores aceitos com `|`, e o valor usado não está entr
 
 **Como corrigir:** dê outro nome ao parâmetro, como `tecla`: `@component botao {tecla texto}`. No uso, `key=1` volta a ser o atalho.
 
-## F5xx: definições e tema do projeto
+## F5xx: definições e tema base
 
 ### R501 · Definição sem valor
 
@@ -926,9 +926,9 @@ O tema não existe, e o documento usa o tema `paper`.
 # Abertura
 ```
 
-**Como corrigir:** use `paper`, `ink` ou `editorial`. Veja [Temas embutidos](/docs/reference/themes/).
+**Como corrigir:** use `paper`, `ink` ou `editorial`. Veja [Temas embutidos](/reference/themes/).
 
-`@theme` não cria nem dá nome a um tema: ele só escolhe a base. Para ter um tema seu, mantenha uma base e ajuste com `@color`, `@font` e `@style`. Veja [Temas](/docs/guides/themes/).
+`@theme` não cria nem dá nome a um tema: ele só escolhe a base. Para ter um tema seu, mantenha uma base e ajuste com `@color`, `@font` e `@style`. Veja [Temas](/guides/themes/).
 
 ### R514 · Versão da linguagem não suportada
 
@@ -956,7 +956,7 @@ O tema não existe, e o documento usa o tema `paper`.
 
 O mesmo código aparece para `width` e `height` inválidos no separador, com as mensagens "largura de página inválida" e "altura de página inválida", como em `--- {width=10}` ou `--- {height=alta}`.
 
-**Como corrigir:** informe largura x altura, como `@page 1920x1080` (16:9), `@page 1440x1080` (4:3), `@page 800xauto` ou `@page width=800 height=auto`. Veja [Tamanhos e documentos](/docs/guides/pages/).
+**Como corrigir:** informe largura x altura, como `@page 1920x1080` (16:9), `@page 1440x1080` (4:3), `@page 800xauto` ou `@page width=800 height=auto`. Veja [Tamanhos e documentos](/guides/pages/).
 
 ### R516 · Nome de cor inválido
 
@@ -998,11 +998,11 @@ O nome do token (a primeira palavra depois de `@font`) segue a mesma regra dos t
 
 **Como corrigir:** use letras minúsculas, números e hífens, como `destaque`.
 
-### R519 · Páginas no tema do projeto
+### R519 · Páginas no tema base
 
-**Erro.** Mensagem: o tema do projeto só pode ter definições, não páginas.
+**Erro.** Mensagem: o tema base só pode ter definições, não páginas.
 
-Aparece apenas ao compilar o [tema do projeto](/docs/guides/themes/), nunca nos documentos. O exemplo abaixo é o texto do tema do projeto.
+Aparece apenas ao compilar o [tema base](/guides/themes/), nunca nos documentos. O exemplo abaixo é o texto do tema base.
 
 ```ribalta
 @theme ink
@@ -1013,11 +1013,11 @@ Aparece apenas ao compilar o [tema do projeto](/docs/guides/themes/), nunca nos 
 
 **Como corrigir:** deixe no tema apenas linhas que começam com `@` (como `@theme`, `@page`, `@color`, `@font`, `@style` e `@component`), além de linhas vazias e comentários. O conteúdo das páginas vai em cada documento.
 
-### R520 · `@title` ou `@author` no tema do projeto
+### R520 · `@title` ou `@author` no tema base
 
-**Aviso.** Mensagem: `@title` no tema do projeto é ignorado; defina-o em cada documento.
+**Aviso.** Mensagem: `@title` no tema base é ignorado; defina-o em cada documento.
 
-Aparece apenas ao compilar o tema do projeto. Título e autor são de cada documento, então são ignorados no tema.
+Aparece apenas ao compilar o tema base. Título e autor são de cada documento, então são ignorados no tema.
 
 ```ribalta
 @title Relatório anual
@@ -1044,7 +1044,7 @@ $page / $pages
 # Abertura
 ```
 
-**Como corrigir:** junte o conteúdo em um único bloco, por exemplo com `::: columns`. Veja [Cabeçalho e rodapé](/docs/guides/header-footer/).
+**Como corrigir:** junte o conteúdo em um único bloco, por exemplo com `::: columns`. Veja [Cabeçalho e rodapé](/guides/header-footer/).
 
 ### R522 · Campo desconhecido no cabeçalho, rodapé ou camada livre
 
@@ -1118,7 +1118,7 @@ A linha do `@header`, `@footer` ou `@overlay` só aceita atributos entre chaves.
 # Abertura
 ```
 
-**Como corrigir:** passe o texto para a linha de baixo. Para desligar o rodapé que vem do tema do projeto, use `@footer none`.
+**Como corrigir:** passe o texto para a linha de baixo. Para desligar o rodapé que vem do tema base, use `@footer none`.
 
 ### R530 · Definição que não cabe no tipo de item de biblioteca
 
@@ -1475,7 +1475,7 @@ Detalhes
 
 ## F8xx: arquivos externos
 
-Só aparecem na [linha de comando](/docs/reference/cli/), com `ribalta check --check-assets`, que acessa a internet para conferir as imagens e os sons.
+Só aparecem na [linha de comando](https://github.com/Viniciusadm/ribalta/tree/master/crates/cli), com `ribalta check --check-assets`, que acessa a internet para conferir as imagens e os sons.
 
 ### R801 · Imagem ou som inacessível
 
@@ -1489,4 +1489,4 @@ Só aparecem na [linha de comando](/docs/reference/cli/), com `ribalta check --c
 
 Também aparece quando o endereço não responde (domínio errado, sem conexão) e quando ele é uma página, não o arquivo: por exemplo, o link de uma foto no Unsplash em vez do endereço da imagem.
 
-**Como corrigir:** abra o endereço no navegador. Se for uma página, clique com o botão direito na imagem e copie o endereço dela. Se o arquivo não existir mais ou exigir login, envie a imagem para o projeto.
+**Como corrigir:** abra o endereço no navegador. Se for uma página, clique com o botão direito na imagem e copie o endereço dela. Se o arquivo não existir mais ou exigir login, guarde a imagem no programa em que você escreve (`asset:`).

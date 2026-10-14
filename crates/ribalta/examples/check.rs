@@ -3,7 +3,7 @@ fn main() {
     let (prelude_path, path) = match args.as_slice() {
         [flag, prelude, path] if flag == "--prelude" => (Some(prelude), path),
         [path] => (None, path),
-        _ => panic!("usage: check [--prelude theme.ribalta] presentation.ribalta"),
+        _ => panic!("usage: check [--prelude theme.ribalta] document.ribalta"),
     };
     let prelude = prelude_path.map(|path| std::fs::read_to_string(path).expect("read prelude")).unwrap_or_default();
     let source = std::fs::read_to_string(path).expect("read");

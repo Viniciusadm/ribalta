@@ -54,7 +54,7 @@ A renderização acontece no navegador, então não há servidores de exportaç�
 
 | Ação | Efeito |
 | --- | --- |
-| `$x = valor` | Muda o valor. O tipo precisa ser o mesmo do `@state` ([R602](/docs/reference/errors/)). |
+| `$x = valor` | Muda o valor. O tipo precisa ser o mesmo do `@state` ([R602](/reference/errors/)). |
 | `toggle $x` | Inverte verdadeiro/falso. |
 | `add $lista valor` / `remove $lista valor` | Põe ou tira um texto de uma lista. Veja [Listas no estado](#listas-no-estado). |
 | `clear $lista` | Esvazia a lista. |
@@ -62,11 +62,11 @@ A renderização acontece no navegador, então não há servidores de exportaç�
 | `go back` | Volta para onde você estava antes do último `go` ou link. |
 | `go next` / `go prev` | Avança ou volta uma etapa, como as setas. |
 
-`click` funciona em qualquer bloco (`::: box {click="…"}`) e em trechos de texto (`[texto]{click="…"}`). Clicar num elemento interativo não avança a página. Só variáveis de `@state` podem mudar ([R605](/docs/reference/errors/)).
+`click` funciona em qualquer bloco (`::: box {click="…"}`) e em trechos de texto (`[texto]{click="…"}`). Clicar num elemento interativo não avança a página. Só variáveis de `@state` podem mudar ([R605](/reference/errors/)).
 
 ## Conteúdo que depende do estado
 
-Use `::: if`, `::: else` e o atributo `if` exatamente como em [Variáveis, dados e repetição](/docs/guides/data/#condições-com--if). A diferença é que, com `@state`, todas as alternativas vão para o documento e a escolha acontece na hora:
+Use `::: if`, `::: else` e o atributo `if` exatamente como em [Variáveis, dados e repetição](/guides/data/#condições-com--if). A diferença é que, com `@state`, todas as alternativas vão para o documento e a escolha acontece na hora:
 
 ```ribalta preview
 @state cenario = otimista
@@ -105,7 +105,7 @@ Um elemento escondido por `if` sai do layout e o resto da página se reorganiza.
 :::
 ```
 
-Atributos visuais como `color`, `size` e `w` só aceitam valores fixos. Usar `@state` neles é erro ([R604](/docs/reference/errors/)): use uma variante. Assim o compilador valida todas as cores e medidas antes de mostrar o documento.
+Atributos visuais como `color`, `size` e `w` só aceitam valores fixos. Usar `@state` neles é erro ([R604](/reference/errors/)): use uma variante. Assim o compilador valida todas as cores e medidas antes de mostrar o documento.
 
 ### Ao passar o mouse
 
@@ -179,9 +179,9 @@ Finais descobertos: $(len($finais)) de 3
 ```
 
 - `in` também funciona com uma lista fixa: `$rota in [mar, vila]` é o mesmo que `$rota == mar or $rota == vila`.
-- Listas do estado não se comparam com `==`; use `in` e `len` ([R602](/docs/reference/errors/)). Elas também não mudam com `=`: use `add`, `remove` e `clear`.
-- A Ribalta avisa quando `valor in $x` procura um texto que nenhuma ação adiciona, como um erro de digitação ([R608](/docs/reference/errors/)).
-- `::: for item in $x` também percorre listas do estado: o conteúdo é repetido enquanto o documento é mostrado e acompanha cada `add` e `remove`. Dentro dele, ações não usam `$item` ([R620](/docs/reference/errors/)).
+- Listas do estado não se comparam com `==`; use `in` e `len` ([R602](/reference/errors/)). Elas também não mudam com `=`: use `add`, `remove` e `clear`.
+- A Ribalta avisa quando `valor in $x` procura um texto que nenhuma ação adiciona, como um erro de digitação ([R608](/reference/errors/)).
+- `::: for item in $x` também percorre listas do estado: o conteúdo é repetido enquanto o documento é mostrado e acompanha cada `add` e `remove`. Dentro dele, ações não usam `$item` ([R620](/reference/errors/)).
 
 ## Sorteios
 
@@ -199,7 +199,7 @@ Dado: $dado · Jogada: $jogada
 
 - Cada chamada faz um sorteio novo: `$dado = random(1, 6) + random(1, 6)` soma dois dados.
 - Com uma lista do estado, dá para tirar cartas sem repetir: `click="$carta = pick($baralho); remove $baralho $carta"`.
-- Fora de uma ação, como em `$(random(1, 6))` no texto ou num `if`, o número mudaria a cada vez que a tela é desenhada, então a Ribalta recusa ([R613](/docs/reference/errors/)). Guarde o sorteio num `@state` e mostre a variável.
+- Fora de uma ação, como em `$(random(1, 6))` no texto ou num `if`, o número mudaria a cada vez que a tela é desenhada, então a Ribalta recusa ([R613](/reference/errors/)). Guarde o sorteio num `@state` e mostre a variável.
 
 ## Tempo
 
@@ -246,7 +246,7 @@ A porta range… {if="$senha == abracadabra"}
 - `on-submit` roda ações quando a pessoa aperta Enter, inclusive `go`. Sem `on-submit`, o Enter no campo aciona o elemento da página com `key=enter`, como o botão de enviar de um formulário.
 - O valor muda a cada tecla. Para aceitar variações de uma resposta, use uma lista: `{if="$resposta in [Brasília, brasília, brasilia]"}`.
 - Digitar no campo não avança a página, e as setas movem o cursor dentro dele.
-- Detalhes em [Blocos › input](/docs/reference/blocks/#input).
+- Detalhes em [Blocos › input](/reference/blocks/#input).
 
 ## Teclado
 
@@ -296,7 +296,7 @@ A porta range… {if="$senha == abracadabra"}
 @persist finais moedas
 ```
 
-- Só valem `@state` do início do documento ([R617](/docs/reference/errors/)). As outras variáveis começam do valor inicial, como sempre.
+- Só valem `@state` do início do documento ([R617](/reference/errors/)). As outras variáveis começam do valor inicial, como sempre.
 - O progresso fica no navegador de cada pessoa, separado para cada endereço.
 - Para recomeçar do zero, use as próprias ações: `click="clear $finais; $moedas = 0"`.
 
@@ -317,11 +317,7 @@ Treinamentos e quizzes podem rodar dentro de um LMS (Moodle, Canvas, TalentLMS�
 # Você fez $pontos pontos
 ```
 
-Depois gere o pacote com a [linha de comando](/docs/reference/cli/) e envie o `.zip` ao LMS como pacote SCORM:
-
-```sh
-ribalta build quiz.ribalta --target scorm
-```
+O programa que mostra o documento gera o pacote SCORM, um `.zip` que você envia ao LMS.
 
 | Parâmetro | O que faz |
 | --- | --- |
@@ -330,7 +326,7 @@ ribalta build quiz.ribalta --target scorm
 | `max=100` | Nota máxima (padrão `100`). A nota enviada fica entre `0` e `max`. |
 | `pass=70` | Nota mínima para aprovar. Com ela, a conclusão vira "aprovado" ou "reprovado"; sem ela, "concluído". |
 
-- O pacote usa SCORM 1.2, aceito por praticamente todos os LMS.
+- A comunicação com o LMS usa SCORM 1.2, aceito por praticamente todos os LMS.
 - O LMS guarda a sessão: se o aluno sair no meio, volta para a mesma página com o mesmo estado.
 - Sem `@scorm`, o pacote só avisa a conclusão quando o aluno chega à última página.
 - Fora de um LMS, `@scorm` não faz nada.
@@ -351,7 +347,7 @@ Brasília {if="$revelada" color=green}
 
 - O valor depois do `=` é o exemplo: define o tipo (verdadeiro/falso, número, texto ou lista de textos) e é o que aparece quando ninguém fornece o valor, como numa prévia ou num PDF.
 - Use `$nome`, `if`, variantes e expressões como com `@state`.
-- Só quem mostra o documento muda um `@extern`: ações, `:: input`, `@persist` e o `score` de `@scorm` não aceitam ([R619](/docs/reference/errors/)). Para um valor que o próprio documento muda, use `@state`.
+- Só quem mostra o documento muda um `@extern`: ações, `:: input`, `@persist` e o `score` de `@scorm` não aceitam ([R619](/reference/errors/)). Para um valor que o próprio documento muda, use `@state`.
 
 ### Listas de registros
 
@@ -374,7 +370,7 @@ $i. **$jogador.nome**: $jogador.pontos pontos
 
 - A tabela de exemplo precisa de pelo menos uma linha: ela dá o tipo de cada campo.
 - Quem mostra o documento pode enviar mais ou menos linhas; o `for` acompanha.
-- Dentro do `for`, use `$jogador.campo` no texto, em `if` e em variantes. Ações não usam o item ([R620](/docs/reference/errors/)), e atributos visuais como `size` continuam só com valores fixos.
+- Dentro do `for`, use `$jogador.campo` no texto, em `if` e em variantes. Ações não usam o item ([R620](/reference/errors/)), e atributos visuais como `size` continuam só com valores fixos.
 - `len($placar)` dá o número de linhas.
 
 ## Navegação
@@ -406,7 +402,7 @@ Uma página com `hidden` fica fora do fluxo normal: as setas pulam essa página 
 [← Voltar]{click="go back"}
 ```
 
-Uma página oculta que nenhum link ou `go` alcança gera um aviso ([R702](/docs/reference/errors/)).
+Uma página oculta que nenhum link ou `go` alcança gera um aviso ([R702](/reference/errors/)).
 
 ### Mudando a próxima página
 
@@ -437,7 +433,7 @@ Para o mesmo componente servir a variáveis diferentes, passe o `@state` como pa
 :: item {n=2 estado=$q2}
 ```
 
-O `@state` de uma página (veja abaixo), o `@let` de uma página e as variáveis de `::: for` só existem onde o componente é usado, então o componente não os enxerga: passe-os como parâmetro ([R410](/docs/reference/errors/)).
+O `@state` de uma página (veja abaixo), o `@let` de uma página e as variáveis de `::: for` só existem onde o componente é usado, então o componente não os enxerga: passe-os como parâmetro ([R410](/reference/errors/)).
 
 ## Estado de uma página
 
@@ -471,7 +467,7 @@ Você já passou por aqui $visitas vez(es).
 # Fim
 ```
 
-- As ações são as mesmas de `click` que mudam o estado: `$x = valor` e `toggle $x`, separadas por `;`. Ir para outra página (`go`, `go back`, `go next`, `go prev`) não é permitido ([R612](/docs/reference/errors/)); para escolher a página seguinte, use `next=#id`.
+- As ações são as mesmas de `click` que mudam o estado: `$x = valor` e `toggle $x`, separadas por `;`. Ir para outra página (`go`, `go back`, `go next`, `go prev`) não é permitido ([R612](/reference/errors/)); para escolher a página seguinte, use `next=#id`.
 - O estado da própria página volta ao valor inicial antes das ações, então `on-enter` também pode ajustá-lo.
 - `on-enter` funciona dentro de um `@style`, o que permite reaproveitar a mesma ação em várias páginas. As ações do estilo rodam antes das escritas no separador:
 
@@ -510,7 +506,7 @@ Num jogo ou numa história de escolhas, quem decide a próxima página é a opç
 - As ações escritas na página continuam funcionando, inclusive `go next` e `go prev`.
 - Numa página `hidden` aberta por `go`, a seta também não volta sozinha para onde você estava. Para isso, ofereça um `[Voltar]{click="go back"}`.
 
-`@mode game` no início do documento (ou no tema do projeto) faz isso em todas as páginas. Ele também avisa ao programa que mostra o documento que se trata de um jogo, para ele esconder o que entregaria o final antes da hora, como o contador de páginas ou um atalho para a última página. O modo padrão é `@mode default`. Uma página pode voltar ao normal com `nav=on`:
+`@mode game` no início do documento (ou no tema base) faz isso em todas as páginas. Ele também avisa ao programa que mostra o documento que se trata de um jogo, para ele esconder o que entregaria o final antes da hora, como o contador de páginas ou um atalho para a última página. O modo padrão é `@mode default`. Uma página pode voltar ao normal com `nav=on`:
 
 ```ribalta
 @mode game
@@ -559,18 +555,18 @@ Uma visualização estática do documento, como uma imagem ou um PDF, usa o esta
 
 | Código | Quando acontece |
 | --- | --- |
-| [R604](/docs/reference/errors/) | `@state` usado num atributo visual ou num `@let`. |
-| [R605](/docs/reference/errors/) | `click` tentando mudar um `@let`, um dado ou um parâmetro. |
-| [R608](/docs/reference/errors/) | Comparação com um valor que o estado nunca recebe, como `$plano == prro`. |
-| [R611](/docs/reference/errors/) | Ação de `click` mal escrita. |
-| [R612](/docs/reference/errors/) | `on-enter` tentando mudar de página. |
-| [R613](/docs/reference/errors/) | `random` ou `pick` fora de uma ação. |
-| [R614](/docs/reference/errors/) | `on-timeout` sem `timeout`. |
-| [R116](/docs/reference/errors/) | `:: input` sem `bind`. |
-| [R210](/docs/reference/errors/) | `key` sem `click`. |
-| [R615](/docs/reference/errors/) | `play` ou `stop` com um som que não está na página. |
-| [R617](/docs/reference/errors/) | `@persist` com algo que não é um `@state`. |
-| [R618](/docs/reference/errors/) | `@scorm` com parâmetro desconhecido, nota que não é um `@state` numérico ou número inválido. |
-| [R534](/docs/reference/errors/) | `@mode` com um valor diferente de `default` ou `game`. |
-| [R701](/docs/reference/errors/) | `go #id`, link ou `next` para uma página que não existe. |
-| [R702](/docs/reference/errors/) | Página `hidden` que ninguém alcança. |
+| [R604](/reference/errors/) | `@state` usado num atributo visual ou num `@let`. |
+| [R605](/reference/errors/) | `click` tentando mudar um `@let`, um dado ou um parâmetro. |
+| [R608](/reference/errors/) | Comparação com um valor que o estado nunca recebe, como `$plano == prro`. |
+| [R611](/reference/errors/) | Ação de `click` mal escrita. |
+| [R612](/reference/errors/) | `on-enter` tentando mudar de página. |
+| [R613](/reference/errors/) | `random` ou `pick` fora de uma ação. |
+| [R614](/reference/errors/) | `on-timeout` sem `timeout`. |
+| [R116](/reference/errors/) | `:: input` sem `bind`. |
+| [R210](/reference/errors/) | `key` sem `click`. |
+| [R615](/reference/errors/) | `play` ou `stop` com um som que não está na página. |
+| [R617](/reference/errors/) | `@persist` com algo que não é um `@state`. |
+| [R618](/reference/errors/) | `@scorm` com parâmetro desconhecido, nota que não é um `@state` numérico ou número inválido. |
+| [R534](/reference/errors/) | `@mode` com um valor diferente de `default` ou `game`. |
+| [R701](/reference/errors/) | `go #id`, link ou `next` para uma página que não existe. |
+| [R702](/reference/errors/) | Página `hidden` que ninguém alcança. |

@@ -5,11 +5,9 @@ description: Set the size of the pages with @page, use automatic height for long
 
 A Ribalta document is a sequence of **pages**. The first content after the preamble starts page 1, and each `---` starts a new one. Every page has a width and a height in pixels, and every length in the document (`w`, `h`, `x`, `y`, sizes and spacing) is measured in pixels of the page, whatever the screen it is shown on.
 
-What a page becomes depends on the program that shows the document. A presentation app shows each page as a slide; a reader can show a long page as a scrolling screen; a printout puts each page on paper. The language only describes the pages and their size.
-
 ## Who picks the size
 
-The program that shows the document sets the default size when it compiles. Folio, the presentation app built on Ribalta, uses 1920 × 1080: a Folio presentation is a document of 1920 × 1080 pages, each one a 16:9 slide. Without any default from the program, a page is 1920 pixels wide and has [automatic height](#automatic-height).
+The program that shows the document sets the default size when it compiles. Without a default from the program, a page is 1920 pixels wide and has [automatic height](#automatic-height).
 
 The document can change that with `@page`, and a single page can change it again on its separator.
 
@@ -30,7 +28,7 @@ Write `@page` in the preamble, with the width and the height separated by an `x`
 | Key form | `@page width=800 height=auto` | Same as above, written with names. |
 | Only one key | `@page height=auto` | Changes only what it names; the width stays the default. |
 
-Width and height go from 16 to 16384 pixels. Anything else, such as `@page 16:9`, is an error ([R515](/docs/en/reference/errors/#r515--invalid-page-size)), and the default size stays.
+Width and height go from 16 to 16384 pixels. Anything else, such as `@page 16:9`, is an error ([R515](/en/reference/errors/#r515--invalid-page-size)), and the default size stays.
 
 ## Automatic height
 
@@ -106,7 +104,7 @@ Revenue grew 38%.
 | Jun | 52 |
 ```
 
-An invalid value, such as `width=10` or `height=tall`, is an error ([R515](/docs/en/reference/errors/#r515--invalid-page-size)), and the page keeps the size it would have had.
+An invalid value, such as `width=10` or `height=tall`, is an error ([R515](/en/reference/errors/#r515--invalid-page-size)), and the page keeps the size it would have had.
 
 ## Who wins
 
@@ -115,11 +113,11 @@ Each level overrides the one before it:
 | Level | Example |
 | --- | --- |
 | 1. Default from the program that shows the document | 1920 × 1080 in a presentation app; 1920 × automatic without one |
-| 2. `@page` in the [project theme](/docs/en/guides/themes/#project-theme) | `@page 1440x1080` for every document in the project |
+| 2. `@page` in the [base theme](/en/guides/themes/#base-theme) | `@page 1440x1080` for every document that uses that theme |
 | 3. `@page` in the document | `@page 800xauto` |
 | 4. `width` and `height` on the separator | `--- {width=1080 height=1920}` |
 
-In the key form, each level only changes what it names. With `@page width=800` in the project theme and `@page height=auto` in the document, the pages are 800 wide with automatic height.
+In the key form, each level only changes what it names. With `@page width=800` in the base theme and `@page height=auto` in the document, the pages are 800 wide with automatic height.
 
 ## Page number and total
 
@@ -139,10 +137,10 @@ $page / $pages
 # Results
 ```
 
-Each page also has a title and an id. The title is the first `#` heading of the page, or "Page N" without one. The id comes from `--- {#id}`, or is `page-N` without one, and is what links and `go #id` use. See [Header, footer and overlay](/docs/en/guides/header-footer/) and [Interactivity and navigation](/docs/en/guides/interactive/#navigation).
+Each page also has a title and an id. The title is the first `#` heading of the page, or "Page N" without one. The id comes from `--- {#id}`, or is `page-N` without one, and is what links and `go #id` use. See [Header, footer and overlay](/en/guides/header-footer/) and [Interactivity and navigation](/en/guides/interactive/#navigation).
 
 ## Next steps
 
-- [Layout](/docs/en/guides/layout/): arrange the content inside each page.
-- [Attributes](/docs/en/reference/attributes/#lengths): lengths, percentages and positions.
-- [Syntax](/docs/en/reference/syntax/#page-separator): everything the separator accepts.
+- [Layout](/en/guides/layout/): arrange the content inside each page.
+- [Attributes](/en/reference/attributes/#lengths): lengths, percentages and positions.
+- [Syntax](/en/reference/syntax/#page-separator): everything the separator accepts.

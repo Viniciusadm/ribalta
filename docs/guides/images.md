@@ -1,19 +1,19 @@
 ---
 title: Imagens
-description: Use imagens do projeto ou endereços externos, ajuste o enquadramento e use imagens de fundo.
+description: Use imagens guardadas ou endereços externos, ajuste o enquadramento e use imagens de fundo.
 ---
 
-Uma imagem na Ribalta é escrita como no Markdown: `![descrição](endereço)`. O endereço pode ser uma imagem guardada no projeto ou um link `https://`.
+Uma imagem na Ribalta é escrita como no Markdown: `![descrição](endereço)`. O endereço pode ser uma imagem guardada pelo programa em que você escreve ou um link `https://`.
 
-## Imagens do projeto
+## Imagens guardadas
 
-Uma imagem guardada no projeto é referenciada por `asset:` seguido do identificador dela. O programa em que você escreve cuida de guardar o arquivo e de escrever essa referência para você:
+Uma imagem guardada é referenciada por `asset:` seguido do identificador dela. O programa em que você escreve cuida de guardar o arquivo e de escrever essa referência para você:
 
 ```ribalta
 ![grafico-vendas](asset:3f2b8c1e-7a4d-4e9b-9c2a-1d5e6f7a8b9c)
 ```
 
-Troque a descrição entre colchetes por um texto que descreva a imagem. Para usar a mesma imagem em outro documento do projeto, copie a linha `![…](asset:…)`.
+Troque a descrição entre colchetes por um texto que descreva a imagem. Para usar a mesma imagem em outro documento, copie a linha `![…](asset:…)`.
 
 ## Imagens externas
 
@@ -25,7 +25,7 @@ Também é possível usar uma imagem publicada na internet, com um endereço que
 ```
 
 :::caution
-Uma imagem externa depende do site que a publica. Se ela for removida ou mudar de endereço, deixa de aparecer no documento. Para imagens importantes, prefira guardar o arquivo no projeto.
+Uma imagem externa depende do site que a publica. Se ela for removida ou mudar de endereço, deixa de aparecer no documento. Para imagens importantes, prefira guardar o arquivo.
 :::
 
 ## Ajustando a imagem
@@ -51,7 +51,7 @@ O `fit` só faz diferença quando a área tem proporção diferente da imagem, p
 :::
 ```
 
-Para colocar texto ao lado da imagem, use colunas. Veja [Layouts](/docs/guides/layout/).
+Para colocar texto ao lado da imagem, use colunas. Veja [Layouts](/guides/layout/).
 
 ## Imagens no meio do texto
 
@@ -76,7 +76,7 @@ Encontro anual de liderança {.lead}
 :::
 ```
 
-`image` aceita os mesmos endereços que as imagens comuns: `https://` ou uma imagem do projeto (`image=asset:…`).
+`image` aceita os mesmos endereços que as imagens comuns: `https://` ou uma imagem guardada (`image=asset:…`).
 
 ```ribalta
 --- {image=asset:3f2b8c1e-7a4d-4e9b-9c2a-1d5e6f7a8b9c}
@@ -92,6 +92,6 @@ Texto sobre uma foto costuma ficar difícil de ler. Coloque-o num `box` com fund
 
 | Código | Quando acontece |
 | --- | --- |
-| R301 | Endereço não permitido: não começa com `https://` nem é uma imagem do projeto (`asset:` seguido do identificador). |
+| R301 | Endereço não permitido: não começa com `https://` nem é uma imagem guardada (`asset:` seguido do identificador). |
 | R301 | `fit` com um valor diferente de `cover` ou `contain`. |
 | R209 | Atributo desconhecido na imagem, como `fitt`. |

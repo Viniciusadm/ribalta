@@ -161,9 +161,9 @@ The cover has no header, footer or overlay. By default, the cover is the first p
 ![Team photo](https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=1600){fit=cover w=100% h=100%}
 ```
 
-## In the project theme
+## In the base theme
 
-A `@header`, `@footer` or `@overlay` written in the [project theme](/docs/en/guides/themes/#project-theme) applies to every document in the project. It is the place for the company's standard footer.
+A `@header`, `@footer` or `@overlay` written in the [base theme](/en/guides/themes/#base-theme) applies to every document that uses that theme. It is the place for the company's standard footer.
 
 - If a document has its own `@footer`, it **replaces** the theme's.
 - To remove the theme's footer from one document, write `@footer none`. The same goes for `@header none` and `@overlay none`.

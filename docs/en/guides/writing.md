@@ -130,7 +130,7 @@ Separate the columns with `|` and put a line of dashes right below the header. U
 | `:---:` | Centered |
 | `---:` | Right |
 
-Cells accept bold, italic, code and links. Tables also work as the data source for [charts](/docs/en/guides/charts/).
+Cells accept bold, italic, code and links. Tables also work as the data source for [charts](/en/guides/charts/).
 
 ## Images
 
@@ -141,7 +141,7 @@ Use the Markdown image syntax: `!`, the description in brackets and the address 
 ![Mountain landscape](https://images.unsplash.com/photo-1501785888041-af3ef285b470?w=1200){h=600 radius=lg}
 ```
 
-The address must start with `https://` or be an image uploaded to the project (`asset:`). See [Images](/docs/en/guides/images/) for uploaded images and `fit=cover`.
+The address must start with `https://` or be a stored image (`asset:`). See [Images](/en/guides/images/) for stored images and `fit=cover`.
 
 :::caution
 Leave a blank line between a paragraph and an image. Without it, the image becomes part of the paragraph, like an image in the middle of the text.
@@ -196,6 +196,6 @@ The block starts with `::: notes` and ends with a line containing only `:::`. Th
 
 ## Next steps
 
-- [Layout](/docs/en/guides/layout/): arrange content in columns, rows and grids.
-- [Styling](/docs/en/guides/styling/): change colors, sizes and fonts.
-- [Syntax reference](/docs/en/reference/syntax/): the whole language on one page.
+- [Layout](/en/guides/layout/): arrange content in columns, rows and grids.
+- [Styling](/en/guides/styling/): change colors, sizes and fonts.
+- [Syntax reference](/en/reference/syntax/): the whole language on one page.

@@ -47,7 +47,7 @@ pub struct CheckArgs {
     #[arg(help = "Arquivo .ribalta, ou `-` para ler da entrada padrão")]
     pub file: PathBuf,
 
-    #[arg(long, value_name = "ARQUIVO", help = "Tema do projeto aplicado antes do documento")]
+    #[arg(long, value_name = "ARQUIVO", help = "Tema base aplicado antes do documento")]
     pub theme: Option<PathBuf>,
 
     #[arg(long, value_name = "LARGURAxALTURA", value_parser = parse_page, help = "Tamanho de página padrão, como faria o host: 1920x1080 ou 800xauto (padrão: 1920xauto)")]
@@ -71,7 +71,7 @@ pub struct FmtArgs {
     #[arg(long, help = "Só lista os arquivos que mudariam e falha se houver algum")]
     pub check: bool,
 
-    #[arg(long, value_name = "ARQUIVO", help = "Tema do projeto usado para conferir que o resultado não muda")]
+    #[arg(long, value_name = "ARQUIVO", help = "Tema base usado para conferir que o resultado não muda")]
     pub theme: Option<PathBuf>,
 }
 
@@ -80,7 +80,7 @@ pub struct GraphArgs {
     #[arg(help = "Arquivo .ribalta, ou `-` para ler da entrada padrão")]
     pub file: PathBuf,
 
-    #[arg(long, value_name = "ARQUIVO", help = "Tema do projeto aplicado antes do documento")]
+    #[arg(long, value_name = "ARQUIVO", help = "Tema base aplicado antes do documento")]
     pub theme: Option<PathBuf>,
 
     #[arg(long, value_enum, default_value_t = GraphFormat::Text, help = "Formato da saída")]

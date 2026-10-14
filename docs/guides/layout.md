@@ -30,7 +30,7 @@ Os mais usados:
 | `#id` | Identificador da página | `#capa` |
 | `.estilo` | Aplica um estilo pronto ou seu | `.dark` |
 
-A página aceita qualquer atributo de estilo. Veja a lista completa em [Atributos](/docs/reference/attributes/). Para mudar o tamanho das páginas, veja [Tamanhos e documentos](/docs/guides/pages/).
+A página aceita qualquer atributo de estilo. Veja a lista completa em [Atributos](/reference/attributes/). Para mudar o tamanho das páginas, veja [Tamanhos e documentos](/guides/pages/).
 
 :::tip
 Para configurar a primeira página, comece o texto com uma linha `--- {…}`. Ela não cria uma página vazia antes dela.
@@ -234,6 +234,6 @@ Dois blocos de uma linha só ajudam a ajustar o ritmo da página:
 
 ## Próximos passos
 
-- [Estilos](/docs/guides/styling/): cores, tamanhos, bordas e estilos reutilizáveis.
-- [Componentes](/docs/guides/components/): transforme layouts que se repetem em blocos reutilizáveis.
-- [Referência de blocos](/docs/reference/blocks/): todos os blocos e seus atributos.
+- [Estilos](/guides/styling/): cores, tamanhos, bordas e estilos reutilizáveis.
+- [Componentes](/guides/components/): transforme layouts que se repetem em blocos reutilizáveis.
+- [Referência de blocos](/reference/blocks/): todos os blocos e seus atributos.

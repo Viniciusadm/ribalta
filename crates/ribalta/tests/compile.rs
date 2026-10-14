@@ -17,26 +17,26 @@ fn clean(source: &str) -> Value {
 }
 
 #[test]
-fn splits_slides_on_separator_and_takes_titles_from_headings() {
+fn splits_pages_on_separator_and_takes_titles_from_headings() {
     let value = clean("# Primeiro\n\nTexto\n---\n## Segundo\n---\nSem título");
-    let slides = value["document"]["pages"].as_array().unwrap();
-    assert_eq!(slides.len(), 3);
-    assert_eq!(slides[0]["title"], "Primeiro");
-    assert_eq!(slides[1]["title"], "Segundo");
-    assert_eq!(slides[2]["title"], "Página 3");
-    assert_eq!(slides[1]["line"], 4);
+    let pages = value["document"]["pages"].as_array().unwrap();
+    assert_eq!(pages.len(), 3);
+    assert_eq!(pages[0]["title"], "Primeiro");
+    assert_eq!(pages[1]["title"], "Segundo");
+    assert_eq!(pages[2]["title"], "Página 3");
+    assert_eq!(pages[1]["line"], 4);
 }
 
 #[test]
 fn preamble_sets_metadata_theme_and_custom_tokens() {
     let value = clean("@title Minha palestra\n@theme ink\n@color marca #ff6b4a\n@font titulo \"Bebas Neue\" 400\n\n# Oi {color=marca font=titulo}");
-    let deck = &value["document"];
-    assert_eq!(deck["meta"]["title"], "Minha palestra");
-    assert_eq!(deck["theme"]["name"], "ink");
-    let heading = &deck["pages"][0]["children"][0];
+    let document = &value["document"];
+    assert_eq!(document["meta"]["title"], "Minha palestra");
+    assert_eq!(document["theme"]["name"], "ink");
+    let heading = &document["pages"][0]["children"][0];
     assert_eq!(heading["style"]["color"], "#ff6b4a");
     assert_eq!(heading["style"]["font"], "Bebas Neue");
-    assert!(deck["theme"]["fontFamilies"].as_array().unwrap().contains(&json!({ "family": "Bebas Neue", "weights": [400] })));
+    assert!(document["theme"]["fontFamilies"].as_array().unwrap().contains(&json!({ "family": "Bebas Neue", "weights": [400] })));
 }
 
 #[test]
@@ -62,7 +62,7 @@ fn themes_describe_element_decorations_with_their_own_colors() {
 }
 
 #[test]
-fn decks_carry_the_drawings_of_the_icons_they_use() {
+fn documents_carry_the_drawings_of_the_icons_they_use() {
     let value = clean("::: columns\n:: icon rocket\n- item\n:::\n---\n:: icon rocket\n:: icon check");
     let icons = value["document"]["icons"].as_object().unwrap();
     assert_eq!(icons.keys().collect::<Vec<_>>(), ["check", "rocket"]);
@@ -113,22 +113,22 @@ fn columns_and_nested_containers() {
 #[test]
 fn steps_reveal_children_and_list_items_in_order() {
     let value = clean("# Etapas\n::: steps\nPrimeiro ponto.\n\n- a\n- b\n:::\nFinal {step=5}");
-    let slide = &value["document"]["pages"][0];
-    let steps = &slide["children"][1]["children"];
+    let page = &value["document"]["pages"][0];
+    let steps = &page["children"][1]["children"];
     assert_eq!(steps[0]["step"], 1);
     assert_eq!(steps[1]["items"][0]["step"], 2);
     assert_eq!(steps[1]["items"][1]["step"], 3);
-    assert_eq!(slide["children"][2]["step"], 5);
-    assert_eq!(slide["steps"], 5);
+    assert_eq!(page["children"][2]["step"], 5);
+    assert_eq!(page["steps"], 5);
 }
 
 #[test]
-fn slide_attributes_and_ids() {
+fn page_attributes_and_ids() {
     let value = clean("--- {#capa .dark align=center}\n# Oi");
-    let slide = &value["document"]["pages"][0];
-    assert_eq!(slide["id"], "capa");
-    assert_eq!(slide["style"]["align"], "center");
-    assert_eq!(slide["style"]["bg"], json!({ "kind": "solid", "color": "#151821" }));
+    let page = &value["document"]["pages"][0];
+    assert_eq!(page["id"], "capa");
+    assert_eq!(page["style"]["align"], "center");
+    assert_eq!(page["style"]["bg"], json!({ "kind": "solid", "color": "#151821" }));
 }
 
 #[test]
@@ -196,12 +196,12 @@ fn stray_closing_fence_is_reported() {
 }
 
 #[test]
-fn separators_inside_code_fences_do_not_split_slides() {
+fn separators_inside_code_fences_do_not_split_pages() {
     let value = clean("```yaml\n---\nkey: value\n```");
-    let slides = value["document"]["pages"].as_array().unwrap();
-    assert_eq!(slides.len(), 1);
-    assert_eq!(slides[0]["children"][0]["code"], "---\nkey: value");
-    assert_eq!(slides[0]["children"][0]["lang"], "yaml");
+    let pages = value["document"]["pages"].as_array().unwrap();
+    assert_eq!(pages.len(), 1);
+    assert_eq!(pages[0]["children"][0]["code"], "---\nkey: value");
+    assert_eq!(pages[0]["children"][0]["lang"], "yaml");
 }
 
 #[test]
@@ -223,9 +223,9 @@ fn raw_html_is_plain_text() {
 #[test]
 fn notes_are_collected_and_not_rendered() {
     let value = clean("# Oi\n::: notes\nFale devagar.\n\nPausa.\n:::");
-    let slide = &value["document"]["pages"][0];
-    assert_eq!(slide["notes"], "Fale devagar.\n\nPausa.");
-    assert_eq!(slide["children"].as_array().unwrap().len(), 1);
+    let page = &value["document"]["pages"][0];
+    assert_eq!(page["notes"], "Fale devagar.\n\nPausa.");
+    assert_eq!(page["children"].as_array().unwrap().len(), 1);
 }
 
 #[test]
@@ -293,7 +293,7 @@ fn unknown_blocks_icons_and_themes_suggest_alternatives() {
 }
 
 #[test]
-fn definitions_after_the_first_slide_are_errors() {
+fn definitions_after_the_first_page_are_errors() {
     let (_, compilation) = output("# Oi\n@style a {color=red}");
     assert_eq!(codes(&compilation), ["R103"]);
 }
@@ -427,11 +427,11 @@ fn project_prelude_provides_theme_tokens_styles_and_components() {
     let compilation = ribalta::compile_with_prelude(BRAND, "# Oi {.destaque font=titulo}\n\n:: selo {texto=Novo}");
     assert!(compilation.diagnostics.is_empty(), "{:#?}", compilation.diagnostics);
     let value = serde_json::to_value(&compilation).unwrap();
-    let deck = &value["document"];
-    assert_eq!(deck["theme"]["name"], "ink");
-    assert_eq!(deck["pages"][0]["children"][0]["style"]["color"], "#12a37f");
-    assert_eq!(deck["pages"][0]["children"][0]["style"]["font"], "Bebas Neue");
-    assert_eq!(deck["pages"][0]["children"][1]["style"]["bg"], json!({ "kind": "solid", "color": "#12a37f" }));
+    let document = &value["document"];
+    assert_eq!(document["theme"]["name"], "ink");
+    assert_eq!(document["pages"][0]["children"][0]["style"]["color"], "#12a37f");
+    assert_eq!(document["pages"][0]["children"][0]["style"]["font"], "Bebas Neue");
+    assert_eq!(document["pages"][0]["children"][1]["style"]["bg"], json!({ "kind": "solid", "color": "#12a37f" }));
 }
 
 #[test]
@@ -446,7 +446,7 @@ fn documents_override_the_project_prelude() {
 }
 
 #[test]
-fn prelude_errors_stay_out_of_presentation_diagnostics() {
+fn prelude_errors_stay_out_of_document_diagnostics() {
     let broken = "@colr marca #12a37f\n@style ruim {colr=red}\n@theme nada";
     let compilation = ribalta::compile_with_prelude(broken, "# Oi");
     assert!(compilation.diagnostics.is_empty(), "{:#?}", compilation.diagnostics);
@@ -457,20 +457,20 @@ fn prelude_errors_stay_out_of_presentation_diagnostics() {
 }
 
 #[test]
-fn prelude_rejects_slides_and_warns_about_titles() {
+fn prelude_rejects_pages_and_warns_about_titles() {
     let found: Vec<_> = ribalta::check_prelude("@title X\n@color a #fff\n\n# Page").iter().map(|d| (d.code, d.line)).collect();
     assert_eq!(found, [("R520", 1), ("R519", 4)]);
     assert!(ribalta::check_prelude(BRAND).is_empty());
 }
 
 #[test]
-fn uploaded_assets_can_be_used_as_images_and_backgrounds() {
+fn stored_assets_can_be_used_as_images_and_backgrounds() {
     let id = "3f2b8c1e-9d4a-4b7e-8f21-0a1b2c3d4e5f";
     let value = clean(&format!("--- {{image=asset:{id}}}\n![Foto](asset:{id}){{fit=cover}}"));
-    let slide = &value["document"]["pages"][0];
+    let page = &value["document"]["pages"][0];
     let asset = json!({ "kind": "asset", "id": id });
-    assert_eq!(slide["style"]["bgImage"], asset);
-    assert_eq!(slide["children"][0]["src"], asset);
+    assert_eq!(page["style"]["bgImage"], asset);
+    assert_eq!(page["children"][0]["src"], asset);
 
     let (_, compilation) = output("![x](asset:../../etc)\n\n[link](asset:3f2b8c1e-9d4a-4b7e-8f21-0a1b2c3d4e5f)");
     assert_eq!(codes(&compilation), ["R301", "R301"]);
@@ -488,7 +488,7 @@ fn diagnostics_follow_the_requested_locale() {
     assert!(portuguese.diagnostics.iter().any(|d| d.message.contains("atributo desconhecido")));
     assert_eq!(english.diagnostics.iter().map(|d| (d.code, d.line, d.column)).collect::<Vec<_>>(), portuguese.diagnostics.iter().map(|d| (d.code, d.line, d.column)).collect::<Vec<_>>());
 
-    let theme = ribalta::check_prelude_localized("# slide", ribalta::Locale::En);
+    let theme = ribalta::check_prelude_localized("# heading", ribalta::Locale::En);
     assert!(theme[0].message.contains("can only contain definitions"));
     assert!(ribalta::compile_localized("@component c {x}\n::: box {colr=1}\n:::\n@end\n\n:: c {x=1}", "", ribalta::Locale::En).diagnostics.is_empty());
     let nested = ribalta::compile_localized("", "@component c {x}\n::: box {colr=1}\n:::\n@end\n\n:: c {x=1}", ribalta::Locale::En);
@@ -536,25 +536,25 @@ fn texts(value: &Value) -> String {
 }
 
 #[test]
-fn header_and_footer_repeat_on_every_slide_but_the_cover_with_fields_filled() {
+fn header_and_footer_repeat_on_every_page_but_the_cover_with_fields_filled() {
     let value = clean("@title Pitch\n@author Ana\n\n@header\nLumen\n@end\n\n@footer\n$title · $author · $page / $pages\n@end\n\n# Capa\n---\n# Dois\n---\n# Três");
-    let slides = value["document"]["pages"].as_array().unwrap();
-    assert!(slides[0].get("header").is_none());
-    assert!(slides[0].get("footer").is_none());
-    assert_eq!(texts(&slides[1]["header"]), "Lumen");
-    assert_eq!(texts(&slides[1]["footer"]), "Pitch · Ana · 2 / 3");
-    assert_eq!(texts(&slides[2]["footer"]), "Pitch · Ana · 3 / 3");
-    assert_eq!(slides[1]["footer"]["type"], "layout");
-    assert!(slides[1]["footer"]["style"]["size"].is_number());
-    assert!(slides[1]["footer"]["style"]["color"].is_string());
-    assert_eq!(slides[1]["footer"]["line"], 8);
-    assert_eq!(texts(&slides[1]["children"]), "Dois");
+    let pages = value["document"]["pages"].as_array().unwrap();
+    assert!(pages[0].get("header").is_none());
+    assert!(pages[0].get("footer").is_none());
+    assert_eq!(texts(&pages[1]["header"]), "Lumen");
+    assert_eq!(texts(&pages[1]["footer"]), "Pitch · Ana · 2 / 3");
+    assert_eq!(texts(&pages[2]["footer"]), "Pitch · Ana · 3 / 3");
+    assert_eq!(pages[1]["footer"]["type"], "layout");
+    assert!(pages[1]["footer"]["style"]["size"].is_number());
+    assert!(pages[1]["footer"]["style"]["color"].is_string());
+    assert_eq!(pages[1]["footer"]["line"], 8);
+    assert_eq!(texts(&pages[1]["children"]), "Dois");
 }
 
 #[test]
-fn covers_and_per_slide_switches_decide_where_regions_appear() {
+fn covers_and_per_page_switches_decide_where_regions_appear() {
     let value = clean("@footer\nRodapé\n@end\n\n--- {cover=false}\n# A\n--- {footer=off}\n# B\n--- {cover}\n# C\n--- {cover footer=on}\n# D\n---\n# E");
-    let shown: Vec<bool> = value["document"]["pages"].as_array().unwrap().iter().map(|slide| slide.get("footer").is_some()).collect();
+    let shown: Vec<bool> = value["document"]["pages"].as_array().unwrap().iter().map(|page| page.get("footer").is_some()).collect();
     assert_eq!(shown, [true, false, false, true, true]);
 }
 
@@ -569,7 +569,7 @@ fn region_attributes_style_the_band_and_date_is_left_for_the_renderer() {
 }
 
 #[test]
-fn project_theme_regions_apply_until_the_presentation_replaces_or_disables_them() {
+fn base_theme_regions_apply_until_the_document_replaces_or_disables_them() {
     let prelude = "@footer\nEmpresa · $page\n@end";
     let inherited = ribalta::compile_with_prelude(prelude, "# A\n---\n# B");
     assert!(inherited.diagnostics.is_empty(), "{:#?}", inherited.diagnostics);
@@ -621,19 +621,19 @@ fn region_mistakes_are_reported_once_with_helpful_hints() {
 fn regions_never_reveal_step_by_step_nor_carry_notes() {
     let (value, compilation) = output("@footer\n::: steps\n- a\n- b\n:::\n::: notes\nsegredo\n:::\n@end\n\n# A\n---\n# B");
     assert_eq!(codes(&compilation), ["R523", "R524"]);
-    let slide = &value["document"]["pages"][1];
-    assert_eq!(slide["steps"], 0);
-    assert!(slide["notes"].is_null());
-    assert!(!serde_json::to_string(&slide["footer"]).unwrap().contains("\"step\""));
+    let page = &value["document"]["pages"][1];
+    assert_eq!(page["steps"], 0);
+    assert!(page["notes"].is_null());
+    assert!(!serde_json::to_string(&page["footer"]).unwrap().contains("\"step\""));
 }
 
 #[test]
-fn overlay_floats_over_every_slide_but_the_cover_without_the_band_defaults() {
+fn overlay_floats_over_every_page_but_the_cover_without_the_band_defaults() {
     let value = clean("@title Pitch\n\n@overlay {align=right}\nRascunho {x=1500 y=40}\n\n$page / $pages\n@end\n\n# Capa\n---\n# Dois\n--- {overlay=off}\n# Três\n--- {cover overlay=on}\n# Quatro");
-    let slides = value["document"]["pages"].as_array().unwrap();
-    let shown: Vec<bool> = slides.iter().map(|slide| slide.get("overlay").is_some()).collect();
+    let pages = value["document"]["pages"].as_array().unwrap();
+    let shown: Vec<bool> = pages.iter().map(|page| page.get("overlay").is_some()).collect();
     assert_eq!(shown, [false, true, false, true]);
-    let overlay = &slides[1]["overlay"];
+    let overlay = &pages[1]["overlay"];
     assert_eq!(texts(overlay), "Rascunho2 / 4");
     assert_eq!(overlay["type"], "layout");
     assert_eq!(overlay["style"]["align"], "right");
@@ -641,11 +641,11 @@ fn overlay_floats_over_every_slide_but_the_cover_without_the_band_defaults() {
     assert!(overlay["style"].get("color").is_none());
     assert_eq!(overlay["children"][0]["style"]["x"], json!({ "unit": "px", "value": 1500.0 }));
     assert_eq!(overlay["line"], 3);
-    assert!(slides[1].get("header").is_none() && slides[1].get("footer").is_none());
+    assert!(pages[1].get("header").is_none() && pages[1].get("footer").is_none());
 }
 
 #[test]
-fn project_theme_overlay_applies_until_replaced_or_disabled() {
+fn base_theme_overlay_applies_until_replaced_or_disabled() {
     let prelude = "@overlay\nLogo\n@end";
     let inherited = ribalta::compile_with_prelude(prelude, "# A\n---\n# B");
     assert!(inherited.diagnostics.is_empty(), "{:#?}", inherited.diagnostics);
@@ -701,7 +701,7 @@ fn spans_keep_their_raw_attributes() {
 }
 
 #[test]
-fn text_blocks_written_in_the_slide_carry_their_source_range() {
+fn text_blocks_written_in_the_page_carry_their_source_range() {
     let value = clean("## Título {size=5xl}\n\nLinha um\n  linha dois {.lead}\n\n- item {color=accent}\n  continua\n  - aninhado");
     let children = &value["document"]["pages"][0]["children"];
     assert_eq!(children[0]["source"], json!({"line": 1, "spans": [[3, 10]]}));
@@ -714,15 +714,15 @@ fn text_blocks_written_in_the_slide_carry_their_source_range() {
 #[test]
 fn text_from_components_regions_and_quotes_has_no_source_range() {
     let value = clean("@component card {titulo}\n## $titulo\n@end\n@footer\nRodapé\n@end\n\n:: card {titulo=Oi}\n\n> citação\n---\nSegundo");
-    let slides = &value["document"]["pages"];
-    assert!(slides[0]["children"][0]["source"].is_null());
-    assert!(slides[0]["children"][1]["children"][0]["source"].is_null());
-    assert!(slides[1]["footer"]["children"][0]["source"].is_null());
-    assert!(!slides[1]["children"][0]["source"].is_null());
+    let pages = &value["document"]["pages"];
+    assert!(pages[0]["children"][0]["source"].is_null());
+    assert!(pages[0]["children"][1]["children"][0]["source"].is_null());
+    assert!(pages[1]["footer"]["children"][0]["source"].is_null());
+    assert!(!pages[1]["children"][0]["source"].is_null());
 }
 
 #[test]
-fn slide_blocks_report_where_they_end_in_the_source() {
+fn page_blocks_report_where_they_end_in_the_source() {
     let value = clean("# Título\nlinha um\nlinha dois\n\n- a\n- b\n  - c\n\n::: columns\nEsquerda\n\nDireita\n:::\n\n```js\nx\n```\n\n:: icon star");
     let children = value["document"]["pages"][0]["children"].as_array().unwrap();
     let ranges: Vec<(u64, u64)> = children.iter().map(|block| (block["line"].as_u64().unwrap(), block["endLine"].as_u64().unwrap())).collect();

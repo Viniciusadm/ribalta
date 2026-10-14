@@ -3,7 +3,7 @@ title: Escrevendo documentos
 description: Títulos, parágrafos, ênfase, links, listas, citações, código, tabelas, imagens, comentários e notas.
 ---
 
-Um documento Ribalta é feito de páginas separadas por uma linha com `---`. Cada página vira um slide quando o documento é mostrado como apresentação. Veja [Tamanhos e documentos](/docs/guides/pages/).
+Um documento Ribalta é feito de páginas separadas por uma linha com `---`. Veja [Tamanhos e documentos](/guides/pages/).
 
 O conteúdo de uma página é escrito como em Markdown, com uma diferença importante: em uma página, cada linha tem intenção, então uma quebra de linha no texto é uma quebra de linha na página.
 
@@ -132,7 +132,7 @@ Separe as colunas com `|` e coloque uma linha de traços logo abaixo do cabeçal
 | `:---:` | Centralizado |
 | `---:` | À direita |
 
-As células aceitam negrito, itálico, código e links. Tabelas também servem de fonte de dados para [gráficos](/docs/guides/charts/).
+As células aceitam negrito, itálico, código e links. Tabelas também servem de fonte de dados para [gráficos](/guides/charts/).
 
 ## Imagens
 
@@ -143,7 +143,7 @@ Use a sintaxe de imagem do Markdown: `!`, a descrição entre colchetes e o ende
 ![Paisagem com montanhas](https://images.unsplash.com/photo-1501785888041-af3ef285b470?w=1200){h=600 radius=lg}
 ```
 
-O endereço precisa começar com `https://` ou ser uma imagem enviada ao projeto (`asset:`). Veja [Imagens](/docs/guides/images/) para enviar arquivos e usar `fit=cover`.
+O endereço precisa começar com `https://` ou ser uma imagem guardada (`asset:`). Veja [Imagens](/guides/images/) para imagens guardadas e `fit=cover`.
 
 :::caution
 Deixe uma linha em branco entre um parágrafo e uma imagem. Sem ela, a imagem passa a fazer parte do parágrafo, como uma imagem no meio do texto.
@@ -198,6 +198,6 @@ O bloco começa com `::: notes` e termina com uma linha contendo apenas `:::`. O
 
 ## Próximos passos
 
-- [Layouts](/docs/guides/layout/): organize o conteúdo em colunas, linhas e grades.
-- [Estilos](/docs/guides/styling/): mude cores, tamanhos e fontes.
-- [Referência da sintaxe](/docs/reference/syntax/): toda a linguagem em uma página.
+- [Layouts](/guides/layout/): organize o conteúdo em colunas, linhas e grades.
+- [Estilos](/guides/styling/): mude cores, tamanhos e fontes.
+- [Referência da sintaxe](/reference/syntax/): toda a linguagem em uma página.

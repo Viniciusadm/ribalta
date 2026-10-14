@@ -11,11 +11,11 @@ The `icon` block draws an icon from the built-in library, on a single line:
 
 | Part | Values | Default |
 | --- | --- | --- |
-| `name` | One of the names in the list below | Required ([R114](/docs/en/reference/errors/)) |
-| `size` | `xs`…`7xl` scale or pixels from 8 to 400 ([Sizes](/docs/en/reference/attributes/#sizes)) | 96 px |
-| `color` | Any [color](/docs/en/reference/attributes/#colors) | Text color |
+| `name` | One of the names in the list below | Required ([R114](/en/reference/errors/)) |
+| `size` | `xs`…`7xl` scale or pixels from 8 to 400 ([Sizes](/en/reference/attributes/#sizes)) | 96 px |
+| `color` | Any [color](/en/reference/attributes/#colors) | Text color |
 
-Icons also accept the other [style attributes](/docs/en/reference/attributes/), such as `opacity` and `step`. A name outside the list is an error ([R115](/docs/en/reference/errors/)), with a suggestion of the closest name. In an editor with Ribalta support, typing `:: icon ` lists the names.
+Icons also accept the other [style attributes](/en/reference/attributes/), such as `opacity` and `step`. A name outside the list is an error ([R115](/en/reference/errors/)), with a suggestion of the closest name. In an editor with Ribalta support, typing `:: icon ` lists the names.
 
 ```ribalta preview
 ::: grid {cols=3 gap=lg}

@@ -3,7 +3,7 @@ title: Syntax
 description: A quick reference to the whole Ribalta language, from document structure to escapes.
 ---
 
-This page sums up the whole language in short tables. For step-by-step explanations, see the [guides](/docs/en/guides/writing/); for the values each attribute accepts, see [Attributes](/docs/en/reference/attributes/).
+This page sums up the whole language in short tables. For step-by-step explanations, see the [guides](/en/guides/writing/); for the values each attribute accepts, see [Attributes](/en/reference/attributes/).
 
 ## Document structure
 
@@ -30,24 +30,24 @@ A document has two parts, in this order:
 | `@author` | `@author Name` | Document author. |
 | `@theme` | `@theme paper` | Built-in theme: `paper` (default), `ink` or `editorial`. |
 | `@version` | `@version 2` | Language version: `1` or `2`. The current version is `2`. |
-| `@page` | `@page 1920x1080` | Page size in pixels: `@page 1920x1080`, `@page 800xauto` or `@page width=800 height=auto`. A height of `auto` grows with the content. Without it, the program showing the document picks the size. See [Page sizes](/docs/en/guides/pages/). |
+| `@page` | `@page 1920x1080` | Page size in pixels: `@page 1920x1080`, `@page 800xauto` or `@page width=800 height=auto`. A height of `auto` grows with the content. Without it, the program showing the document picks the size. See [Page sizes](/en/guides/pages/). |
 | `@color` | `@color brand #ff6b4a` | Creates or replaces a color token. |
 | `@font` | `@font title "Bebas Neue" 400 700` | Creates or replaces a font token (a Google Fonts family and weights from 100 to 900). |
 | `@style` | `@style highlight {color=brand weight=bold}` | Creates a reusable style, applied with `.highlight`. |
 | `@component` … `@end` | `@component name {param param=default}` | Defines a component. The body runs until the `@end` line. |
-| `@let` | `@let spacing = lg` | Creates a fixed variable, used as `$spacing`. See [Variables](/docs/en/guides/data/). |
+| `@let` | `@let spacing = lg` | Creates a fixed variable, used as `$spacing`. See [Variables](/en/guides/data/). |
 | `@data` … `@end` | `@data team` followed by a table | Creates a list of records from the table. |
-| `@state` | `@state details = false` | Creates a variable that changes while the document is shown. See [Interactivity](/docs/en/guides/interactive/). |
+| `@state` | `@state details = false` | Creates a variable that changes while the document is shown. See [Interactivity](/en/guides/interactive/). |
 | `@transition` | `@transition fade` | Default transition when entering pages: `fade`, `slide`, `zoom` or `none`. |
-| `@extern` | `@extern score = 0` | Creates a variable that the program showing the document sets, such as the score of a game. See [Values from outside](/docs/en/guides/interactive/#values-from-outside-with-extern). |
-| `@persist` | `@persist endings coins` | Keeps these `@state` variables in the browser, so progress carries on after the document is closed. See [Saved progress](/docs/en/guides/interactive/#saved-progress). |
-| `@scorm` | `@scorm score=$points complete=#end` | Score and completion reported to an LMS by the SCORM package. See [Score and completion in an LMS](/docs/en/guides/interactive/#score-and-completion-in-an-lms-scorm). |
-| `@mode` | `@mode game` | `default` (default) or `game`: in `game`, the arrows do not leave pages and the counter is hidden. See [Interactivity](/docs/en/guides/interactive/#locked-pages-and-game-mode). |
-| `@header` … `@end` | `@header {attributes}` | Header repeated on every page except the cover. See [Header, footer and overlay](/docs/en/guides/header-footer/). |
-| `@footer` … `@end` | `@footer {attributes}` | Footer repeated on every page except the cover. `@footer none` turns off the project theme's footer. |
-| `@overlay` … `@end` | `@overlay {attributes}` | Free layer on top of the content, on every page except the cover; blocks with `x`/`y` are placed from the page's corner. `@overlay none` turns off the project theme's overlay. See [Overlay](/docs/en/guides/header-footer/#overlay-overlay). |
+| `@extern` | `@extern score = 0` | Creates a variable that the program showing the document sets, such as the score of a game. See [Values from outside](/en/guides/interactive/#values-from-outside-with-extern). |
+| `@persist` | `@persist endings coins` | Keeps these `@state` variables in the browser, so progress carries on after the document is closed. See [Saved progress](/en/guides/interactive/#saved-progress). |
+| `@scorm` | `@scorm score=$points complete=#end` | Score and completion reported to an LMS by the SCORM package. See [Score and completion in an LMS](/en/guides/interactive/#score-and-completion-in-an-lms-scorm). |
+| `@mode` | `@mode game` | `default` (default) or `game`: in `game`, the arrows do not leave pages and the counter is hidden. See [Interactivity](/en/guides/interactive/#locked-pages-and-game-mode). |
+| `@header` … `@end` | `@header {attributes}` | Header repeated on every page except the cover. See [Header, footer and overlay](/en/guides/header-footer/). |
+| `@footer` … `@end` | `@footer {attributes}` | Footer repeated on every page except the cover. `@footer none` turns off the base theme's footer. |
+| `@overlay` … `@end` | `@overlay {attributes}` | Free layer on top of the content, on every page except the cover; blocks with `x`/`y` are placed from the page's corner. `@overlay none` turns off the base theme's overlay. See [Overlay](/en/guides/header-footer/#overlay-overlay). |
 
-Color, font, style and component names use lowercase letters, numbers and hyphens, starting with a letter. Blank lines and comments may appear between definitions. A definition after the first page is an error ([R103](/docs/en/reference/errors/)).
+Color, font, style and component names use lowercase letters, numbers and hyphens, starting with a letter. Blank lines and comments may appear between definitions. A definition after the first page is an error ([R103](/en/reference/errors/)).
 
 ### Page separator
 
@@ -58,7 +58,7 @@ Color, font, style and component names use lowercase letters, numbers and hyphen
 | `--- {#id}` | Gives the page an id, used by internal links such as `[back](#id)` and by `click="go #id"`. |
 | `--- {hidden}` | Takes the page out of the normal flow; it is only reached by link or `go`. |
 | `--- {next=#id}` | Replaces the following page when advancing. |
-| `--- {width=1080 height=1920}` | Gives this page its own size; `height=auto` makes it grow with the content. See [Page sizes](/docs/en/guides/pages/). |
+| `--- {width=1080 height=1920}` | Gives this page its own size; `height=auto` makes it grow with the content. See [Page sizes](/en/guides/pages/). |
 
 Right after the separator, `@let` and `@state` lines create variables that only exist in that page.
 
@@ -154,7 +154,7 @@ Text
 | `input` | `::` | Text field bound to a `@state`: `:: input {bind=$name}`. |
 | `sound` | `::` | Sound played by `play` and `stop`: `:: sound https://… {name=door}`. |
 
-Details for each block in [Blocks](/docs/en/reference/blocks/).
+Details for each block in [Blocks](/en/reference/blocks/).
 
 ## Components
 
@@ -178,13 +178,13 @@ Components only take named parameters: `.style`, `#id` and loose text after the 
 | `$param` | In a component body, in text or an attribute value | Replaced by the parameter value: `## $title`, `{color=$tone}`. |
 | `$content` | Alone on a line of the body | Receives the content passed between `::: name` and `:::`. |
 | `$name` | Alone on a line of the body, when `name` is not a parameter | Named slot, filled with `::: slot name`. It stays empty if not filled. |
-| `$page`, `$pages`, `$title`, `$author`, `$date` | Inside `@header`, `@footer` and `@overlay` | Page number, total pages, title, author and today's date. Any other name is an error ([R522](/docs/en/reference/errors/)). |
+| `$page`, `$pages`, `$title`, `$author`, `$date` | Inside `@header`, `@footer` and `@overlay` | Page number, total pages, title, author and today's date. Any other name is an error ([R522](/en/reference/errors/)). |
 | `$variable`, `$item.field` | Anywhere | Value of a `@let`, `@data`, `@state`, `for` variable or record field. |
 | `$( expression )` | Anywhere | Result of an expression, such as `$($price * 12)`. |
 | `$step` | Anywhere | Current step of the page. |
-| `$elapsed` | Anywhere | Seconds since the page opened. See [Time](/docs/en/guides/interactive/#time). |
+| `$elapsed` | Anywhere | Seconds since the page opened. See [Time](/en/guides/interactive/#time). |
 
-A `$word` that is not a declared variable is plain text, so `US$ 10` stays the same. The exception is `$content` alone on a line outside a component, which is an error ([R401](/docs/en/reference/errors/)). For a literal `$` before a declared name, write `\$name`.
+A `$word` that is not a declared variable is plain text, so `US$ 10` stays the same. The exception is `$content` alone on a line outside a component, which is an error ([R401](/en/reference/errors/)). For a literal `$` before a declared name, write `\$name`.
 
 ## Expressions
 

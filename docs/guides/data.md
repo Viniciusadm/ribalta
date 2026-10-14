@@ -12,7 +12,7 @@ Quando a mesma informação aparece em vários lugares, ou quando uma página é
 | `::: for` | Repetir um trecho para cada item de uma lista. |
 | `::: if` | Mostrar um trecho só quando uma condição é verdadeira. |
 
-Tudo isso é resolvido **antes** de mostrar o documento: o compilador gera as páginas finais e avisa sobre qualquer problema. Para conteúdo que muda **enquanto** o documento é mostrado (ao clicar, por exemplo), veja [Interatividade e navegação](/docs/guides/interactive/).
+Tudo isso é resolvido **antes** de mostrar o documento: o compilador gera as páginas finais e avisa sobre qualquer problema. Para conteúdo que muda **enquanto** o documento é mostrado (ao clicar, por exemplo), veja [Interatividade e navegação](/guides/interactive/).
 
 ## Variáveis com `@let`
 
@@ -84,7 +84,7 @@ Por ano, com 15% de desconto: R$ $(round($preco * $usuarios * 12 * 0.85))
 | Pertence à lista | `$fruta in [maçã, pera]`, `chave in $mochila` |
 | Lógica | `$a and $b`, `$a or $b`, `not $a` |
 | Escolha | `$compacto ? sm : lg` |
-| Funções | `len($lista)`, `min($lista)`, `max($lista)`, `sum($lista)`, `round($x)`, `round($x, 1)`; em ações, `random(1, 6)` e `pick($lista)` ([Sorteios](/docs/guides/interactive/#sorteios)) |
+| Funções | `len($lista)`, `min($lista)`, `max($lista)`, `sum($lista)`, `round($x)`, `round($x, 1)`; em ações, `random(1, 6)` e `pick($lista)` ([Sorteios](/guides/interactive/#sorteios)) |
 
 Não há funções criadas pelo usuário, laços infinitos nem acesso a nada fora do documento: as expressões só calculam valores.
 
@@ -259,7 +259,7 @@ Suporte dedicado {.kicker}
 :::
 ```
 
-- `tom=claro|escuro` declara os valores aceitos; o primeiro é o padrão. Outro valor é erro ([R418](/docs/reference/errors/)).
+- `tom=claro|escuro` declara os valores aceitos; o primeiro é o padrão. Outro valor é erro ([R418](/reference/errors/)).
 - `.plano-$tom` escolhe o estilo pela variante, sem repetir propriedades.
 
 ### Componente, variável ou estilo?
@@ -270,20 +270,20 @@ Suporte dedicado {.kicker}
 | A mesma estrutura com conteúdos diferentes | `@component` |
 | Um valor compartilhado (tamanho, texto, opção) | `@let` |
 | Várias estruturas geradas a partir de dados | `@data` + `::: for` + componente |
-| Algo que muda enquanto o documento é mostrado | `@state` (veja [Interatividade](/docs/guides/interactive/)) |
+| Algo que muda enquanto o documento é mostrado | `@state` (veja [Interatividade](/guides/interactive/)) |
 
-## Tokens no tema do projeto
+## Tokens no tema base
 
-O tema do projeto também aceita `@let` e `@data`. Um documento pode redefinir um `@let` do tema, do mesmo jeito que faz com `@color`.
+O tema base também aceita `@let` e `@data`. Um documento pode redefinir um `@let` do tema, do mesmo jeito que faz com `@color`.
 
 ## Erros comuns
 
 | Código | Quando acontece |
 | --- | --- |
-| [R601](/docs/reference/errors/) | `$nome` numa expressão, `if` ou `for` sem ter sido declarado. |
-| [R602](/docs/reference/errors/) | Tipos que não combinam, como `$texto * 2` ou um `if` sobre um número. |
-| [R603](/docs/reference/errors/) | Expressão mal escrita, como `$(1 +)`. |
-| [R606](/docs/reference/errors/) | `for` sobre algo que não é lista, ou repetições demais. |
-| [R607](/docs/reference/errors/) | `::: else` sem um `::: if` logo antes. |
-| [R609](/docs/reference/errors/) | `@let`, `@state` ou `@data` mal escrito. |
-| [R610](/docs/reference/errors/) | O mesmo nome declarado duas vezes. |
+| [R601](/reference/errors/) | `$nome` numa expressão, `if` ou `for` sem ter sido declarado. |
+| [R602](/reference/errors/) | Tipos que não combinam, como `$texto * 2` ou um `if` sobre um número. |
+| [R603](/reference/errors/) | Expressão mal escrita, como `$(1 +)`. |
+| [R606](/reference/errors/) | `for` sobre algo que não é lista, ou repetições demais. |
+| [R607](/reference/errors/) | `::: else` sem um `::: if` logo antes. |
+| [R609](/reference/errors/) | `@let`, `@state` ou `@data` mal escrito. |
+| [R610](/reference/errors/) | O mesmo nome declarado duas vezes. |

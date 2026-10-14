@@ -100,7 +100,7 @@ Regular steps only add content. With `$step`, the current step of the page, you 
 Only on the last step: **all set!** {if="$step == 3" enter=zoom}
 ```
 
-The page has as many steps as the largest number used in `step`, in `::: steps` or in a comparison with `$step`. For more, use `--- {steps=N}`. See also [Interactivity and navigation](/docs/en/guides/interactive/#steps-with-step).
+The page has as many steps as the largest number used in `step`, in `::: steps` or in a comparison with `$step`. For more, use `--- {steps=N}`. See also [Interactivity and navigation](/en/guides/interactive/#steps-with-step).
 
 ## How elements appear
 

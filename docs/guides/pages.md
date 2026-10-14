@@ -22,10 +22,7 @@ As medidas da linguagem são pixels da página, qualquer que seja a tela em que 
 
 ## Tamanho padrão
 
-O programa que compila o documento escolhe o tamanho padrão das páginas. É assim que o mesmo texto serve para coisas diferentes:
-
-- O Folio, o programa de apresentações feito com a Ribalta, usa páginas de 1920 × 1080. Uma apresentação do Folio é um documento de páginas 1920 × 1080.
-- Sem nenhum programa definindo o padrão, a página tem 1920 pixels de largura e altura automática.
+O programa que compila o documento escolhe o tamanho padrão das páginas. Sem um padrão do programa, a página tem 1920 pixels de largura e altura automática.
 
 Para não depender do padrão, diga o tamanho no próprio documento com `@page`.
 
@@ -61,7 +58,7 @@ Também dá para nomear cada medida com `width` e `height`. Nessa forma, `@page`
 # Mesma largura do padrão, altura automática
 ```
 
-Cada medida vai de 16 a 16384 pixels, e a altura também aceita `auto`. Um valor fora dessas regras, como `@page 16:9`, é erro ([R515](/docs/reference/errors/)).
+Cada medida vai de 16 a 16384 pixels, e a altura também aceita `auto`. Um valor fora dessas regras, como `@page 16:9`, é erro ([R515](/reference/errors/)).
 
 ## Altura automática
 
@@ -123,18 +120,18 @@ A terceira página volta ao tamanho do `@page`. Para deixar uma página só com 
 Uma lista longa de detalhes, que cresce o quanto precisar.
 ```
 
-Valores inválidos no separador também são erro [R515](/docs/reference/errors/), com as mensagens "largura de página inválida" ou "altura de página inválida".
+Valores inválidos no separador também são erro [R515](/reference/errors/), com as mensagens "largura de página inválida" ou "altura de página inválida".
 
 ## Quem decide o tamanho
 
 Cada página começa com o tamanho padrão e pode ser ajustada em quatro níveis. Cada nível vence o anterior:
 
 1. O padrão do programa que compila o documento.
-2. `@page` no [tema do projeto](/docs/guides/themes/#tema-do-projeto), que vale para todos os documentos do projeto.
+2. `@page` no [tema base](/guides/themes/#tema-base), que vale para todos os documentos que usam esse tema.
 3. `@page` no documento.
 4. `width` e `height` no separador da página.
 
-Por exemplo, um tema do projeto com `@page 1440x1080` deixa todos os documentos em 4:3; um documento com `@page 1920x1080` volta a 16:9 só para ele; e uma página com `--- {height=auto}` fica com 1920 de largura e altura automática.
+Por exemplo, um tema base com `@page 1440x1080` deixa todos os documentos em 4:3; um documento com `@page 1920x1080` volta a 16:9 só para ele; e uma página com `--- {height=auto}` fica com 1920 de largura e altura automática.
 
 ## Número da página
 
@@ -154,12 +151,12 @@ Página $page de $pages
 # Próximos passos
 ```
 
-A capa conta como página 1, mesmo sem rodapé. Veja [Cabeçalho, rodapé e camada livre](/docs/guides/header-footer/#campos-automáticos).
+A capa conta como página 1, mesmo sem rodapé. Veja [Cabeçalho, rodapé e camada livre](/guides/header-footer/#campos-automáticos).
 
 ## Erros comuns
 
 | Código | Quando acontece |
 | --- | --- |
-| [R515](/docs/reference/errors/) | `@page` sem largura e altura válidas, como `@page 16:9`, ou `width`/`height` inválidos no separador. |
-| [R501](/docs/reference/errors/) | `@page` sem valor. |
-| [R103](/docs/reference/errors/) | `@page` depois da primeira página. |
+| [R515](/reference/errors/) | `@page` sem largura e altura válidas, como `@page 16:9`, ou `width`/`height` inválidos no separador. |
+| [R501](/reference/errors/) | `@page` sem valor. |
+| [R103](/reference/errors/) | `@page` depois da primeira página. |

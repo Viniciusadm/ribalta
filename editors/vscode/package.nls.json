@@ -3,6 +3,6 @@
   "command.graph": "Show route map",
   "command.restart": "Restart language server",
   "config.path": "Path to the `ribalta` command line tool, installed with `cargo install ribalta-cli`.",
-  "config.theme": "Project theme applied before each document. Relative paths are resolved from the folder of each file. When empty, a `theme.ribalta` next to the file is used, if there is one.",
+  "config.theme": "Base theme applied before each document. Relative paths are resolved from the folder of each file. When empty, a `theme.ribalta` next to the file is used, if there is one.",
   "config.language": "Language of the compiler messages. `auto` follows the editor language."
 }

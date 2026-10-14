@@ -27,10 +27,10 @@ Main public API:
 | Function | Purpose |
 | --- | --- |
 | `compile(source)` | Compiles a document |
-| `compile_with_prelude(prelude, source)` | Compiles with the project theme (`prelude`) applied |
+| `compile_with_prelude(prelude, source)` | Compiles with the base theme (`prelude`) applied |
 | `compile_localized(prelude, source, locale)` | Same, with messages in pt or en |
 | `compile_with_options(prelude, source, locale, options)` | Same, with the host's defaults, such as the page size |
-| `check_prelude(prelude)` | Validates a project theme |
+| `check_prelude(prelude)` | Validates a base theme |
 | `*_to_json` | Variants that return JSON, used by the WebAssembly bridge |
 
 The result contains the `document` (its pages as IR) and the list of `diagnostics` (severity, code, line, column, message and hint). An error does not stop compilation: the compiler returns everything it could build. The IR is specified in [crates/ribalta/IR.md](crates/ribalta/IR.md), the contract for writing a renderer outside the web app.
@@ -64,7 +64,7 @@ The release profile optimizes the `ribalta` crate for size (`opt-level = "s"`, L
 
 ## Documentation
 
-[`docs`](docs) holds the pages about the language, in pt and en (`en/`): writing, page sizes and documents, layout, styling, themes, components, data, interactivity, charts, images and the reference of syntax, attributes, blocks, themes, icons and errors. They are also published as [`@ribaltalang/docs`](packages/docs) for sites that host them, and their `ribalta` examples are the corpus of the formatter and Android tests.
+[`docs`](docs) holds the pages about the language, in pt and en (`en/`): writing, page sizes and documents, layout, styling, themes, components, data, interactivity, charts, images and the reference of syntax, attributes, blocks, themes, icons and errors. [`site`](site) publishes them at [viniciusadm.github.io/ribalta](https://viniciusadm.github.io/ribalta/), and their `ribalta` examples are the corpus of the formatter and Android tests.
 
 ## Tests
 
@@ -73,7 +73,7 @@ cargo test
 npm install && npm test
 ```
 
-`cargo test` covers the compiler (`crates/ribalta/tests`) and the language CLI (`crates/cli/tests`), including the conformance cases in `crates/ribalta/conformance` that the web and Android renderers also run, and the formatter over every `ribalta` example in [`docs`](docs). `npm test` builds `ribalta.wasm` and runs [`tests`](tests) against the npm packages: the same conformance cases, the expression fixtures, the icon data and the documentation (every page in both languages, every error code documented).
+`cargo test` covers the compiler (`crates/ribalta/tests`) and the language CLI (`crates/cli/tests`), including the conformance cases in `crates/ribalta/conformance` that the web and Android renderers also run, and the formatter over every `ribalta` example in [`docs`](docs). `npm test` builds `ribalta.wasm` and runs [`tests`](tests) against the npm packages: the same conformance cases, the expression fixtures, the icon data and the documentation (every page in both languages, every internal link and every error code documented).
 
 ## License
 

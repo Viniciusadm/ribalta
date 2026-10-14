@@ -67,7 +67,7 @@ private class Track(context: Context, address: String, private val sound: BlockK
     }
 }
 
-private fun soundsOf(slide: Page): List<BlockKind.Sound> {
+private fun soundsOf(page: Page): List<BlockKind.Sound> {
     val found = mutableListOf<BlockKind.Sound>()
     fun visit(blocks: List<Block>) {
         for (block in blocks) {
@@ -80,17 +80,17 @@ private fun soundsOf(slide: Page): List<BlockKind.Sound> {
             }
         }
     }
-    visit(listOfNotNull(slide.header) + slide.children + listOfNotNull(slide.footer, slide.overlay))
+    visit(listOfNotNull(page.header) + page.children + listOfNotNull(page.footer, page.overlay))
     return found
 }
 
 private class Seen(var id: Int)
 
 @Composable
-fun SlideSounds(slide: Page, cues: List<Cue>, images: Images) {
+fun PageSounds(page: Page, cues: List<Cue>, images: Images) {
     val context = LocalContext.current
-    val tracks = remember(slide) {
-        soundsOf(slide).mapNotNull { sound -> images.address(sound.src)?.let { sound.name to Track(context, it, sound) } }
+    val tracks = remember(page) {
+        soundsOf(page).mapNotNull { sound -> images.address(sound.src)?.let { sound.name to Track(context, it, sound) } }
     }
     DisposableEffect(tracks) {
         onDispose { tracks.forEach { (_, track) -> track.release() } }

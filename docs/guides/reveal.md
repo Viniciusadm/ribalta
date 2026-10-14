@@ -100,7 +100,7 @@ As etapas normais só acrescentam conteúdo. Com `$step`, a etapa atual da pági
 Só na última etapa: **tudo pronto!** {if="$step == 3" enter=zoom}
 ```
 
-A página tem tantas etapas quanto o maior número usado em `step`, em `::: steps` ou numa comparação com `$step`. Para mais, use `--- {steps=N}`. Veja também [Interatividade e navegação](/docs/guides/interactive/#etapas-com-step).
+A página tem tantas etapas quanto o maior número usado em `step`, em `::: steps` ou numa comparação com `$step`. Para mais, use `--- {steps=N}`. Veja também [Interatividade e navegação](/guides/interactive/#etapas-com-step).
 
 ## Como os elementos aparecem
 

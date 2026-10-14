@@ -62,10 +62,10 @@ import com.archieapps.ribaltareader.render.Interaction
 import com.archieapps.ribaltareader.render.LocalInteraction
 import com.archieapps.ribaltareader.render.RenderContext
 import com.archieapps.ribaltareader.render.ScaledPage
-import com.archieapps.ribaltareader.render.SlideSounds
+import com.archieapps.ribaltareader.render.PageSounds
 import com.archieapps.ribaltareader.render.PageView
 import com.archieapps.ribaltareader.render.entrance
-import com.archieapps.ribaltareader.render.slideBackground
+import com.archieapps.ribaltareader.render.pageBackground
 import com.archieapps.ribaltareader.runtime.Navigation
 import com.archieapps.ribaltareader.runtime.Persist
 import com.archieapps.ribaltareader.runtime.Shortcuts
@@ -136,14 +136,14 @@ private fun Reader(immersive: (Boolean) -> Unit) {
             opened = null
             immersive(false)
         }
-        Presenter(current.compilation, Persist(context.applicationContext, current.source), fonts, images, english)
+        DocumentViewer(current.compilation, Persist(context.applicationContext, current.source), fonts, images, english)
         return
     }
 
     Box(Modifier.fillMaxSize().background(Color(0xff0f141b)).padding(32.dp), contentAlignment = Alignment.Center) {
         Column(horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.spacedBy(16.dp)) {
             Text("Ribalta Reader", color = Color.White, fontSize = 32.sp)
-            Text(if (english) "Open a .ribalta file to present it." else "Abra um arquivo .ribalta para apresentar.", color = Color(0xff8a97a8))
+            Text(if (english) "Open a .ribalta file to view it." else "Abra um arquivo .ribalta para visualizar.", color = Color(0xff8a97a8))
             if (loading) {
                 CircularProgressIndicator()
             } else {
@@ -158,26 +158,26 @@ private fun Reader(immersive: (Boolean) -> Unit) {
 }
 
 @Composable
-private fun Presenter(compilation: Compilation, persist: Persist, fonts: Fonts, images: Images, english: Boolean) {
+private fun DocumentViewer(compilation: Compilation, persist: Persist, fonts: Fonts, images: Images, english: Boolean) {
     val document = compilation.document
     var session by remember(document) { mutableStateOf<Session>(Navigation.start(document, state = persist.load(document))) }
     val focus = remember { FocusRequester() }
     var showErrors by remember(document) { mutableStateOf(compilation.diagnostics.any { it.severity == "error" }) }
     if (document.pages.isEmpty()) {
         Box(Modifier.fillMaxSize().background(Color.Black), contentAlignment = Alignment.Center) {
-            Text(if (english) "This file has no slides." else "Este arquivo não tem slides.", color = Color.White)
+            Text(if (english) "This file has no pages." else "Este arquivo não tem páginas.", color = Color.White)
         }
         return
     }
-    val slide = document.pages[session.index]
+    val page = document.pages[session.index]
     fun shortcut(key: String): Boolean {
-        val actions = Shortcuts.forSlide(document, session)[key] ?: return false
+        val actions = Shortcuts.forPage(document, session)[key] ?: return false
         session = Navigation.run(document, session, actions)
         return true
     }
     val interaction = Interaction(Scope(session.state, session.step, session.elapsed), shortcut = ::shortcut) { actions -> session = Navigation.run(document, session, actions) }
-    LaunchedEffect(document, session.index, slide.clock) {
-        if (!slide.clock) return@LaunchedEffect
+    LaunchedEffect(document, session.index, page.clock) {
+        if (!page.clock) return@LaunchedEffect
         while (true) {
             delay(1000)
             session = Navigation.tick(document, session)
@@ -185,8 +185,8 @@ private fun Presenter(compilation: Compilation, persist: Persist, fonts: Fonts, 
     }
     LaunchedEffect(document, session.state) { persist.save(document, session.state) }
     LaunchedEffect(Unit) { runCatching { focus.requestFocus() } }
-    SlideSounds(slide, session.cues, images)
-    val render = RenderContext(document.theme, fonts, document.icons, images, slideBackground(document, slide), english)
+    PageSounds(page, session.cues, images)
+    val render = RenderContext(document.theme, fonts, document.icons, images, pageBackground(document, page), english)
     Box(
         Modifier.fillMaxSize().background(Color.Black).pointerInput(document) {
             detectTapGestures { offset ->
@@ -205,10 +205,10 @@ private fun Presenter(compilation: Compilation, persist: Persist, fonts: Fonts, 
             true
         },
     ) {
-        ScaledPage(slide.width, slide.height, Modifier.fillMaxSize()) {
+        ScaledPage(page.width, page.height, Modifier.fillMaxSize()) {
             key(session.index) {
-                Box(Modifier.entrance(slide.transition?.let { document.theme.motion.transitions[it] })) {
-                    CompositionLocalProvider(LocalInteraction provides interaction) { PageView(document, slide, render) }
+                Box(Modifier.entrance(page.transition?.let { document.theme.motion.transitions[it] })) {
+                    CompositionLocalProvider(LocalInteraction provides interaction) { PageView(document, page, render) }
                 }
             }
         }

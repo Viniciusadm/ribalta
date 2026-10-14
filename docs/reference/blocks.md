@@ -10,7 +10,7 @@ Blocos organizam o conteúdo da página. Há duas formas:
 | Contêiner | `::: nome {atributos}` … `:::` | Blocos com conteúdo. Um `:::` sozinho na linha fecha o último bloco aberto. |
 | Uma linha | `:: nome valor {atributos}` | Blocos sem conteúdo, como ícones e espaços. |
 
-Todos os blocos aceitam os [atributos de estilo](/docs/reference/attributes/#atributos-de-estilo). Blocos contêiner podem ser aninhados à vontade, e a indentação é opcional.
+Todos os blocos aceitam os [atributos de estilo](/reference/attributes/#atributos-de-estilo). Blocos contêiner podem ser aninhados à vontade, e a indentação é opcional.
 
 ## Resumo
 
@@ -34,7 +34,7 @@ Todos os blocos aceitam os [atributos de estilo](/docs/reference/attributes/#atr
 | [`input`](#input) | Uma linha | Nenhum | `bind`, `placeholder`, `on-submit` |
 | [`sound`](#sound) | Uma linha | Nenhum; o valor é o endereço do áudio | `name`, `autoplay`, `loop`, `volume` |
 
-`icon`, `spacer` e `divider` não aceitam conteúdo ([R109](/docs/reference/errors/)). Nos demais blocos embutidos, texto depois do nome é ignorado ([R110](/docs/reference/errors/)); use atributos entre chaves.
+`icon`, `spacer` e `divider` não aceitam conteúdo ([R109](/reference/errors/)). Nos demais blocos embutidos, texto depois do nome é ignorado ([R110](/reference/errors/)); use atributos entre chaves.
 
 ## columns
 
@@ -151,7 +151,7 @@ Só borda e espaçamento.
 
 Revela os filhos um por vez enquanto o documento é mostrado: cada filho é uma etapa. Se um filho é uma lista, **cada item** da lista vira uma etapa. Numa visualização estática, como uma imagem ou um PDF, tudo aparece de uma vez.
 
-Aceita os mesmos atributos de `stack`. Para controlar a ordem manualmente, use `{step=N}` em qualquer bloco ou trecho. Veja [Revelação](/docs/guides/reveal/).
+Aceita os mesmos atributos de `stack`. Para controlar a ordem manualmente, use `{step=N}` em qualquer bloco ou trecho. Veja [Revelação](/guides/reveal/).
 
 ```ribalta preview
 ## Três motivos
@@ -204,7 +204,7 @@ Desenha um gráfico a partir de uma tabela Markdown dentro do bloco. A primeira 
 
 Com `data=$lista`, os dados vêm de um `@data` e o bloco pode ter uma linha só: `:: chart {data=$vendas label=mes series="receita custo"}`.
 
-Mais exemplos em [Gráficos](/docs/guides/charts/).
+Mais exemplos em [Gráficos](/guides/charts/).
 
 ## table
 
@@ -238,7 +238,7 @@ Versão completa, com todos os detalhes.
 :::
 ```
 
-O atributo `if=condição` faz o mesmo para um único elemento. Com `@state`, a escolha acontece enquanto o documento é mostrado; veja [Interatividade](/docs/guides/interactive/).
+O atributo `if=condição` faz o mesmo para um único elemento. Com `@state`, a escolha acontece enquanto o documento é mostrado; veja [Interatividade](/guides/interactive/).
 
 ## for
 
@@ -252,11 +252,11 @@ O atributo `if=condição` faz o mesmo para um único elemento. Com `@state`, a 
 :::
 ```
 
-Listas Markdown geradas por um `for` são juntadas numa lista só. Veja [Variáveis, dados e repetição](/docs/guides/data/).
+Listas Markdown geradas por um `for` são juntadas numa lista só. Veja [Variáveis, dados e repetição](/guides/data/).
 
 ## slot
 
-Preenche um espaço nomeado de um componente. Só pode ser usado diretamente dentro do uso de um componente contêiner ([R416](/docs/reference/errors/) fora dele). O nome do espaço vem depois de `slot`.
+Preenche um espaço nomeado de um componente. Só pode ser usado diretamente dentro do uso de um componente contêiner ([R416](/reference/errors/) fora dele). O nome do espaço vem depois de `slot`.
 
 ```ribalta preview
 @component comparacao {antes depois}
@@ -280,11 +280,11 @@ Os dados chegam sozinhos.
 :::
 ```
 
-Veja [Componentes](/docs/guides/components/) para os detalhes de `$content` e dos espaços nomeados.
+Veja [Componentes](/guides/components/) para os detalhes de `$content` e dos espaços nomeados.
 
 ## icon
 
-Desenha um ícone da biblioteca embutida. O nome vem depois de `icon`; a lista completa está em [Ícones](/docs/reference/icons/).
+Desenha um ícone da biblioteca embutida. O nome vem depois de `icon`; a lista completa está em [Ícones](/reference/icons/).
 
 | Atributo | Uso | Padrão |
 | --- | --- | --- |
@@ -301,7 +301,7 @@ Desenha um ícone da biblioteca embutida. O nome vem depois de `icon`; a lista c
 
 ## spacer
 
-Espaço vazio entre dois blocos. O valor é um tamanho da [escala de espaçamento](/docs/reference/attributes/#espaçamento) (`none` a `3xl`) ou pixels de 0 a 600. Sem valor, vale `md` (32 px).
+Espaço vazio entre dois blocos. O valor é um tamanho da [escala de espaçamento](/reference/attributes/#espaçamento) (`none` a `3xl`) ou pixels de 0 a 600. Sem valor, vale `md` (32 px).
 
 ```ribalta preview
 # Antes do espaço
@@ -338,7 +338,7 @@ Campo de texto ligado a um `@state`. O que a pessoa digita vai direto para a var
 Olá, $nome! {if="$nome != \"\""}
 ```
 
-Digitar no campo não avança a página. Numa visualização estática, como uma imagem ou um PDF, o campo aparece com o valor inicial. Veja [Entrada de texto](/docs/guides/interactive/#entrada-de-texto).
+Digitar no campo não avança a página. Numa visualização estática, como uma imagem ou um PDF, o campo aparece com o valor inicial. Veja [Entrada de texto](/guides/interactive/#entrada-de-texto).
 
 ## sound
 
@@ -358,4 +358,4 @@ Um som da página. Ele não é desenhado: toca com `autoplay` ao entrar, ou quan
 [Abrir]{click="play porta"} · [Silêncio]{click="stop chuva"}
 ```
 
-O endereço começa com `https://`. Veja [Som](/docs/guides/interactive/#som).
+O endereço começa com `https://`. Veja [Som](/guides/interactive/#som).

@@ -21,7 +21,7 @@ Errors inside a component are reported on the line where the component is **used
 | [F2xx](#f2xx-attributes) | Attributes: brace syntax, styles and attribute names. |
 | [F3xx](#f3xx-values) | Attribute values. |
 | [F4xx](#f4xx-components) | Components and named slots. |
-| [F5xx](#f5xx-definitions-and-project-theme) | Preamble definitions and the project theme. |
+| [F5xx](#f5xx-definitions-and-base-theme) | Preamble definitions and the base theme. |
 | [F6xx](#f6xx-variables-expressions-and-state) | Variables, data, expressions, repetition and state. |
 | [F7xx](#f7xx-navigation) | Navigation between pages. |
 
@@ -129,7 +129,7 @@ A table row has more or fewer cells than the header.
 
 **Error.** Message: unknown block: `colums`.
 
-The name after `:::` or `::` is neither a built-in block nor a component defined in the document or the project theme. The hint suggests the closest name.
+The name after `:::` or `::` is neither a built-in block nor a component defined in the document or the base theme. The hint suggests the closest name.
 
 ```ribalta
 ::: colums
@@ -137,7 +137,7 @@ Text
 :::
 ```
 
-**How to fix:** fix the name (here, `columns`) or define the component with `@component`. See the list in [Blocks](/docs/en/reference/blocks/).
+**How to fix:** fix the name (here, `columns`) or define the component with `@component`. See the list in [Blocks](/en/reference/blocks/).
 
 ### R109 · Single-line block with content
 
@@ -181,7 +181,7 @@ Sales per month
 :::
 ```
 
-**How to fix:** put a table inside the block. The first column holds the labels and the others are the series. See [Charts](/docs/en/guides/charts/).
+**How to fix:** put a table inside the block. The first column holds the labels and the others are the series. See [Charts](/en/guides/charts/).
 
 ### R112 · Chart value is not a number
 
@@ -223,7 +223,7 @@ The table only has the label column, so there is nothing to draw.
 :: icon {size=3xl}
 ```
 
-**How to fix:** write the name after `icon`, as in `:: icon rocket {size=3xl}`. The names are listed in [Icons](/docs/en/reference/icons/).
+**How to fix:** write the name after `icon`, as in `:: icon rocket {size=3xl}`. The names are listed in [Icons](/en/reference/icons/).
 
 ### R115 · Unknown icon
 
@@ -235,7 +235,7 @@ The name is not in the list of built-in icons. When there is a similar name, the
 :: icon rockets
 ```
 
-**How to fix:** use a name from the list in [Icons](/docs/en/reference/icons/), such as `rocket`.
+**How to fix:** use a name from the list in [Icons](/en/reference/icons/), such as `rocket`.
 
 ### R116 · Field without a variable
 
@@ -347,7 +347,7 @@ The name after the `.` is not a built-in style, a `@style` or a color token. The
 Text {.highlite}
 ```
 
-**How to fix:** fix the name or declare the style at the start of the document with `@style name {attributes}`. See the [built-in styles](/docs/en/reference/themes/#built-in-styles).
+**How to fix:** fix the name or declare the style at the start of the document with `@style name {attributes}`. See the [built-in styles](/en/reference/themes/#built-in-styles).
 
 ### R208 · Repeated page id
 
@@ -375,7 +375,7 @@ The name is neither a style attribute nor an attribute of the block it appears o
 # Heading {colr=coral}
 ```
 
-**How to fix:** fix the name. Block attributes, such as `cols` or `fit`, only work on the right blocks. See [Attributes](/docs/en/reference/attributes/).
+**How to fix:** fix the name. Block attributes, such as `cols` or `fit`, only work on the right blocks. See [Attributes](/en/reference/attributes/).
 
 ## F3xx: values
 
@@ -425,7 +425,7 @@ Common cases:
 | Invalid `spacer` size | `:: spacer huge` | `:: spacer 3xl` |
 | Step outside 1 to 99 | `step=0` | `step=1` |
 
-**How to fix:** use one of the values given in the hint. The full scales and ranges are in [Attributes](/docs/en/reference/attributes/).
+**How to fix:** use one of the values given in the hint. The full scales and ranges are in [Attributes](/en/reference/attributes/).
 
 ### R302 · `widths` does not match the columns
 
@@ -637,7 +637,7 @@ Sale
 @end
 ```
 
-**How to fix:** remove or rename one of the definitions. Redefining a project theme component in a document is allowed and does not cause this error.
+**How to fix:** remove or rename one of the definitions. Redefining a base theme component in a document is allowed and does not cause this error.
 
 ### R414 · Unknown named slot
 
@@ -753,7 +753,7 @@ The parameter declares its accepted values with `|`, and the value used is not o
 
 **How to fix:** give the parameter another name, such as `hotkey`: `@component button {hotkey text}`. On usage, `key=1` is the shortcut again.
 
-## F5xx: definitions and project theme
+## F5xx: definitions and base theme
 
 ### R501 · Definition without a value
 
@@ -928,9 +928,9 @@ The theme does not exist, and the document falls back to the `paper` theme.
 # Opening
 ```
 
-**How to fix:** use `paper`, `ink` or `editorial`. See [Built-in themes](/docs/en/reference/themes/).
+**How to fix:** use `paper`, `ink` or `editorial`. See [Built-in themes](/en/reference/themes/).
 
-`@theme` does not create or name a theme: it only picks the base. To have your own theme, keep a base and adjust it with `@color`, `@font` and `@style`. See [Themes](/docs/en/guides/themes/).
+`@theme` does not create or name a theme: it only picks the base. To have your own theme, keep a base and adjust it with `@color`, `@font` and `@style`. See [Themes](/en/guides/themes/).
 
 ### R514 · Unsupported language version
 
@@ -956,7 +956,7 @@ The theme does not exist, and the document falls back to the `paper` theme.
 # Opening
 ```
 
-**How to fix:** use width x height, as in `@page 1920x1080`, or the key form, as in `@page width=800 height=auto`. See [Page sizes](/docs/en/guides/pages/).
+**How to fix:** use width x height, as in `@page 1920x1080`, or the key form, as in `@page width=800 height=auto`. See [Page sizes](/en/guides/pages/).
 
 The same code appears for `width` and `height` on the page separator, with the messages invalid page width and invalid page height:
 
@@ -1009,11 +1009,11 @@ The token name (the first word after `@font`) follows the same rule as color tok
 
 **How to fix:** use lowercase letters, numbers and hyphens, such as `highlight`.
 
-### R519 · Pages in the project theme
+### R519 · Pages in the base theme
 
-**Error.** Message: the project theme can only contain definitions, not pages.
+**Error.** Message: the base theme can only contain definitions, not pages.
 
-It only appears when checking the [project theme](/docs/en/guides/themes/), never in documents. The example below is the text of the project theme.
+It only appears when checking the [base theme](/en/guides/themes/), never in documents. The example below is the text of the base theme.
 
 ```ribalta
 @theme ink
@@ -1024,11 +1024,11 @@ It only appears when checking the [project theme](/docs/en/guides/themes/), neve
 
 **How to fix:** keep only lines that start with `@` (`@theme`, `@color`, `@font`, `@style` and `@component`) in the theme, plus blank lines and comments. Page content goes in each document.
 
-### R520 · `@title` or `@author` in the project theme
+### R520 · `@title` or `@author` in the base theme
 
-**Warning.** Message: `@title` in the project theme is ignored; set it in each document.
+**Warning.** Message: `@title` in the base theme is ignored; set it in each document.
 
-It only appears when checking the project theme. Title and author belong to each document, so they are ignored in the theme.
+It only appears when checking the base theme. Title and author belong to each document, so they are ignored in the theme.
 
 ```ribalta
 @title Annual report
@@ -1055,7 +1055,7 @@ $page / $pages
 # Opening
 ```
 
-**How to fix:** put all the content in a single block, for example with `::: columns`. See [Header and footer](/docs/en/guides/header-footer/).
+**How to fix:** put all the content in a single block, for example with `::: columns`. See [Header and footer](/en/guides/header-footer/).
 
 ### R522 · Unknown field in the header, footer or overlay
 
@@ -1129,7 +1129,7 @@ The `@header`, `@footer` or `@overlay` line only accepts attributes in braces. T
 # Opening
 ```
 
-**How to fix:** move the text to the next line. To turn off the footer that comes from the project theme, use `@footer none`.
+**How to fix:** move the text to the next line. To turn off the footer that comes from the base theme, use `@footer none`.
 
 ### R530 · Definition that does not fit the library item kind
 
@@ -1486,7 +1486,7 @@ Details
 
 ## F8xx: external files
 
-These only appear in the [command line](/docs/en/reference/cli/), with `ribalta check --check-assets`, which goes online to check images and sounds.
+These only appear in the [command line](https://github.com/Viniciusadm/ribalta/tree/master/crates/cli), with `ribalta check --check-assets`, which goes online to check images and sounds.
 
 ### R801 · Unreachable image or sound
 
@@ -1500,4 +1500,4 @@ These only appear in the [command line](/docs/en/reference/cli/), with `ribalta 
 
 It also appears when the address does not answer (wrong domain, no connection) and when it is a web page rather than the file: for example, the link to a photo on Unsplash instead of the image address.
 
-**How to fix:** open the address in the browser. If it is a page, right-click the image and copy its address. If the file no longer exists or requires a login, upload the image to the project.
+**How to fix:** open the address in the browser. If it is a page, right-click the image and copy its address. If the file does not exist or requires a login, store the image in the program you write in (`asset:`).

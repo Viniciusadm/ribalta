@@ -3,7 +3,7 @@ title: Built-in themes
 description: Colors, fonts, sizes and styles of each built-in Ribalta theme.
 ---
 
-Ribalta has three built-in themes: `paper` (the default), `ink` and `editorial`. Pick one with `@theme` at the start of the document or in the [project theme](/docs/en/guides/themes/). Any token can be replaced with `@color` and `@font`.
+Ribalta has three built-in themes: `paper` (the default), `ink` and `editorial`. Pick one with `@theme` at the start of the document or in the [base theme](/en/guides/themes/). Any token can be replaced with `@color` and `@font`.
 
 ```ribalta
 @theme editorial
@@ -25,7 +25,7 @@ Ribalta has three built-in themes: `paper` (the default), `ink` and `editorial`.
 | Space between page blocks | 32 px | 32 px | 32 px |
 | Code blocks | Dark background | Dark background | Light background |
 
-In every theme, page content starts aligned to the left and vertically centered. On a page with [automatic height](/docs/en/guides/pages/), there is no spare room, so the content simply starts at the top.
+In every theme, page content starts aligned to the left and vertically centered. On a page with [automatic height](/en/guides/pages/), there is no spare room, so the content simply starts at the top.
 
 ## paper
 

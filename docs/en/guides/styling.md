@@ -52,7 +52,7 @@ Every theme has these colors:
 | `coral`, `blue`, `green`, `yellow`, `violet` | Supporting colors |
 | `white`, `black`, `ink`, `paper`, `transparent` | Neutrals |
 
-The exact values for each theme are in [Themes](/docs/en/reference/themes/).
+The exact values for each theme are in [Themes](/en/reference/themes/).
 
 ### Gradients
 
@@ -160,7 +160,7 @@ Transparent
 
 ## Background image
 
-`image` sets a background image that covers the whole block or page. The address must start with `https://` or be an uploaded image (`asset:`):
+`image` sets a background image that covers the whole block or page. The address must start with `https://` or be a stored image (`asset:`):
 
 ```ribalta preview
 --- {image=https://images.unsplash.com/photo-1501785888041-af3ef285b470?w=1200 color=white}
@@ -237,6 +237,6 @@ Owner: product team {.brand}
 
 ## Next steps
 
-- [Themes](/docs/en/guides/themes/): pick a theme and define your own colors and fonts.
-- [Components](/docs/en/guides/components/): combine styles and layouts into reusable blocks.
-- [Attributes reference](/docs/en/reference/attributes/): every attribute and where it applies.
+- [Themes](/en/guides/themes/): pick a theme and define your own colors and fonts.
+- [Components](/en/guides/components/): combine styles and layouts into reusable blocks.
+- [Attributes reference](/en/reference/attributes/): every attribute and where it applies.

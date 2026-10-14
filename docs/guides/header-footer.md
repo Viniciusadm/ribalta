@@ -161,9 +161,9 @@ A capa fica sem cabeçalho, rodapé e camada livre. Por padrão, a capa é a pri
 ![Foto do time](https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=1600){fit=cover w=100% h=100%}
 ```
 
-## No tema do projeto
+## No tema base
 
-Um `@header`, `@footer` ou `@overlay` escrito no [tema do projeto](/docs/guides/themes/#tema-do-projeto) vale para todos os documentos do projeto. É o lugar do rodapé padrão da empresa.
+Um `@header`, `@footer` ou `@overlay` escrito no [tema base](/guides/themes/#tema-base) vale para todos os documentos que usam esse tema. É o lugar do rodapé padrão da empresa.
 
 - Se o documento tiver o seu próprio `@footer`, ele **substitui** o do tema.
 - Para tirar o rodapé do tema num documento, escreva `@footer none`. O mesmo vale para `@header none` e `@overlay none`.

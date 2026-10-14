@@ -149,7 +149,7 @@ Com uma tabela declarada em `@data`, o gráfico pode ter uma linha só. `label` 
 :: chart {data=$vendas type=area series=receita}
 ```
 
-Os mesmos dados podem alimentar outros gráficos, tabelas (`:: table {data=$vendas}`) e repetições. Veja [Variáveis, dados e repetição](/docs/guides/data/).
+Os mesmos dados podem alimentar outros gráficos, tabelas (`:: table {data=$vendas}`) e repetições. Veja [Variáveis, dados e repetição](/guides/data/).
 
 ## Números
 

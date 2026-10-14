@@ -3,7 +3,7 @@ title: Sintaxe
 description: Referência rápida de toda a linguagem Ribalta, da estrutura do documento aos escapes.
 ---
 
-Esta página resume a linguagem inteira em tabelas curtas. Para explicações passo a passo, veja os [guias](/docs/guides/writing/); para os valores aceitos por cada atributo, veja [Atributos](/docs/reference/attributes/).
+Esta página resume a linguagem inteira em tabelas curtas. Para explicações passo a passo, veja os [guias](/guides/writing/); para os valores aceitos por cada atributo, veja [Atributos](/reference/attributes/).
 
 ## Estrutura do documento
 
@@ -30,24 +30,24 @@ Um documento tem duas partes, nesta ordem:
 | `@author` | `@author Nome` | Autor do documento. |
 | `@theme` | `@theme paper` | Tema embutido: `paper` (padrão), `ink` ou `editorial`. |
 | `@version` | `@version 2` | Versão da linguagem: `1` ou `2`. A versão atual é `2`. |
-| `@page` | `@page 1920x1080`, `@page 800xauto`, `@page width=800 height=auto` | Tamanho das páginas, em pixels: largura `x` altura, de 16 a 16384; `auto` na altura faz a página crescer com o conteúdo. A forma com chaves só muda o que nomeia. Sem `@page`, vale o padrão do programa que compila o documento. Veja [Tamanhos e documentos](/docs/guides/pages/). |
+| `@page` | `@page 1920x1080`, `@page 800xauto`, `@page width=800 height=auto` | Tamanho das páginas, em pixels: largura `x` altura, de 16 a 16384; `auto` na altura faz a página crescer com o conteúdo. A forma com chaves só muda o que nomeia. Sem `@page`, vale o padrão do programa que compila o documento. Veja [Tamanhos e documentos](/guides/pages/). |
 | `@color` | `@color marca #ff6b4a` | Cria ou substitui um token de cor. |
 | `@font` | `@font titulo "Bebas Neue" 400 700` | Cria ou substitui um token de fonte (família do Google Fonts e pesos de 100 a 900). |
 | `@style` | `@style destaque {color=marca weight=bold}` | Cria um estilo reutilizável, aplicado com `.destaque`. |
 | `@component` … `@end` | `@component nome {param param=padrão}` | Define um componente. O corpo vai até a linha `@end`. |
-| `@let` | `@let espaco = lg` | Cria uma variável fixa, usada com `$espaco`. Veja [Variáveis](/docs/guides/data/). |
+| `@let` | `@let espaco = lg` | Cria uma variável fixa, usada com `$espaco`. Veja [Variáveis](/guides/data/). |
 | `@data` … `@end` | `@data equipe` seguido de uma tabela | Cria uma lista de registros a partir da tabela. |
-| `@state` | `@state detalhes = false` | Cria uma variável que muda enquanto o documento é mostrado. Veja [Interatividade](/docs/guides/interactive/). |
+| `@state` | `@state detalhes = false` | Cria uma variável que muda enquanto o documento é mostrado. Veja [Interatividade](/guides/interactive/). |
 | `@transition` | `@transition fade` | Transição padrão ao entrar nas páginas: `fade`, `slide`, `zoom` ou `none`. |
-| `@extern` | `@extern placar = 0` | Cria uma variável que quem mostra o documento define, como o placar de um jogo. Veja [Valores de fora](/docs/guides/interactive/#valores-de-fora-com-extern). |
-| `@persist` | `@persist finais moedas` | Guarda esses `@state` no navegador, para o progresso continuar depois de fechar a página. Veja [Progresso salvo](/docs/guides/interactive/#progresso-salvo). |
-| `@scorm` | `@scorm score=$pontos complete=#fim` | Nota e conclusão enviadas a um LMS no pacote SCORM. Veja [Nota e conclusão em LMS](/docs/guides/interactive/#nota-e-conclusão-em-lms-scorm). |
-| `@mode` | `@mode game` | `default` (padrão) ou `game`: em `game`, as setas não saem das páginas e o programa que mostra o documento esconde o contador. Veja [Interatividade](/docs/guides/interactive/#páginas-sem-avanço-e-modo-jogo). |
-| `@header` … `@end` | `@header {atributos}` | Cabeçalho repetido em todas as páginas, menos na capa. Veja [Cabeçalho, rodapé e camada livre](/docs/guides/header-footer/). |
-| `@footer` … `@end` | `@footer {atributos}` | Rodapé repetido em todas as páginas, menos na capa. `@footer none` desliga o rodapé do tema do projeto. |
-| `@overlay` … `@end` | `@overlay {atributos}` | Camada livre por cima do conteúdo, em todas as páginas menos na capa; blocos com `x`/`y` ficam relativos ao canto da página. `@overlay none` desliga a do tema do projeto. Veja [Camada livre](/docs/guides/header-footer/#camada-livre-overlay). |
+| `@extern` | `@extern placar = 0` | Cria uma variável que quem mostra o documento define, como o placar de um jogo. Veja [Valores de fora](/guides/interactive/#valores-de-fora-com-extern). |
+| `@persist` | `@persist finais moedas` | Guarda esses `@state` no navegador, para o progresso continuar depois de fechar a página. Veja [Progresso salvo](/guides/interactive/#progresso-salvo). |
+| `@scorm` | `@scorm score=$pontos complete=#fim` | Nota e conclusão enviadas a um LMS no pacote SCORM. Veja [Nota e conclusão em LMS](/guides/interactive/#nota-e-conclusão-em-lms-scorm). |
+| `@mode` | `@mode game` | `default` (padrão) ou `game`: em `game`, as setas não saem das páginas e o programa que mostra o documento esconde o contador. Veja [Interatividade](/guides/interactive/#páginas-sem-avanço-e-modo-jogo). |
+| `@header` … `@end` | `@header {atributos}` | Cabeçalho repetido em todas as páginas, menos na capa. Veja [Cabeçalho, rodapé e camada livre](/guides/header-footer/). |
+| `@footer` … `@end` | `@footer {atributos}` | Rodapé repetido em todas as páginas, menos na capa. `@footer none` desliga o rodapé do tema base. |
+| `@overlay` … `@end` | `@overlay {atributos}` | Camada livre por cima do conteúdo, em todas as páginas menos na capa; blocos com `x`/`y` ficam relativos ao canto da página. `@overlay none` desliga a do tema base. Veja [Camada livre](/guides/header-footer/#camada-livre-overlay). |
 
-Nomes de cores, fontes, estilos e componentes usam letras minúsculas, números e hífens, começando por uma letra. Linhas vazias e comentários podem aparecer entre as definições. Uma definição depois da primeira página é erro ([R103](/docs/reference/errors/)).
+Nomes de cores, fontes, estilos e componentes usam letras minúsculas, números e hífens, começando por uma letra. Linhas vazias e comentários podem aparecer entre as definições. Uma definição depois da primeira página é erro ([R103](/reference/errors/)).
 
 ### Separador de páginas
 
@@ -154,7 +154,7 @@ Texto
 | `input` | `::` | Campo de texto ligado a um `@state`: `:: input {bind=$nome}`. |
 | `sound` | `::` | Som tocado por `play` e `stop`: `:: sound https://… {name=porta}`. |
 
-Detalhes de cada bloco em [Blocos](/docs/reference/blocks/).
+Detalhes de cada bloco em [Blocos](/reference/blocks/).
 
 ## Componentes
 
@@ -178,13 +178,13 @@ Componentes recebem apenas parâmetros nomeados: `.estilo`, `#id` e texto solto 
 | `$param` | No corpo de um componente, em texto ou valor de atributo | Trocado pelo valor do parâmetro: `## $titulo`, `{color=$cor}`. |
 | `$content` | Sozinho numa linha do corpo | Recebe o conteúdo passado entre `::: nome` e `:::`. |
 | `$nome` | Sozinho numa linha do corpo, quando `nome` não é parâmetro | Espaço nomeado, preenchido com `::: slot nome`. Fica vazio se não for preenchido. |
-| `$page`, `$pages`, `$title`, `$author`, `$date` | Dentro de `@header`, `@footer` e `@overlay` | Número desta página, total de páginas, título, autor e data de hoje. Outro nome é erro ([R522](/docs/reference/errors/)). |
+| `$page`, `$pages`, `$title`, `$author`, `$date` | Dentro de `@header`, `@footer` e `@overlay` | Número desta página, total de páginas, título, autor e data de hoje. Outro nome é erro ([R522](/reference/errors/)). |
 | `$variavel`, `$item.campo` | Em qualquer lugar | Valor de um `@let`, `@data`, `@state`, variável do `for` ou campo de registro. |
 | `$( expressão )` | Em qualquer lugar | Resultado de uma expressão, como `$($preco * 12)`. |
 | `$step` | Em qualquer lugar | Etapa atual da página. |
-| `$elapsed` | Em qualquer lugar | Segundos desde que a página abriu. Veja [Tempo](/docs/guides/interactive/#tempo). |
+| `$elapsed` | Em qualquer lugar | Segundos desde que a página abriu. Veja [Tempo](/guides/interactive/#tempo). |
 
-Um `$palavra` que não é variável declarada é texto comum, então `US$ 10` continua igual. A exceção é `$content` sozinho numa linha fora de um componente, que é erro ([R401](/docs/reference/errors/)). Para um `$` literal antes de um nome declarado, escreva `\$nome`.
+Um `$palavra` que não é variável declarada é texto comum, então `US$ 10` continua igual. A exceção é `$content` sozinho numa linha fora de um componente, que é erro ([R401](/reference/errors/)). Para um `$` literal antes de um nome declarado, escreva `\$nome`.
 
 ## Expressões
 

@@ -269,8 +269,8 @@ fn validate_item_checks_allowed_definitions_per_kind() {
     assert_eq!(palette[0].line, 3);
     assert!(library::validate_item(ItemKind::Palette, "@color a #fff\n@font f \"Inter\"", None, Locale::Pt).is_empty());
 
-    let theme_with_slides = library::validate_item(ItemKind::Theme, "@color a #fff\n\n# Page", None, Locale::Pt);
-    assert_eq!(codes(&theme_with_slides), ["R519"]);
+    let theme_with_pages = library::validate_item(ItemKind::Theme, "@color a #fff\n\n# Page", None, Locale::Pt);
+    assert_eq!(codes(&theme_with_pages), ["R519"]);
     assert!(library::validate_item(ItemKind::Theme, THEME, None, Locale::Pt).is_empty());
 
     let style_with_component = library::validate_item(ItemKind::Style, "@style s {weight=bold}\n@component c\n# x\n@end", Some("s"), Locale::En);
@@ -317,7 +317,7 @@ fn json_wrappers_follow_the_contract() {
     assert_eq!(merged["source"], "@color a #fff\n\n// Biblioteca: Kit\n@color b #000\n");
     assert_eq!(merged["renamed"], serde_json::json!([{"kind": "color", "from": "a", "to": "b"}]));
 
-    let unknown: serde_json::Value = serde_json::from_str(&ribalta::validate_item_to_json("deck", "", "", Locale::En)).unwrap();
+    let unknown: serde_json::Value = serde_json::from_str(&ribalta::validate_item_to_json("widget", "", "", Locale::En)).unwrap();
     assert_eq!(unknown[0]["code"], "R533");
     let palette: serde_json::Value = serde_json::from_str(&ribalta::validate_item_to_json("palette", "@style s {size=xl}", "", Locale::Pt)).unwrap();
     assert_eq!(palette[0]["code"], "R530");

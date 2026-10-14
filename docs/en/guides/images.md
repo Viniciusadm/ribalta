@@ -1,13 +1,13 @@
 ---
 title: Images
-description: Use uploaded images or external addresses, adjust how they fit and use background images.
+description: Use stored images or external addresses, adjust how they fit and use background images.
 ---
 
-An image in Ribalta is written as in Markdown: `![description](address)`. The address can be an image uploaded to the project or an `https://` link.
+An image in Ribalta is written as in Markdown: `![description](address)`. The address can be an image stored by the program you write in or an `https://` link.
 
-## Uploaded images
+## Stored images
 
-The program you write in may let you upload image files to the project. An uploaded image is referenced with `asset:` followed by its identifier:
+A stored image is referenced with `asset:` followed by its identifier. The program you write in takes care of storing the file and of writing this reference for you:
 
 ```ribalta
 ![sales-chart](asset:3f2b8c1e-7a4d-4e9b-9c2a-1d5e6f7a8b9c)
@@ -16,7 +16,7 @@ The program you write in may let you upload image files to the project. An uploa
 Write a description in brackets that says what the image shows.
 
 :::tip
-The image belongs to the project. To use it in another document of the same project, copy the `![…](asset:…)` line.
+To use the same image in another document, copy the `![…](asset:…)` line.
 :::
 
 ## External images
@@ -29,7 +29,7 @@ You can also use an image published on the web, with an address that starts with
 ```
 
 :::caution
-An external image depends on the site that publishes it. If it is removed or moves to another address, it no longer shows up in your document. For important images, upload the file instead.
+An external image depends on the site that publishes it. If it is removed or moves to another address, it no longer shows up in your document. For important images, store the file instead.
 :::
 
 ## Adjusting the image
@@ -55,7 +55,7 @@ An image on a line of its own is a block. Attributes go in braces, right after t
 :::
 ```
 
-To place text next to an image, use columns. See [Layout](/docs/en/guides/layout/).
+To place text next to an image, use columns. See [Layout](/en/guides/layout/).
 
 ## Images within text
 
@@ -80,7 +80,7 @@ Annual leadership meeting {.lead}
 :::
 ```
 
-`image` accepts the same addresses as regular images: `https://` or an uploaded image (`image=asset:…`).
+`image` accepts the same addresses as regular images: `https://` or a stored image (`image=asset:…`).
 
 ```ribalta
 --- {image=asset:3f2b8c1e-7a4d-4e9b-9c2a-1d5e6f7a8b9c}
@@ -96,6 +96,6 @@ Text on top of a photo is often hard to read. Put it in a `box` with a semi-tran
 
 | Code | When it happens |
 | --- | --- |
-| R301 | Address not allowed: it does not start with `https://` and is not an uploaded image (`asset:` followed by the identifier). |
+| R301 | Address not allowed: it does not start with `https://` and is not a stored image (`asset:` followed by the identifier). |
 | R301 | `fit` with a value other than `cover` or `contain`. |
 | R209 | Unknown attribute on the image, such as `fitt`. |

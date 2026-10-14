@@ -284,7 +284,7 @@ pub fn url(value: &str, allow_data: bool) -> Parsed<String> {
     } else {
         invalid(
             tr(format!("endereço não permitido: `{value}`"), format!("address not allowed: `{value}`")),
-            if allow_data { tr("Use uma imagem enviada (asset:...) ou um endereço que comece com https://", "Use an uploaded image (asset:...) or an address that starts with https://") } else { tr("Use um endereço que comece com https://", "Use an address that starts with https://") },
+            if allow_data { tr("Use uma imagem guardada (asset:...) ou um endereço que comece com https://", "Use a stored image (asset:...) or an address that starts with https://") } else { tr("Use um endereço que comece com https://", "Use an address that starts with https://") },
         )
     }
 }

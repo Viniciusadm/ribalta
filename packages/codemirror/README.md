@@ -1,6 +1,6 @@
 # @ribaltalang/codemirror
 
-[CodeMirror 6](https://codemirror.net) support for [Ribalta](https://folioslides.com.br/docs/): syntax highlighting, completions (with Portuguese and English labels), snippets and a helper that turns compiler diagnostics into editor ranges.
+[CodeMirror 6](https://codemirror.net) support for [Ribalta](https://viniciusadm.github.io/ribalta/): syntax highlighting, completions (with Portuguese and English labels), snippets and a helper that turns compiler diagnostics into editor ranges.
 
 ```sh
 npm install @ribaltalang/codemirror @codemirror/state @codemirror/view @codemirror/autocomplete @codemirror/lint

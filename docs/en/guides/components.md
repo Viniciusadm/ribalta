@@ -5,7 +5,7 @@ description: Build reusable blocks with parameters, content and named slots to k
 
 A component is a named piece of page that you define once and use as many times as you like. It takes parameters, like a template: the text changes, the look stays the same.
 
-Inside a component you can use everything a page can, including `::: if`, `::: for` and expressions on the parameters. See [Variables, data and repetition](/docs/en/guides/data/#components-that-take-data).
+Inside a component you can use everything a page can, including `::: if`, `::: for` and expressions on the parameters. See [Variables, data and repetition](/en/guides/data/#components-that-take-data).
 
 ## Defining a component
 
@@ -168,7 +168,7 @@ The `step` attribute also works on a component call. The whole component appears
 :: metric {value=94 label="new customers" step=2}
 ```
 
-Learn more in [Step-by-step reveal](/docs/en/guides/reveal/).
+Learn more in [Step-by-step reveal](/en/guides/reveal/).
 
 ## Styling a component
 
@@ -183,12 +183,12 @@ Components only accept parameters. Styles such as `.card` and `#id` on the call 
 If the change should always apply, create a parameter instead, like `color=accent` in the `metric` example.
 
 :::tip
-To use the same components in every document of a project, define them in the project theme. See [Themes](/docs/en/guides/themes/).
+To use the same components in many documents, define them in the base theme. See [Themes](/en/guides/themes/).
 :::
 
 ## Parameters with accepted values
 
-Separate the accepted values with `|` in the default value. The first one is the default, and any other value is an error ([R418](/docs/en/reference/errors/)). Combine it with one style per variant, such as `.button-$kind`, to avoid repeating properties:
+Separate the accepted values with `|` in the default value. The first one is the default, and any other value is an error ([R418](/en/reference/errors/)). Combine it with one style per variant, such as `.button-$kind`, to avoid repeating properties:
 
 ```ribalta preview
 @style button-primary {bg=accent color=white}
@@ -231,4 +231,4 @@ A parameter can take a whole `@data` record: `:: card {p=$person}`. In the body,
 | R504 | `@component` without a matching `@end`. |
 | R511 | Invalid component name (use lowercase letters, numbers and hyphens). |
 
-Errors inside a component body are reported on the line where the component is **used**, with the note "(in component `name`)". The full list is in [Error messages](/docs/en/reference/errors/).
+Errors inside a component body are reported on the line where the component is **used**, with the note "(in component `name`)". The full list is in [Error messages](/en/reference/errors/).

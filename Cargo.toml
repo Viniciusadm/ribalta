@@ -7,7 +7,7 @@ edition = "2024"
 rust-version = "1.94"
 license = "MIT OR Apache-2.0"
 repository = "https://github.com/Viniciusadm/ribalta"
-homepage = "https://folioslides.com.br"
+homepage = "https://viniciusadm.github.io/ribalta/"
 authors = ["viniciusam <viniciusam.22@gmail.com>"]
 
 [profile.release.package.ribalta]

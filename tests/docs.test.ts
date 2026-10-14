@@ -20,6 +20,22 @@ function compilerCodes() {
   return [...codes].sort();
 }
 
+function headingSlugs(text: string) {
+  const slugs = new Set<string>();
+  for (const [, heading] of text.replace(/```[\s\S]*?```/g, "").matchAll(/^#{2,6}\s+(.+)$/gm)) {
+    const base = heading!
+      .toLowerCase()
+      .replace(/`/g, "")
+      .replace(/[^\p{L}\p{N}\s-]/gu, "")
+      .trim()
+      .replace(/\s/g, "-");
+    let slug = base;
+    for (let index = 1; slugs.has(slug); index++) slug = `${base}-${index}`;
+    slugs.add(slug);
+  }
+  return slugs;
+}
+
 describe("documentation", () => {
   const pages = files(docs)
     .filter((file) => file.endsWith(".md"))
@@ -29,6 +45,19 @@ describe("documentation", () => {
 
   it("has every page in both languages", () => {
     expect(english.sort()).toEqual(portuguese.sort());
+  });
+
+  it("links only to pages and headings that exist", () => {
+    const anchors = new Map(pages.map(({ file, id }) => [`/${id.replace(/(^|\/)index\.md$/, "$1").replace(/\.md$/, "/")}`, headingSlugs(readFileSync(file, "utf8"))]));
+    const broken: string[] = [];
+    for (const { file, id } of pages) {
+      for (const [, target] of readFileSync(file, "utf8").matchAll(/\]\((\/[^)\s]*)\)/g)) {
+        const [path, hash] = target!.split("#") as [string, string | undefined];
+        const headings = anchors.get(path);
+        if (!headings || (hash && !headings.has(decodeURIComponent(hash)))) broken.push(`${id}: ${target}`);
+      }
+    }
+    expect(broken).toEqual([]);
   });
 
   it("has no unfinished pages", () => {

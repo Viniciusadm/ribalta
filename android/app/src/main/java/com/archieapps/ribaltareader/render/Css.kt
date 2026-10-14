@@ -76,7 +76,7 @@ data class TextEnv(
     }
 }
 
-class RenderContext(val theme: Theme, val fonts: Fonts, val icons: Map<String, List<com.archieapps.ribaltareader.ir.IconElement>>, val images: Images, val slideBackground: Color, val english: Boolean) {
+class RenderContext(val theme: Theme, val fonts: Fonts, val icons: Map<String, List<com.archieapps.ribaltareader.ir.IconElement>>, val images: Images, val pageBackground: Color, val english: Boolean) {
     fun family(name: String?): FontFamily = fonts.family(name)
 }
 

@@ -28,9 +28,9 @@ The most common ones:
 | `gap` | Space between the blocks of the page | `gap=lg` |
 | `#id` | Page identifier | `#cover` |
 | `.style` | Applies a built-in style or one of your own | `.dark` |
-| `width`, `height` | Size of this page, in pixels; `height=auto` grows with the content. See [Page sizes](/docs/en/guides/pages/) | `width=1080 height=1920` |
+| `width`, `height` | Size of this page, in pixels; `height=auto` grows with the content. See [Page sizes](/en/guides/pages/) | `width=1080 height=1920` |
 
-A page accepts any style attribute. See the full list in [Attributes](/docs/en/reference/attributes/).
+A page accepts any style attribute. See the full list in [Attributes](/en/reference/attributes/).
 
 :::tip
 To configure the first page, start the text with a `--- {…}` line. It does not create an empty page before it.
@@ -199,7 +199,7 @@ In Ribalta, `align` is **always horizontal** and `valign` is **always vertical**
 
 The `w` and `h` attributes set width and height. They accept pixels (`480`), a percentage (`50%`), `full` or `auto`.
 
-The `x` and `y` attributes take a block out of the flow and place it at an exact point on the page, measured in pixels from the page's top-left corner. In the example, the page is 1920 × 1080 pixels; the size of each page comes from [`@page`](/docs/en/guides/pages/) or from the program that shows the document:
+The `x` and `y` attributes take a block out of the flow and place it at an exact point on the page, measured in pixels from the page's top-left corner. In the example, the page is 1920 × 1080 pixels; the size of each page comes from [`@page`](/en/guides/pages/) or from the program that shows the document:
 
 ```ribalta preview
 # Launching in March
@@ -234,6 +234,6 @@ Two single-line blocks help adjust the rhythm of the page:
 
 ## Next steps
 
-- [Styling](/docs/en/guides/styling/): colors, sizes, borders and reusable styles.
-- [Components](/docs/en/guides/components/): turn repeated layouts into reusable blocks.
-- [Blocks reference](/docs/en/reference/blocks/): every block and its attributes.
+- [Styling](/en/guides/styling/): colors, sizes, borders and reusable styles.
+- [Components](/en/guides/components/): turn repeated layouts into reusable blocks.
+- [Blocks reference](/en/reference/blocks/): every block and its attributes.

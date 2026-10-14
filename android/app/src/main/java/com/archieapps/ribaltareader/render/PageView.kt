@@ -52,36 +52,36 @@ private fun positioned(blocks: List<Block>, env: TextEnv, interaction: Interacti
     }
 }
 
-fun slideBackground(document: Document, slide: Page): Color {
-    val merged = slide.style over document.theme.page
+fun pageBackground(document: Document, page: Page): Color {
+    val merged = page.style over document.theme.page
     val solid = (merged.bg as? Paint.Solid)?.color
     return color(solid ?: document.theme.colors["bg"] ?: 0xffffffff)
 }
 
 @Composable
-fun PageView(document: Document, slide: Page, render: RenderContext) {
+fun PageView(document: Document, page: Page, render: RenderContext) {
     val theme = document.theme
     val interaction = LocalInteraction.current
-    val merged = slide.style over theme.page
+    val merged = page.style over theme.page
     val env = TextEnv.Initial.with(theme.text).with(merged)
     val pad = merged.pad ?: (0f to 0f)
     val gap = merged.gap ?: 0f
     val image by rememberImage(render.images, merged.bgImage)
     val base = (theme.page.bg as? Paint.Solid)?.color ?: theme.colors["bg"]
-    val ownBg = slide.style.bg
-    val banded = slide.header != null || slide.footer != null
+    val ownBg = page.style.bg
+    val banded = page.header != null || page.footer != null
     val band = theme.layout.band
     val bandHeight = maxOf(0f, pad.first * band.heightScale - band.gap)
-    val fixed = slide.height != null
+    val fixed = page.height != null
     val area = if (fixed) Modifier.fillMaxSize() else Modifier.fillMaxWidth()
     val floating = mutableListOf<Positioned>().also { list ->
-        listOfNotNull(slide.header, slide.footer).let { positioned(it, env, interaction, theme, list) }
-        positioned(slide.children, env, interaction, theme, list)
-        slide.overlay?.let { positioned(listOf(it), env, interaction, theme, list) }
+        listOfNotNull(page.header, page.footer).let { positioned(it, env, interaction, theme, list) }
+        positioned(page.children, env, interaction, theme, list)
+        page.overlay?.let { positioned(listOf(it), env, interaction, theme, list) }
     }
     CompositionLocalProvider(LocalRender provides render) {
         Box(
-            (if (fixed) Modifier.size(slide.width.dp, slide.height!!.dp).clipToBounds() else Modifier.width(slide.width.dp)).drawBehind {
+            (if (fixed) Modifier.size(page.width.dp, page.height!!.dp).clipToBounds() else Modifier.width(page.width.dp)).drawBehind {
                 if (ownBg is Paint.Solid && base != null && image == null) {
                     drawRect(color(base))
                     drawRect(color(ownBg.color))
@@ -96,25 +96,25 @@ fun PageView(document: Document, slide: Page, render: RenderContext) {
                     area.padding(
                         start = pad.second.dp,
                         end = pad.second.dp,
-                        top = (if (slide.header != null) pad.first * band.edgeScale else pad.first).dp,
-                        bottom = (if (slide.footer != null) pad.first * band.edgeScale else pad.first).dp,
+                        top = (if (page.header != null) pad.first * band.edgeScale else pad.first).dp,
+                        bottom = (if (page.footer != null) pad.first * band.edgeScale else pad.first).dp,
                     ),
                 ) {
-                    Band(slide.header, env, if (slide.header != null) bandHeight else 0f)
+                    Band(page.header, env, if (page.header != null) bandHeight else 0f)
                     Box(Modifier.padding(vertical = band.gap.dp).let { if (fixed) it.weight(1f) else it }.fillMaxWidth()) {
-                        FlowColumn(gap, merged.align, merged.valign, area, fillHeight = fixed) { Blocks(slide.children, env) }
+                        FlowColumn(gap, merged.align, merged.valign, area, fillHeight = fixed) { Blocks(page.children, env) }
                     }
-                    Band(slide.footer, env, if (slide.footer != null) bandHeight else 0f)
+                    Band(page.footer, env, if (page.footer != null) bandHeight else 0f)
                 }
             } else {
                 FlowColumn(gap, merged.align, merged.valign, area.padding(horizontal = pad.second.dp, vertical = pad.first.dp), fillHeight = fixed) {
-                    Blocks(slide.children, env)
+                    Blocks(page.children, env)
                 }
             }
-            slide.overlay?.let { overlay ->
+            page.overlay?.let { overlay ->
                 Box(Modifier.matchParentSize().padding(horizontal = pad.second.dp, vertical = pad.first.dp), propagateMinConstraints = true) { BlockView(overlay, env) }
             }
-            for (item in floating) Floating(item, slide.width, slide.height ?: slide.width)
+            for (item in floating) Floating(item, page.width, page.height ?: page.width)
         }
     }
 }

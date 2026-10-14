@@ -12,7 +12,7 @@ When the same information shows up in several places, or a page is made of many 
 | `::: for` | Repeat a section for each item in a list. |
 | `::: if` | Show a section only when a condition is true. |
 
-All of this is resolved **before** the document is shown: the compiler builds the final pages and reports any problem. For content that changes **while** the document is shown (on click, for example), see [Interactivity and navigation](/docs/en/guides/interactive/).
+All of this is resolved **before** the document is shown: the compiler builds the final pages and reports any problem. For content that changes **while** the document is shown (on click, for example), see [Interactivity and navigation](/en/guides/interactive/).
 
 ## Variables with `@let`
 
@@ -84,7 +84,7 @@ Yearly, with 15% off: $ $(round($price * $users * 12 * 0.85))
 | In a list | `$fruit in [apple, pear]`, `key in $backpack` |
 | Logic | `$a and $b`, `$a or $b`, `not $a` |
 | Choice | `$compact ? sm : lg` |
-| Functions | `len($list)`, `min($list)`, `max($list)`, `sum($list)`, `round($x)`, `round($x, 1)`; in actions, `random(1, 6)` and `pick($list)` ([Random draws](/docs/en/guides/interactive/#random-draws)) |
+| Functions | `len($list)`, `min($list)`, `max($list)`, `sum($list)`, `round($x)`, `round($x, 1)`; in actions, `random(1, 6)` and `pick($list)` ([Random draws](/en/guides/interactive/#random-draws)) |
 
 There are no user-defined functions, endless loops or access to anything outside the document: expressions only compute values.
 
@@ -259,7 +259,7 @@ Dedicated support {.kicker}
 :::
 ```
 
-- `tone=light|dark` declares the accepted values; the first one is the default. Any other value is an error ([R418](/docs/en/reference/errors/)).
+- `tone=light|dark` declares the accepted values; the first one is the default. Any other value is an error ([R418](/en/reference/errors/)).
 - `.plan-$tone` picks the style from the variant, without repeating properties.
 
 ### Component, variable or style?
@@ -270,20 +270,20 @@ Dedicated support {.kicker}
 | The same structure with different content | `@component` |
 | A shared value (size, text, option) | `@let` |
 | Several structures generated from data | `@data` + `::: for` + component |
-| Something that changes while the document is shown | `@state` (see [Interactivity](/docs/en/guides/interactive/)) |
+| Something that changes while the document is shown | `@state` (see [Interactivity](/en/guides/interactive/)) |
 
-## Tokens in the project theme
+## Tokens in the base theme
 
-The project theme also accepts `@let` and `@data`. A document can redefine a theme `@let`, just like it does with `@color`.
+The base theme also accepts `@let` and `@data`. A document can redefine a theme `@let`, just like it does with `@color`.
 
 ## Common errors
 
 | Code | When it happens |
 | --- | --- |
-| [R601](/docs/en/reference/errors/) | `$name` in an expression, `if` or `for` without being declared. |
-| [R602](/docs/en/reference/errors/) | Types that don't match, such as `$text * 2` or an `if` on a number. |
-| [R603](/docs/en/reference/errors/) | A badly written expression, such as `$(1 +)`. |
-| [R606](/docs/en/reference/errors/) | A `for` over something that is not a list, or too many repetitions. |
-| [R607](/docs/en/reference/errors/) | `::: else` without a `::: if` right before it. |
-| [R609](/docs/en/reference/errors/) | A badly written `@let`, `@state` or `@data`. |
-| [R610](/docs/en/reference/errors/) | The same name declared twice. |
+| [R601](/en/reference/errors/) | `$name` in an expression, `if` or `for` without being declared. |
+| [R602](/en/reference/errors/) | Types that don't match, such as `$text * 2` or an `if` on a number. |
+| [R603](/en/reference/errors/) | A badly written expression, such as `$(1 +)`. |
+| [R606](/en/reference/errors/) | A `for` over something that is not a list, or too many repetitions. |
+| [R607](/en/reference/errors/) | `::: else` without a `::: if` right before it. |
+| [R609](/en/reference/errors/) | A badly written `@let`, `@state` or `@data`. |
+| [R610](/en/reference/errors/) | The same name declared twice. |

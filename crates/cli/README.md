@@ -1,6 +1,6 @@
 # ribalta-cli
 
-Command line for the [Ribalta](https://folioslides.com.br/docs/) language: check, format and map `.ribalta` files, and a language server for editors.
+Command line for the [Ribalta](https://viniciusadm.github.io/ribalta/) language: check, format and map `.ribalta` files, and a language server for editors.
 
 ```sh
 cargo install ribalta-cli
@@ -9,10 +9,10 @@ cargo install ribalta-cli
 This installs the `ribalta` binary:
 
 ```sh
-ribalta check presentation.ribalta
-ribalta check --prelude theme.ribalta presentation.ribalta
-ribalta fmt presentation.ribalta
-ribalta graph presentation.ribalta
+ribalta check document.ribalta
+ribalta check --prelude theme.ribalta document.ribalta
+ribalta fmt document.ribalta
+ribalta graph document.ribalta
 ribalta lsp
 ```
 

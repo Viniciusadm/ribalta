@@ -120,7 +120,7 @@ class CompilerTest {
         val session = Navigation.start(document, seed = 7)
         assertEquals(Scalar.List(listOf("start")), session.state["endings"])
         assertTrue((session.state["die"] as Scalar.Number).value in 1.0..6.0)
-        assertEquals("p", Shortcuts.forSlide(document, session).keys.single())
+        assertEquals("p", Shortcuts.forPage(document, session).keys.single())
         assertEquals(0, Navigation.advance(document, session, 1).index)
         val timedOut = (1..5).fold(session) { current, _ -> Navigation.tick(document, current) }
         assertEquals(1, timedOut.index)

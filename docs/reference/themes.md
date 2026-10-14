@@ -3,7 +3,7 @@ title: Temas embutidos
 description: Cores, fontes, tamanhos e estilos de cada tema embutido da Ribalta.
 ---
 
-A Ribalta tem três temas embutidos: `paper` (o padrão), `ink` e `editorial`. Escolha um com `@theme` no início do documento ou no [tema do projeto](/docs/guides/themes/). Qualquer token pode ser substituído com `@color` e `@font`.
+A Ribalta tem três temas embutidos: `paper` (o padrão), `ink` e `editorial`. Escolha um com `@theme` no início do documento ou no [tema base](/guides/themes/). Qualquer token pode ser substituído com `@color` e `@font`.
 
 ```ribalta
 @theme editorial

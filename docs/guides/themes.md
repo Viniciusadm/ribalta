@@ -1,6 +1,6 @@
 ---
 title: Temas
-description: Escolha um tema pronto, ajuste cores e fontes e compartilhe definições entre os documentos de um projeto.
+description: Escolha um tema pronto, ajuste cores e fontes e compartilhe definições entre vários documentos.
 ---
 
 O tema define a aparência básica do documento: cores, fontes, tamanhos dos títulos e margens. Você escolhe um tema pronto e ajusta o que quiser com definições no início do texto.
@@ -51,7 +51,7 @@ Relatório anual {.kicker}
 Receita, clientes e próximos passos. {.lead}
 ```
 
-A lista completa de cores e fontes de cada tema está em [Referência de temas](/docs/reference/themes/).
+A lista completa de cores e fontes de cada tema está em [Referência de temas](/reference/themes/).
 
 ## Cores
 
@@ -95,11 +95,11 @@ Uma fonte nova, como `titulo`, é aplicada com `font=titulo`. Usar um nome que j
 Declare apenas os pesos que você realmente usa. Cada peso é mais um arquivo para carregar.
 :::
 
-## Tema do projeto
+## Tema base
 
-O tema do projeto reúne definições que valem para todos os documentos de um projeto. É o lugar certo para a identidade visual de uma empresa, de um curso ou de um cliente.
+O tema base reúne definições compartilhadas por vários documentos. É o lugar certo para a identidade visual de uma empresa, de um curso ou de um cliente.
 
-O tema do projeto é um texto à parte, escrito com as mesmas definições do início de um documento. O programa que compila o documento junta os dois: primeiro o tema do projeto, depois o documento.
+O tema base é um texto à parte, escrito com as mesmas definições do início de um documento. O programa que compila o documento junta os dois: primeiro o tema base, depois o documento.
 
 ```ribalta
 @theme editorial
@@ -108,15 +108,15 @@ O tema do projeto é um texto à parte, escrito com as mesmas definições do in
 @style rotulo {size=sm weight=bold uppercase tracking=0.14 color=marca}
 ```
 
-Regras do tema do projeto:
+Regras do tema base:
 
-- Ele só pode ter definições, como `@theme`, `@page`, `@color`, `@font`, `@style` e `@component`. Páginas no tema do projeto são um erro.
+- Ele só pode ter definições, como `@theme`, `@page`, `@color`, `@font`, `@style` e `@component`. Páginas no tema base são um erro.
 - `@title` e `@author` são ignorados ali, com um aviso, porque pertencem a cada documento.
 - Cada documento pode sobrescrever o que quiser: o próprio `@theme`, o tamanho das páginas, uma cor, uma fonte, um estilo ou um componente com o mesmo nome.
-- Erros no tema do projeto são apontados no próprio tema, nunca nos documentos.
+- Erros no tema base são apontados no próprio tema, nunca nos documentos.
 
 ## Próximos passos
 
-- [Estilos](/docs/guides/styling/): use as cores e fontes do tema nas suas páginas.
-- [Componentes](/docs/guides/components/): coloque componentes no tema do projeto para reutilizá-los em todos os documentos.
-- [Referência de temas](/docs/reference/themes/): todas as cores, fontes e tamanhos de cada tema.
+- [Estilos](/guides/styling/): use as cores e fontes do tema nas suas páginas.
+- [Componentes](/guides/components/): coloque componentes no tema base para reutilizá-los em todos os documentos.
+- [Referência de temas](/reference/themes/): todas as cores, fontes e tamanhos de cada tema.

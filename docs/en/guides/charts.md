@@ -149,7 +149,7 @@ With a table declared in `@data`, the chart can be a single line. `label` picks 
 :: chart {data=$sales type=area series=revenue}
 ```
 
-The same data can feed other charts, tables (`:: table {data=$sales}`) and repetitions. See [Variables, data and repetition](/docs/en/guides/data/).
+The same data can feed other charts, tables (`:: table {data=$sales}`) and repetitions. See [Variables, data and repetition](/en/guides/data/).
 
 ## Numbers
 

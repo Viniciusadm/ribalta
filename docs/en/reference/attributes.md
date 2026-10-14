@@ -3,9 +3,9 @@ title: Attributes
 description: Every attribute the compiler accepts, with its values, scales and units.
 ---
 
-Attributes go in braces, as in `{size=5xl color=accent}`. This page lists every attribute the compiler accepts and the valid values for each one. For the brace syntax itself (`.style`, `#id`, quotes, position on the line), see [Syntax](/docs/en/reference/syntax/#attributes).
+Attributes go in braces, as in `{size=5xl color=accent}`. This page lists every attribute the compiler accepts and the valid values for each one. For the brace syntax itself (`.style`, `#id`, quotes, position on the line), see [Syntax](/en/reference/syntax/#attributes).
 
-An unknown attribute is an error ([R209](/docs/en/reference/errors/)), and so is an invalid value ([R301](/docs/en/reference/errors/)); the messages suggest the closest name or value.
+An unknown attribute is an error ([R209](/en/reference/errors/)), and so is an invalid value ([R301](/en/reference/errors/)); the messages suggest the closest name or value.
 
 ## Style attributes
 
@@ -35,15 +35,15 @@ They work on any block, on the page separator (`--- {…}`), on text spans (`[te
 | `opacity` | Number from 0 to 1 or percentage from 0% to 100% | `opacity=0.6`, `opacity=60%` | Transparency of the whole block. |
 | `leading` | `tight`, `normal`, `loose` or a number from 0.6 to 3 | `leading=tight` | Line height. See [line height](#line-height-and-letter-spacing). |
 | `tracking` | `tight`, `normal`, `wide` or a number from -0.2 to 1 (in `em`) | `tracking=0.1` | Letter spacing. |
-| `step` | Whole number from 1 to 99 | `step=2` | Step at which the block or span appears. See [Reveal](/docs/en/guides/reveal/). |
+| `step` | Whole number from 1 to 99 | `step=2` | Step at which the block or span appears. See [Reveal](/en/guides/reveal/). |
 | `enter` | `fade`, `up`, `down`, `left`, `right`, `zoom`, `none` | `enter=zoom` | How the element appears on a step or when an `if` becomes true. Steps default to `up`. |
-| `if` | Condition | `if=$details`, `if="$n > 2"` | Shows the element only when the condition is true. See [Variables](/docs/en/guides/data/#conditions-with--if). |
-| `click` | Actions separated by `;` | `click="go #end"` | What happens on click. See [Interactivity](/docs/en/guides/interactive/#clicks). |
-| `key` | A letter, a digit, `up`, `down`, `left`, `right`, `Enter` or `Space` | `key=up` | Key that runs the element's `click`. See [Keyboard](/docs/en/guides/interactive/#keyboard). |
+| `if` | Condition | `if=$details`, `if="$n > 2"` | Shows the element only when the condition is true. See [Variables](/en/guides/data/#conditions-with--if). |
+| `click` | Actions separated by `;` | `click="go #end"` | What happens on click. See [Interactivity](/en/guides/interactive/#clicks). |
+| `key` | A letter, a digit, `up`, `down`, `left`, `right`, `Enter` or `Space` | `key=up` | Key that runs the element's `click`. See [Keyboard](/en/guides/interactive/#keyboard). |
 
 In addition, `.style=condition` applies a style only when the condition is true: `{.highlight="$plan == pro"}`. With `.style=hover`, the style applies while the mouse is over the element.
 
-Attribute values accept `$variable` and `$( expression )`, as long as they don't depend on `@state` ([R604](/docs/en/reference/errors/)).
+Attribute values accept `$variable` and `$( expression )`, as long as they don't depend on `@state` ([R604](/en/reference/errors/)).
 
 Boolean attributes accept `true`, `yes` or `sim` to turn on and `false`, `no` or `não` to turn off. Writing just the name (`{italic}`) turns the attribute on.
 
@@ -67,7 +67,7 @@ Boolean attributes accept `true`, `yes` or `sim` to turn on and `false`, `no` or
 
 ## Block attributes
 
-Besides the style attributes, some blocks accept attributes of their own. Using them anywhere else is an error ([R209](/docs/en/reference/errors/)). In a `@style`, all of them are accepted, and they only take effect when the style is applied to the right block.
+Besides the style attributes, some blocks accept attributes of their own. Using them anywhere else is an error ([R209](/en/reference/errors/)). In a `@style`, all of them are accepted, and they only take effect when the style is applied to the right block.
 
 | Attribute | Where | Values | Default | Example |
 | --- | --- | --- | --- | --- |
@@ -99,7 +99,7 @@ Besides the style attributes, some blocks accept attributes of their own. Using 
 | `width` | `---` separator | Page width in pixels, from 16 to 16384 | `@page` or the host's default | `--- {width=1080}` |
 | `height` | `---` separator | Page height in pixels, from 16 to 16384, or `auto` (grows with the content) | `@page` or the host's default | `--- {width=1080 height=1920}` |
 
-In `widths`, the proportions are relative: `"2 1"` gives two parts to the first column and one to the second. If the number of values does not match the number of columns, the compiler warns ([R302](/docs/en/reference/errors/)).
+In `widths`, the proportions are relative: `"2 1"` gives two parts to the first column and one to the second. If the number of values does not match the number of columns, the compiler warns ([R302](/en/reference/errors/)).
 
 The default chart palette uses, in order, `accent`, `blue`, `green`, `yellow`, `violet` and `coral`.
 
@@ -200,7 +200,7 @@ Used by `w`, `h`, `x` and `y`.
 | `full` | `w=full` | Same as `100%`. |
 | `auto` | `h=auto` | Automatic size. Only for `w` and `h`. |
 
-Lengths are pixels of the page, whatever the screen it is shown on. The page size comes from the program that shows the document (a presentation app usually uses 1920×1080), from `@page` (`@page 1440x1080`) or from `width` and `height` on the separator; without any of them, the page is 1920 wide with automatic height. With automatic height, the page grows with the content. See [Page sizes](/docs/en/guides/pages/).
+Lengths are pixels of the page, whatever the screen it is shown on. The page size comes from the program that shows the document (a presentation app usually uses 1920×1080), from `@page` (`@page 1440x1080`) or from `width` and `height` on the separator; without any of them, the page is 1920 wide with automatic height. With automatic height, the page grows with the content. See [Page sizes](/en/guides/pages/).
 
 ### Colors
 
@@ -213,7 +213,7 @@ Used by `color`, `bg`, `border` and `colors`.
 | Opacity | `accent/40`, `#000000/20` | Color with an opacity from 0 to 100 (%), after the slash. |
 | Gradient | `ink..violet`, `accent/80..blue` | Two colors separated by `..`. **Only in `bg`.** |
 
-Tokens available in every theme: `bg`, `text`, `muted`, `accent`, `surface`, `line`, `coral`, `blue`, `green`, `yellow`, `violet`, `white`, `black`, `ink`, `paper` and `transparent`. The values for each theme are in [Built-in themes](/docs/en/reference/themes/).
+Tokens available in every theme: `bg`, `text`, `muted`, `accent`, `surface`, `line`, `coral`, `blue`, `green`, `yellow`, `violet`, `white`, `black`, `ink`, `paper` and `transparent`. The values for each theme are in [Built-in themes](/en/reference/themes/).
 
 Every color token also works as a style: `{.coral}` is the same as `{color=coral}`.
 

@@ -3,9 +3,9 @@ title: Atributos
 description: Todos os atributos aceitos pelo compilador, com valores, escalas e unidades.
 ---
 
-Atributos ficam entre chaves, como `{size=5xl color=accent}`. Esta página lista todos os atributos que o compilador aceita e os valores válidos de cada um. Para a sintaxe das chaves (`.estilo`, `#id`, aspas, posição na linha), veja [Sintaxe](/docs/reference/syntax/#atributos).
+Atributos ficam entre chaves, como `{size=5xl color=accent}`. Esta página lista todos os atributos que o compilador aceita e os valores válidos de cada um. Para a sintaxe das chaves (`.estilo`, `#id`, aspas, posição na linha), veja [Sintaxe](/reference/syntax/#atributos).
 
-Um atributo desconhecido é erro ([R209](/docs/reference/errors/)) e um valor inválido também ([R301](/docs/reference/errors/)); as mensagens sugerem o nome ou valor mais próximo.
+Um atributo desconhecido é erro ([R209](/reference/errors/)) e um valor inválido também ([R301](/reference/errors/)); as mensagens sugerem o nome ou valor mais próximo.
 
 ## Atributos de estilo
 
@@ -35,15 +35,15 @@ Valem em qualquer bloco, no separador de página (`--- {…}`), em trechos de te
 | `opacity` | Número de 0 a 1 ou porcentagem de 0% a 100% | `opacity=0.6`, `opacity=60%` | Transparência do bloco inteiro. |
 | `leading` | `tight`, `normal`, `loose` ou número de 0.6 a 3 | `leading=tight` | Altura da linha. Veja [entrelinha](#entrelinha-e-espaçamento-entre-letras). |
 | `tracking` | `tight`, `normal`, `wide` ou número de -0.2 a 1 (em `em`) | `tracking=0.1` | Espaço entre letras. |
-| `step` | Número inteiro de 1 a 99 | `step=2` | Etapa em que o bloco ou trecho aparece. Veja [Revelação](/docs/guides/reveal/). |
+| `step` | Número inteiro de 1 a 99 | `step=2` | Etapa em que o bloco ou trecho aparece. Veja [Revelação](/guides/reveal/). |
 | `enter` | `fade`, `up`, `down`, `left`, `right`, `zoom`, `none` | `enter=zoom` | Como o elemento aparece numa etapa ou quando um `if` fica verdadeiro. Padrão nas etapas: `up`. |
-| `if` | Condição | `if=$detalhes`, `if="$n > 2"` | Mostra o elemento só quando a condição é verdadeira. Veja [Variáveis](/docs/guides/data/#condições-com--if). |
-| `click` | Ações separadas por `;` | `click="go #fim"` | O que acontece ao clicar. Veja [Interatividade](/docs/guides/interactive/#cliques). |
-| `key` | Uma letra, um número, `up`, `down`, `left`, `right`, `Enter` ou `Space` | `key=up` | Tecla que aciona o `click` do elemento. Veja [Teclado](/docs/guides/interactive/#teclado). |
+| `if` | Condição | `if=$detalhes`, `if="$n > 2"` | Mostra o elemento só quando a condição é verdadeira. Veja [Variáveis](/guides/data/#condições-com--if). |
+| `click` | Ações separadas por `;` | `click="go #fim"` | O que acontece ao clicar. Veja [Interatividade](/guides/interactive/#cliques). |
+| `key` | Uma letra, um número, `up`, `down`, `left`, `right`, `Enter` ou `Space` | `key=up` | Tecla que aciona o `click` do elemento. Veja [Teclado](/guides/interactive/#teclado). |
 
 Além disso, `.estilo=condição` aplica um estilo só quando a condição é verdadeira: `{.destaque="$plano == pro"}`. Com `.estilo=hover`, o estilo vale enquanto o mouse está sobre o elemento.
 
-Valores de atributos aceitam `$variavel` e `$( expressão )`, desde que não dependam de `@state` ([R604](/docs/reference/errors/)).
+Valores de atributos aceitam `$variavel` e `$( expressão )`, desde que não dependam de `@state` ([R604](/reference/errors/)).
 
 Atributos booleanos aceitam `true`, `yes` ou `sim` para ligar e `false`, `no` ou `não` para desligar. Escrever só o nome (`{italic}`) liga o atributo.
 
@@ -67,7 +67,7 @@ Fundo `accent`, cantos `xl`
 
 ## Atributos de cada bloco
 
-Além dos atributos de estilo, alguns blocos aceitam atributos próprios. Usá-los em outro lugar é erro ([R209](/docs/reference/errors/)). Em um `@style`, todos são aceitos e só valem quando o estilo é aplicado ao bloco certo.
+Além dos atributos de estilo, alguns blocos aceitam atributos próprios. Usá-los em outro lugar é erro ([R209](/reference/errors/)). Em um `@style`, todos são aceitos e só valem quando o estilo é aplicado ao bloco certo.
 
 | Atributo | Onde | Valores | Padrão | Exemplo |
 | --- | --- | --- | --- | --- |
@@ -99,7 +99,7 @@ Além dos atributos de estilo, alguns blocos aceitam atributos próprios. Usá-l
 | `nav` | Separador `---` | `on` ou `off`: com `off`, setas, espaço, clique e deslizar não saem da página | `on` (`off` com `@mode game`) | `--- {nav=off}` |
 | `on-enter` | Separador `---` | Ações de estado separadas por `;` (`$x = valor`, `toggle $x`) | Nenhuma | `--- {on-enter="$visto = true"}` |
 
-Em `widths`, as proporções são relativas: `"2 1"` dá duas partes para a primeira coluna e uma para a segunda. Se a quantidade de valores não bate com a de colunas, o compilador avisa ([R302](/docs/reference/errors/)).
+Em `widths`, as proporções são relativas: `"2 1"` dá duas partes para a primeira coluna e uma para a segunda. Se a quantidade de valores não bate com a de colunas, o compilador avisa ([R302](/reference/errors/)).
 
 A paleta padrão dos gráficos usa, na ordem, `accent`, `blue`, `green`, `yellow`, `violet` e `coral`.
 
@@ -200,7 +200,7 @@ Usadas por `w`, `h`, `x` e `y`.
 | `full` | `w=full` | O mesmo que `100%`. |
 | `auto` | `h=auto` | Tamanho automático. Só em `w` e `h`. |
 
-As medidas são pixels da página, qualquer que seja a tela em que ela aparece. O tamanho da página vem de `@page` (por exemplo, `@page 1920x1080`) ou de `width` e `height` no separador; sem eles, vale o padrão do programa que compila o documento. Um programa de apresentações costuma usar 1920×1080; sem nenhum padrão, a página tem 1920 de largura e altura automática. Com altura automática (`height=auto`), a página cresce com o conteúdo. Veja [Tamanhos e documentos](/docs/guides/pages/).
+As medidas são pixels da página, qualquer que seja a tela em que ela aparece. O tamanho da página vem de `@page` (por exemplo, `@page 1920x1080`) ou de `width` e `height` no separador; sem eles, vale o padrão do programa que compila o documento. Um programa de apresentações costuma usar 1920×1080; sem nenhum padrão, a página tem 1920 de largura e altura automática. Com altura automática (`height=auto`), a página cresce com o conteúdo. Veja [Tamanhos e documentos](/guides/pages/).
 
 ### Cores
 
@@ -213,7 +213,7 @@ Usadas por `color`, `bg`, `border` e `colors`.
 | Opacidade | `accent/40`, `#000000/20` | Cor com opacidade de 0 a 100 (%), depois da barra. |
 | Gradiente | `ink..violet`, `accent/80..blue` | Duas cores separadas por `..`. **Só em `bg`.** |
 
-Tokens disponíveis em todos os temas: `bg`, `text`, `muted`, `accent`, `surface`, `line`, `coral`, `blue`, `green`, `yellow`, `violet`, `white`, `black`, `ink`, `paper` e `transparent`. Os valores de cada tema estão em [Temas embutidos](/docs/reference/themes/).
+Tokens disponíveis em todos os temas: `bg`, `text`, `muted`, `accent`, `surface`, `line`, `coral`, `blue`, `green`, `yellow`, `violet`, `white`, `black`, `ink`, `paper` e `transparent`. Os valores de cada tema estão em [Temas embutidos](/reference/themes/).
 
 Todo token de cor também funciona como estilo: `{.coral}` é o mesmo que `{color=coral}`.
 

@@ -1,11 +1,11 @@
 # Ribalta for VS Code
 
-Language support for [Ribalta](https://folioslides.com.br/docs/), a text language for themed visuals.
+Language support for [Ribalta](https://viniciusadm.github.io/ribalta/), a text language for themed visuals.
 
 - Syntax highlighting for `.ribalta` files
 - Diagnostics from the Ribalta compiler, with the `R###` codes and hints
 - Completion for directives, blocks, components, attributes and their values, styles, colors, `$variables`, page ids after `#` and icons
-- Go to definition for `#page-id`, `$variable`, `.style` and components, including the ones declared in the project theme
+- Go to definition for `#page-id`, `$variable`, `.style` and components, including the ones declared in the base theme
 - Outline with pages, styles, components and variables
 - Formatting (`ribalta fmt`), which refuses any change that would alter the compiled document
 - Command **Ribalta: Show route map**
@@ -23,7 +23,7 @@ cargo install ribalta-cli
 | Setting | Default | Description |
 | --- | --- | --- |
 | `ribalta.path` | `ribalta` | Path to the `ribalta` binary |
-| `ribalta.theme` | empty | Project theme applied before each document, relative to each file's folder. When empty, a `theme.ribalta` next to the file is used |
+| `ribalta.theme` | empty | Base theme applied before each document, relative to each file's folder. When empty, a `theme.ribalta` next to the file is used |
 | `ribalta.language` | `auto` | Language of the compiler messages: `auto`, `pt` or `en` |
 
 ## Development

@@ -136,12 +136,12 @@ fn check_prelude_inner(prelude: &str) -> Vec<Diagnostic> {
     for (name, value) in [("title", &preamble.title), ("author", &preamble.author)] {
         if value.is_some()
             && let Some(line) = preamble_lines.iter().find(|line| line.trimmed().starts_with(&format!("@{name}"))) {
-                diags.warning("R520", line.full_span(), tr(format!("`@{name}` no tema do projeto é ignorado; defina-o em cada documento"), format!("`@{name}` in the project theme is ignored; set it in each document")));
+                diags.warning("R520", line.full_span(), tr(format!("`@{name}` no tema base é ignorado; defina-o em cada documento"), format!("`@{name}` in the base theme is ignored; set it in each document")));
             }
     }
     if let Some(line) = page_sources.iter().flat_map(|page| page.separator.iter().chain(page.lines.iter())).find(|line| !line.is_blank() && !line.trimmed().starts_with("//")) {
         diags
-            .error("R519", line.full_span(), tr("o tema do projeto só pode ter definições, não páginas", "the project theme can only contain definitions, not pages"))
+            .error("R519", line.full_span(), tr("o tema base só pode ter definições, não páginas", "the base theme can only contain definitions, not pages"))
             .hint(tr("Use apenas definições: @theme, @color, @font, @style, @component, @let, @data, @state, @extern, @transition, @mode, @header, @footer e @overlay", "Use only definitions: @theme, @color, @font, @style, @component, @let, @data, @state, @extern, @transition, @mode, @header, @footer and @overlay"));
     }
     Lowerer::new(PageSize::DEFAULT, None, &preamble, &mut diags).check_regions();

@@ -19,7 +19,7 @@ Ribalta Reader {.kicker color=marca weight=bold uppercase tracking=0.18 size=sm}
 
 # O mesmo IR,[ outra tela]{color=marca} {size=6xl leading=0.95}
 
-Este slide foi compilado no celular e desenhado sem navegador. {size=xl color=muted}
+Esta página foi compilada no celular e desenhada sem navegador. {size=xl color=muted}
 
 ---
 
@@ -84,9 +84,9 @@ O trimestre fechou acima da meta. {size=xl color=muted}
 
 ```kotlin
 fun main() {
-    // desenha o slide
-    val deck = RibaltaCompiler.compile(source)
-    println("${deck.slides.size} slides")
+    // desenha a página
+    val document = RibaltaCompiler.compile(source).document
+    println("${document.pages.size} páginas")
 }
 ```
 :::

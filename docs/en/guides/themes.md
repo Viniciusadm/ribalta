@@ -1,6 +1,6 @@
 ---
 title: Themes
-description: Pick a built-in theme, adjust colors and fonts, and share definitions across the documents in a project.
+description: Pick a built-in theme, adjust colors and fonts, and share definitions across many documents.
 ---
 
 The theme sets the basic look of the document: colors, fonts, heading sizes and margins. You pick a built-in theme and adjust whatever you want with definitions at the start of the text.
@@ -51,7 +51,7 @@ Annual report {.kicker}
 Revenue, customers and next steps. {.lead}
 ```
 
-The full list of colors and fonts for each theme is in the [Themes reference](/docs/en/reference/themes/).
+The full list of colors and fonts for each theme is in the [Themes reference](/en/reference/themes/).
 
 ## Colors
 
@@ -95,9 +95,9 @@ A new font, such as `title`, is applied with `font=title`. Using a name that alr
 Declare only the weights you actually use. Each weight is one more file to load.
 :::
 
-## Project theme
+## Base theme
 
-The project theme gathers definitions that apply to every document in a project. It is the right place for the visual identity of a company, a course or a client. The program you write in decides where the project theme is kept and how you edit it; the compiler reads it before each document.
+The base theme gathers definitions shared by many documents. It is the right place for the visual identity of a company, a course or a client. The program you write in decides where the base theme is kept and how you edit it; the compiler reads it before each document.
 
 ```ribalta
 @theme editorial
@@ -106,15 +106,15 @@ The project theme gathers definitions that apply to every document in a project.
 @style label {size=sm weight=bold uppercase tracking=0.14 color=brand}
 ```
 
-Project theme rules:
+Base theme rules:
 
-- It can only contain definitions, such as `@theme`, `@color`, `@font`, `@style`, `@component` and `@page`. Pages in the project theme are an error.
+- It can only contain definitions, such as `@theme`, `@color`, `@font`, `@style`, `@component` and `@page`. Pages in the base theme are an error.
 - `@title` and `@author` are ignored there, with a warning, because they belong to each document.
-- Each document can override anything it wants: its own `@theme`, a color, a font, a style, a component with the same name or the [page size](/docs/en/guides/pages/).
-- Errors in the project theme are reported when the theme itself is checked, never in the documents.
+- Each document can override anything it wants: its own `@theme`, a color, a font, a style, a component with the same name or the [page size](/en/guides/pages/).
+- Errors in the base theme are reported when the theme itself is checked, never in the documents.
 
 ## Next steps
 
-- [Styling](/docs/en/guides/styling/): use the theme's colors and fonts on your pages.
-- [Components](/docs/en/guides/components/): put components in the project theme to reuse them in every document.
-- [Themes reference](/docs/en/reference/themes/): every color, font and size for each theme.
+- [Styling](/en/guides/styling/): use the theme's colors and fonts on your pages.
+- [Components](/en/guides/components/): put components in the base theme to reuse them in every document.
+- [Themes reference](/en/reference/themes/): every color, font and size for each theme.

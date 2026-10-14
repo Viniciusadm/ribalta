@@ -19,7 +19,7 @@ class Images(private val assetBase: String?) {
 
     fun address(source: ImageSource): String? = when (source) {
         is ImageSource.Url -> source.url
-        is ImageSource.Asset -> assetBase?.let { "${it.trimEnd('/')}/api/v1/assets/${source.id}" }
+        is ImageSource.Asset -> assetBase?.let { "${it.trimEnd('/')}/${source.id}" }
     }
 
     suspend fun load(source: ImageSource): ImageBitmap? {

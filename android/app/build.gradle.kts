@@ -64,7 +64,7 @@ android {
             it.dependsOn(buildHostNative)
             it.systemProperty("java.library.path", languageDir.dir("target/debug").asFile.absolutePath)
             it.systemProperty("ribalta.screenshots", layout.buildDirectory.dir("screenshots").get().asFile.absolutePath)
-            System.getenv("RIBALTA_DECKS")?.let { decks -> it.systemProperty("ribalta.decks", decks) }
+            System.getenv("RIBALTA_DOCUMENTS")?.let { documents -> it.systemProperty("ribalta.documents", documents) }
             it.systemProperty("ribalta.docs", languageDir.dir("docs").asFile.absolutePath)
         }
     }

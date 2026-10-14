@@ -119,20 +119,20 @@ object Navigation {
     }
 
     fun advance(document: Document, session: Session, direction: Int): Session {
-        val slide = document.pages.getOrNull(session.index) ?: return session
-        if (!slide.locked) return travel(document, session, direction)
-        if (direction == 1 && session.step < slide.steps) return session.copy(step = session.step + 1)
+        val page = document.pages.getOrNull(session.index) ?: return session
+        if (!page.locked) return travel(document, session, direction)
+        if (direction == 1 && session.step < page.steps) return session.copy(step = session.step + 1)
         if (direction == -1 && session.step > 0) return session.copy(step = session.step - 1)
         return session
     }
 
     private fun travel(document: Document, session: Session, direction: Int): Session {
-        val slide = document.pages.getOrNull(session.index) ?: return session
-        if (direction == 1 && session.step < slide.steps) return session.copy(step = session.step + 1)
+        val page = document.pages.getOrNull(session.index) ?: return session
+        if (direction == 1 && session.step < page.steps) return session.copy(step = session.step + 1)
         if (direction == -1 && session.step > 0) return session.copy(step = session.step - 1)
-        if (slide.hidden && session.history.isNotEmpty()) return back(document, session)
-        if (direction == 1 && slide.next != null) {
-            val index = indexOf(document, slide.next)
+        if (page.hidden && session.history.isNotEmpty()) return back(document, session)
+        if (direction == 1 && page.next != null) {
+            val index = indexOf(document, page.next)
             if (index >= 0) return arrive(document, place(document, session, index, 0))
         }
         val index = linear(document, session.index, direction)
@@ -151,11 +151,11 @@ object Navigation {
     }
 
     fun tick(document: Document, session: Session): Session {
-        val slide = document.pages.getOrNull(session.index) ?: return session
-        if (!slide.clock) return session
+        val page = document.pages.getOrNull(session.index) ?: return session
+        if (!page.clock) return session
         val ticked = session.copy(elapsed = session.elapsed + 1)
-        val timeout = slide.timeout ?: return ticked
+        val timeout = page.timeout ?: return ticked
         val reached = session.elapsed < timeout && ticked.elapsed >= timeout
-        return if (reached && slide.onTimeout.isNotEmpty()) run(document, ticked, slide.onTimeout) else ticked
+        return if (reached && page.onTimeout.isNotEmpty()) run(document, ticked, page.onTimeout) else ticked
     }
 }

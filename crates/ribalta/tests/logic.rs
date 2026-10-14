@@ -16,8 +16,8 @@ fn clean(source: &str) -> Value {
     value
 }
 
-fn children(value: &Value, slide: usize) -> Vec<Value> {
-    value["document"]["pages"][slide]["children"].as_array().unwrap().clone()
+fn children(value: &Value, page: usize) -> Vec<Value> {
+    value["document"]["pages"][page]["children"].as_array().unwrap().clone()
 }
 
 fn text(block: &Value) -> String {
@@ -93,8 +93,8 @@ fn static_conditions_choose_a_single_branch() {
 #[test]
 fn state_conditions_keep_every_branch_with_a_runtime_condition() {
     let value = clean("@state modo = a\n\n::: if $modo == a\nA\n:::\n::: else if $modo == b\nB\n:::\n::: else\nC\n:::\n[x]{click=\"$modo = b\"}\n[y]{click=\"$modo = c\"}");
-    let deck = &value["document"];
-    assert_eq!(deck["state"], json!({"modo": "a"}));
+    let document = &value["document"];
+    assert_eq!(document["state"], json!({"modo": "a"}));
     let blocks = children(&value, 0);
     let is_a = json!({"op": "binary", "operator": "==", "left": {"op": "state", "name": "modo"}, "right": {"op": "lit", "value": "a"}});
     let is_b = json!({"op": "binary", "operator": "==", "left": {"op": "state", "name": "modo"}, "right": {"op": "lit", "value": "b"}});
@@ -125,24 +125,24 @@ fn variants_actions_and_dynamic_text() {
 }
 
 #[test]
-fn step_comparisons_extend_the_slide_and_highlight_items() {
+fn step_comparisons_extend_the_page_and_highlight_items() {
     let value = clean("@style apagado {opacity=0.4}\n\n- A {step=1 .apagado=\"$step > 1\"}\n- B {step=2}\nSó na etapa 4 {if=\"$step == 4\"}");
-    let slide = &value["document"]["pages"][0];
-    assert_eq!(slide["steps"], 4);
-    assert_eq!(slide["children"][0]["items"][0]["variants"][0]["when"]["left"], json!({"op": "step"}));
+    let page = &value["document"]["pages"][0];
+    assert_eq!(page["steps"], 4);
+    assert_eq!(page["children"][0]["items"][0]["variants"][0]["when"]["left"], json!({"op": "step"}));
 }
 
 #[test]
-fn slide_navigation_attributes_and_local_state() {
+fn page_navigation_attributes_and_local_state() {
     let value = clean("@transition fade\n\n# Início\n[ver](#extra)\n--- {#extra hidden next=#fim transition=zoom}\n@state aberto = false\n# Extra\n[abrir]{click=\"toggle $aberto\"}\n--- {#fim steps=2}\n# Fim");
-    let slides = value["document"]["pages"].as_array().unwrap();
-    assert_eq!(slides[0]["transition"], "fade");
-    assert_eq!(slides[1]["hidden"], true);
-    assert_eq!(slides[1]["next"], "fim");
-    assert_eq!(slides[1]["transition"], "zoom");
-    assert_eq!(slides[1]["state"], json!({"aberto": false}));
-    assert_eq!(slides[1]["title"], "Extra");
-    assert_eq!(slides[2]["steps"], 2);
+    let pages = value["document"]["pages"].as_array().unwrap();
+    assert_eq!(pages[0]["transition"], "fade");
+    assert_eq!(pages[1]["hidden"], true);
+    assert_eq!(pages[1]["next"], "fim");
+    assert_eq!(pages[1]["transition"], "zoom");
+    assert_eq!(pages[1]["state"], json!({"aberto": false}));
+    assert_eq!(pages[1]["title"], "Extra");
+    assert_eq!(pages[2]["steps"], 2);
     assert!(value["document"].get("state").is_none());
 }
 
@@ -181,7 +181,7 @@ fn charts_and_tables_read_data() {
 }
 
 #[test]
-fn prelude_lets_are_tokens_that_presentations_can_override() {
+fn prelude_lets_are_tokens_that_documents_can_override() {
     let compilation = compile_with_prelude("@let raio = sm\n@let fundo = paper", "@let raio = lg\n\n::: box {radius=$raio bg=$fundo}\n:::");
     assert!(compilation.diagnostics.is_empty(), "{:#?}", compilation.diagnostics);
     let value = serde_json::to_value(&compilation).unwrap();
@@ -189,7 +189,7 @@ fn prelude_lets_are_tokens_that_presentations_can_override() {
 }
 
 #[test]
-fn expression_and_scope_errors_are_reported_before_presenting() {
+fn expression_and_scope_errors_are_reported_before_rendering() {
     let cases: &[(&str, &[&str])] = &[
         ("# $(1 +)", &["R603"]),
         ("@let a = 1\n\n# $(a == )", &["R603"]),
@@ -286,10 +286,10 @@ fn on_enter_collects_style_and_separator_actions_in_order() {
     let value = clean(
         "@state visitas = 0\n@state visto = false\n@style final {on-enter=\"$visitas = $visitas + 1\"}\n\n# Início\n[ir](#fim)\n--- {#fim hidden .final on-enter=\"toggle $visto; $tentativas = 1\"}\n@state tentativas = 0\n# Fim",
     );
-    let slides = value["document"]["pages"].as_array().unwrap();
-    assert!(slides[0].get("onEnter").is_none());
+    let pages = value["document"]["pages"].as_array().unwrap();
+    assert!(pages[0].get("onEnter").is_none());
     assert_eq!(
-        slides[1]["onEnter"],
+        pages[1]["onEnter"],
         json!([
             {"type": "set", "name": "visitas", "value": {"op": "binary", "operator": "+", "left": {"op": "state", "name": "visitas"}, "right": {"op": "lit", "value": 1.0}}},
             {"type": "toggle", "name": "visto"},
@@ -309,31 +309,31 @@ fn on_enter_only_changes_state_and_is_validated_like_click() {
 }
 
 #[test]
-fn rejected_on_enter_navigation_does_not_reach_hidden_slides() {
+fn rejected_on_enter_navigation_does_not_reach_hidden_pages() {
     let (value, compilation) = output("# A\n--- {on-enter=\"go #extra\"}\n# B\n--- {#extra hidden}\n# Extra");
     assert_eq!(codes(&compilation), vec!["R612", "R702"]);
     assert!(value["document"]["pages"][1].get("onEnter").is_none());
 }
 
 #[test]
-fn nav_off_locks_slides_and_game_mode_locks_every_slide() {
+fn nav_off_locks_pages_and_game_mode_locks_every_page() {
     let value = clean("# A\n--- {nav=off}\n# B\n--- {nav=on}\n# C");
-    let slides = value["document"]["pages"].as_array().unwrap();
-    assert!(slides[0].get("locked").is_none());
-    assert_eq!(slides[1]["locked"], true);
-    assert!(slides[2].get("locked").is_none());
+    let pages = value["document"]["pages"].as_array().unwrap();
+    assert!(pages[0].get("locked").is_none());
+    assert_eq!(pages[1]["locked"], true);
+    assert!(pages[2].get("locked").is_none());
     assert!(value["document"]["meta"].get("mode").is_none());
 
     let game = clean("@mode game\n@style livre {nav=on}\n\n# A\n--- {.livre}\n# B\n--- {nav=on}\n# C");
-    let slides = game["document"]["pages"].as_array().unwrap();
+    let pages = game["document"]["pages"].as_array().unwrap();
     assert_eq!(game["document"]["meta"]["mode"], "game");
-    assert_eq!(slides[0]["locked"], true);
-    assert!(slides[1].get("locked").is_none());
-    assert!(slides[2].get("locked").is_none());
+    assert_eq!(pages[0]["locked"], true);
+    assert!(pages[1].get("locked").is_none());
+    assert!(pages[2].get("locked").is_none());
 }
 
 #[test]
-fn game_mode_comes_from_the_project_theme_and_validates_values() {
+fn game_mode_comes_from_the_base_theme_and_validates_values() {
     let compilation = compile_with_prelude("@mode game\n", "# A");
     let value = serde_json::to_value(&compilation).unwrap();
     assert_eq!(value["document"]["meta"]["mode"], "game");
@@ -416,7 +416,7 @@ fn components_explain_names_that_only_exist_where_they_are_used() {
 }
 
 #[test]
-fn random_and_pick_draw_inside_actions_and_mark_the_deck() {
+fn random_and_pick_draw_inside_actions_and_mark_the_document() {
     let value = clean(
         "@state dado = 0\n@state baralho = [ás, rei]\n@state carta = nenhuma\n\n# Mesa\n[rolar]{click=\"$dado = random(1, 6)\"}\n\n[jogar]{click=\"$carta = pick([pedra, papel]); add $baralho pick($baralho)\"}",
     );
@@ -454,19 +454,19 @@ fn hover_is_a_variant_condition() {
 }
 
 #[test]
-fn slides_with_elapsed_or_timeout_run_a_clock() {
+fn pages_with_elapsed_or_timeout_run_a_clock() {
     let value = clean(
         "@state pontos = 0\n\n# Início\n--- {timeout=30 on-timeout=\"$pontos = 0; go #esgotado\"}\nRestam $(30 - $elapsed) s\n\nDica {if=\"$elapsed >= 10\"}\n--- {#esgotado hidden}\n# Tempo esgotado\n--- {timeout=5s}\n# Créditos",
     );
-    let slides = value["document"]["pages"].as_array().unwrap();
-    assert!(slides[0].get("clock").is_none());
-    assert_eq!(slides[1]["timeout"], 30.0);
-    assert_eq!(slides[1]["clock"], true);
-    assert_eq!(slides[1]["onTimeout"], json!([{"type": "set", "name": "pontos", "value": {"op": "lit", "value": 0.0}}, {"type": "go", "target": "esgotado"}]));
-    assert_eq!(slides[1]["children"][1]["when"]["left"], json!({"op": "elapsed"}));
-    assert!(slides[2].get("clock").is_none());
-    assert_eq!(slides[3]["timeout"], 5.0);
-    assert!(slides[3].get("onTimeout").is_none());
+    let pages = value["document"]["pages"].as_array().unwrap();
+    assert!(pages[0].get("clock").is_none());
+    assert_eq!(pages[1]["timeout"], 30.0);
+    assert_eq!(pages[1]["clock"], true);
+    assert_eq!(pages[1]["onTimeout"], json!([{"type": "set", "name": "pontos", "value": {"op": "lit", "value": 0.0}}, {"type": "go", "target": "esgotado"}]));
+    assert_eq!(pages[1]["children"][1]["when"]["left"], json!({"op": "elapsed"}));
+    assert!(pages[2].get("clock").is_none());
+    assert_eq!(pages[3]["timeout"], 5.0);
+    assert!(pages[3].get("onTimeout").is_none());
 }
 
 #[test]
@@ -515,13 +515,13 @@ fn key_errors_and_warnings() {
 }
 
 #[test]
-fn sounds_are_declared_per_slide_and_played_by_actions() {
+fn sounds_are_declared_per_page_and_played_by_actions() {
     let value = clean(
         "# Abertura\n\n--- {on-enter=\"play chuva\"}\n:: sound https://exemplo.com/chuva.mp3 {name=chuva loop volume=40%}\n:: sound asset:3f2b8c1e-7a4d-4e9b-9c2a-1d5e6f7a8b9c {autoplay}\n# A porta\n[Abrir]{click=\"stop chuva; go next\"}\n---\n# Dentro",
     );
-    let slide = &value["document"]["pages"][1];
-    assert_eq!(slide["onEnter"], json!([{"type": "play", "name": "chuva"}]));
-    let blocks = slide["children"].as_array().unwrap();
+    let page = &value["document"]["pages"][1];
+    assert_eq!(page["onEnter"], json!([{"type": "play", "name": "chuva"}]));
+    let blocks = page["children"].as_array().unwrap();
     assert_eq!(blocks[0], json!({"type": "sound", "name": "chuva", "src": {"kind": "url", "url": "https://exemplo.com/chuva.mp3"}, "loop": true, "volume": 0.4, "style": {}, "line": 4, "endLine": 4}));
     assert_eq!(blocks[1]["autoplay"], true);
     assert_eq!(blocks[1]["src"]["kind"], "asset");
@@ -576,9 +576,9 @@ fn scorm_validates_its_parameters() {
 #[test]
 fn externs_are_runtime_values_with_a_preview_default() {
     let value = clean("@extern pergunta = \"Qual é a capital?\"\n@extern rodada = 3\n@extern revelada = false\n@extern opcoes = [A, B]\n\n# $pergunta\n\nPergunta $rodada\n\nBrasília {if=\"$revelada\"}\n\nTem B {if=\"B in $opcoes\"}");
-    let deck = &value["document"];
-    assert_eq!(deck["externs"], json!(["pergunta", "rodada", "revelada", "opcoes"]));
-    assert_eq!(deck["state"], json!({"pergunta": "Qual é a capital?", "rodada": 3.0, "revelada": false, "opcoes": ["A", "B"]}));
+    let document = &value["document"];
+    assert_eq!(document["externs"], json!(["pergunta", "rodada", "revelada", "opcoes"]));
+    assert_eq!(document["state"], json!({"pergunta": "Qual é a capital?", "rodada": 3.0, "revelada": false, "opcoes": ["A", "B"]}));
     let blocks = children(&value, 0);
     assert_eq!(blocks[0]["content"][0], json!({"type": "expr", "expr": {"op": "state", "name": "pergunta"}}));
     assert_eq!(blocks[2]["when"], json!({"op": "state", "name": "revelada"}));
@@ -591,7 +591,7 @@ fn externs_do_not_warn_about_values_no_action_adds() {
 }
 
 #[test]
-fn externs_cannot_be_changed_by_the_presentation() {
+fn externs_cannot_be_changed_by_the_document() {
     let (_, compilation) = output(
         "@extern rodada = 1\n@extern revelada = false\n@extern nome = \"\"\n@extern vistos = []\n\n# A\n[x]{click=\"$rodada = 2; toggle $revelada; add $vistos a; clear $vistos\"}\n:: input {bind=$nome}",
     );
@@ -612,7 +612,7 @@ fn extern_names_share_the_namespace_of_other_variables() {
 }
 
 #[test]
-fn prelude_externs_reach_the_deck() {
+fn prelude_externs_reach_the_document() {
     let compilation = compile_with_prelude("@extern placar = 0", "# $placar");
     assert!(compilation.diagnostics.is_empty(), "{:#?}", compilation.diagnostics);
     let value = serde_json::to_value(&compilation).unwrap();
@@ -624,9 +624,9 @@ const PLACAR: &str = "@data exemplo\n| nome | pontos | fora |\n| --- | --- | ---
 #[test]
 fn extern_record_lists_repeat_at_runtime() {
     let value = clean(&format!("{PLACAR}# Placar\n\n::: for jogador, i in $placar\n$i. $jogador.nome {{.muted=$jogador.fora}}\n\n$jogador.pontos {{if=\"not $jogador.fora\"}}\n:::\n\nTotal: $(len($placar))"));
-    let deck = &value["document"];
-    assert_eq!(deck["externs"], json!(["placar"]));
-    assert_eq!(deck["state"]["placar"], json!([{"nome": "Ana", "pontos": 300.0, "fora": false}, {"nome": "Bruno", "pontos": 200.0, "fora": true}]));
+    let document = &value["document"];
+    assert_eq!(document["externs"], json!(["placar"]));
+    assert_eq!(document["state"]["placar"], json!([{"nome": "Ana", "pontos": 300.0, "fora": false}, {"nome": "Bruno", "pontos": 200.0, "fora": true}]));
     let each = &children(&value, 0)[1];
     assert_eq!(each["type"], "each");
     assert_eq!(each["list"], json!({"op": "state", "name": "placar"}));

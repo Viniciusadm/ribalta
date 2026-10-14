@@ -2,7 +2,7 @@
 
 The compiler turns Ribalta source into a JSON document, the IR (`Document` in `src/ir.rs`, mirrored in `packages/compiler/src/types.ts`). A renderer draws pages from the IR alone. This file is the contract for writing a renderer outside the web app, such as a native one.
 
-Field names are camelCase. Optional fields are left out when empty. Colors are hex strings (`#rrggbb` or `#rrggbbaa`). Sizes are pixels on the canvas of each page, `page.width` by `page.height`. A page with `height: null` has a fixed width and grows with its content (a document, a long screen); otherwise the canvas is fixed and the renderer scales it whole to fit the screen. The host chooses the default size when it compiles (a presentation app, for example, asks for 1920 by 1080); the source can change it with `@page` and on each separator.
+Field names are camelCase. Optional fields are left out when empty. Colors are hex strings (`#rrggbb` or `#rrggbbaa`). Sizes are pixels on the canvas of each page, `page.width` by `page.height`. A page with `height: null` has a fixed width and grows with its content (a document, a long screen); otherwise the canvas is fixed and the renderer scales it whole to fit the screen. The host chooses the default size when it compiles (a host that shows fixed 16:9 screens, for example, asks for 1920 by 1080); the source can change it with `@page` and on each separator.
 
 ## Document
 
@@ -53,13 +53,13 @@ Every block has `type`, `style`, `line` and may have `step`, `when`, `variants` 
 | `each` | `list`, `item`, `index?`, `children` | Repetition decided while presenting. Evaluate `list` (always a `state` expression); for every element, draw `children` in place, as if they were children of the parent block, with the element bound to `item` and, when `index` is present, its position (1, 2, ...) bound to `index`. Draws nothing when the list is empty or not a list. Has no style or behavior of its own. |
 | `code` | `lang`, `code`, `lines` | `lines` is the code split in lines of tokens `{kind, text}`. Paint each token with `theme.elements.code.syntax[kind]`; an empty line still takes one line of height. `code` is the raw text. |
 | `table` | `header`, `aligns`, `rows` | Cells are inline content; `aligns` is `left`, `center` or `right` per column. See `theme.elements.table`. |
-| `image` | `src`, `alt`, `fit` | `src` is `{kind: "asset", id}` or `{kind: "url", url}`. An asset id is opaque: the host that shows the document turns it into an address (the Folio app, for example, serves uploaded files at `/api/v1/assets/{id}`); without a host that knows assets, leave the image empty. The image never grows past its container; with a fixed `w`/`h`, `fit` is `cover` (fill and crop) or `contain` (fit inside). |
+| `image` | `src`, `alt`, `fit` | `src` is `{kind: "asset", id}` or `{kind: "url", url}`. An asset id is opaque: the host that shows the document turns it into an address; without a host that knows assets, leave the image empty. The image never grows past its container; with a fixed `w`/`h`, `fit` is `cover` (fill and crop) or `contain` (fit inside). |
 | `layout` | `layout`, `cols`, `widths`, `wrap`, `children` | Container, see [Layout](#layout). |
 | `chart` | `chart`, `labels`, `series`, `legend`, `stacked`, `values`, `scene` | Draw `scene`, see [Charts](#charts). The other fields describe the data. |
 | `icon` | `name` | Draw `document.icons[name]`: a list of `{tag, attrs}` SVG elements (`path`, `circle`, `rect`, `line`, `polyline`, `polygon`, `ellipse`) on a 24 by 24 grid, stroked in the text color with round caps and joins and no fill. Scale it to `style.size` or `theme.elements.icon.size`; the stroke is `theme.elements.icon.stroke` in grid units. The full set lives in `icons/icons.json` (Lucide, ISC license). |
 | `spacer` | `size` | Empty space of `size` pixels along the parent's main axis. |
 | `divider` | | Horizontal rule across the parent with half a line (0.5 em) of space above and below, see `theme.elements.divider`. |
-| `input` | `name`, `numeric?`, `placeholder?`, `onSubmit?` | A text field (a number field when `numeric`) showing the state `name`. Every edit runs a `set` of `name` to the typed text (or its numeric reading, 0 when empty). Enter runs `onSubmit`; without `onSubmit`, Enter runs the page's `key` shortcut for `Enter`, if any. Typing and clicking in the field never move the presentation. Where the page is not interactive (thumbnails, print), draw it disabled with the initial value or the placeholder. |
+| `input` | `name`, `numeric?`, `placeholder?`, `onSubmit?` | A text field (a number field when `numeric`) showing the state `name`. Every edit runs a `set` of `name` to the typed text (or its numeric reading, 0 when empty). Enter runs `onSubmit`; without `onSubmit`, Enter runs the page's `key` shortcut for `Enter`, if any. Typing and clicking in the field never change the page. Where the page is not interactive (thumbnails, print), draw it disabled with the initial value or the placeholder. |
 | `sound` | `src`, `name?`, `autoplay?`, `loop?`, `volume?` | Nothing is drawn. While the page is shown live (not on a presenter screen that has an audience screen), load the audio: `autoplay` starts it when the page is entered, `loop` repeats it, `volume` is 0 to 1. Every sound of the page stops when another page is entered. |
 
 ## Inline content
@@ -170,7 +170,7 @@ The files in [`conformance/`](conformance) check an implementation of these rule
 | `name` | Built-in theme the document starts from. |
 | `colors` | Named colors after the document's overrides (`bg`, `text`, `muted`, `accent`, `surface`, `line`, ...). |
 | `fonts` | Role (`body`, `display`, `mono`, custom) to family. |
-| `fontFamilies` | `[{family, weights}]` to load. Families the renderer does not bundle come from the host. The Folio app lists their files at `GET /api/v1/fonts/manifest?family=Name:wght@400;700` (spaces as `+`), which returns `{faces: [{family, style, weight_min, weight_max, url, format, unicode_range}]}`. The default is woff2 split by `unicode_range`; add `&format=ttf` for one TrueType file per weight, which Android and iOS load directly. |
+| `fontFamilies` | `[{family, weights}]` to load. Families the renderer does not bundle come from the host. |
 | `text` | Base text style of every page. |
 | `headings` | Styles for heading levels 1 to 6. |
 | `page` | Default page style (background, text color, padding, gap, alignment). |

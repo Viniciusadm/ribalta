@@ -18,7 +18,7 @@ import com.archieapps.ribaltareader.render.Interaction
 import com.archieapps.ribaltareader.render.LocalInteraction
 import com.archieapps.ribaltareader.render.RenderContext
 import com.archieapps.ribaltareader.render.PageView
-import com.archieapps.ribaltareader.render.slideBackground
+import com.archieapps.ribaltareader.render.pageBackground
 import com.archieapps.ribaltareader.runtime.Navigation
 import com.archieapps.ribaltareader.runtime.Scope
 import kotlinx.coroutines.runBlocking
@@ -39,30 +39,30 @@ class ScreenshotTest {
     val compose = createAndroidComposeRule<ComponentActivity>()
 
     @Test
-    fun rendersDecksToPng() {
-        val decks = System.getProperty("ribalta.decks")?.split(File.pathSeparator)?.filter { it.isNotBlank() }
-        assumeTrue("set RIBALTA_DECKS to render screenshots", !decks.isNullOrEmpty())
+    fun rendersDocumentsToPng() {
+        val documents = System.getProperty("ribalta.documents")?.split(File.pathSeparator)?.filter { it.isNotBlank() }
+        assumeTrue("set RIBALTA_DOCUMENTS to render screenshots", !documents.isNullOrEmpty())
         val output = File(System.getProperty("ribalta.screenshots")!!).apply { mkdirs() }
         val fonts = Fonts(ApplicationProvider.getApplicationContext())
-        var deckIndex by mutableIntStateOf(0)
-        var slideIndex by mutableIntStateOf(0)
-        val compilations = decks!!.map { RibaltaCompiler.compile(File(it).readText()) }
+        var documentIndex by mutableIntStateOf(0)
+        var pageIndex by mutableIntStateOf(0)
+        val compilations = documents!!.map { RibaltaCompiler.compile(File(it).readText()) }
         compilations.forEach { runBlocking { fonts.load(it.document.theme.fontFamilies) } }
         compose.setContent {
-            val document = compilations[deckIndex].document
-            val slide = document.pages[slideIndex]
-            val session = Navigation.start(document, slideIndex).copy(step = slide.steps)
-            val render = RenderContext(document.theme, fonts, document.icons, Images(null), slideBackground(document, slide), false)
+            val document = compilations[documentIndex].document
+            val page = document.pages[pageIndex]
+            val session = Navigation.start(document, pageIndex).copy(step = page.steps)
+            val render = RenderContext(document.theme, fonts, document.icons, Images(null), pageBackground(document, page), false)
             CompositionLocalProvider(LocalDensity provides Density(1f), LocalInteraction provides Interaction(Scope(session.state, session.step), live = false) {}) {
-                Box { PageView(document, slide, render) }
+                Box { PageView(document, page, render) }
             }
         }
         compilations.forEachIndexed { d, compilation ->
-            val name = File(decks[d]).nameWithoutExtension
+            val name = File(documents[d]).nameWithoutExtension
             compilation.document.pages.indices.forEach { s ->
                 compose.runOnIdle {
-                    deckIndex = d
-                    slideIndex = s
+                    documentIndex = d
+                    pageIndex = s
                 }
                 compose.mainClock.advanceTimeBy(2_000)
                 compose.waitForIdle()

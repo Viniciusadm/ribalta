@@ -8,9 +8,9 @@ import com.archieapps.ribaltareader.ir.Document
 import com.archieapps.ribaltareader.ir.Inline
 
 object Shortcuts {
-    fun forSlide(document: Document, session: Session): Map<String, List<Action>> {
-        val slide = document.pages.getOrNull(session.index) ?: return emptyMap()
-        val scope = Scope(document.state + slide.state + session.state, session.step, session.elapsed)
+    fun forPage(document: Document, session: Session): Map<String, List<Action>> {
+        val page = document.pages.getOrNull(session.index) ?: return emptyMap()
+        val scope = Scope(document.state + page.state + session.state, session.step, session.elapsed)
         val found = linkedMapOf<String, List<Action>>()
         fun visible(behavior: Behavior, step: Int?) = Evaluator.holds(behavior.whenExpr, scope) && (step == null || step <= session.step)
         fun claim(behavior: Behavior) {
@@ -52,7 +52,7 @@ object Shortcuts {
                 }
             }
         }
-        blocks(listOfNotNull(slide.header) + slide.children + listOfNotNull(slide.footer, slide.overlay))
+        blocks(listOfNotNull(page.header) + page.children + listOfNotNull(page.footer, page.overlay))
         return found
     }
 }
