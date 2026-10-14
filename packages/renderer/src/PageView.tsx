@@ -25,9 +25,10 @@ export interface PageViewProps {
   anchor?: string;
   anchorToken?: number;
   scrollTo?: (id: string) => boolean;
+  fluid?: boolean;
 }
 
-export const PageView = memo(function PageView({ doc, page, step = Number.POSITIVE_INFINITY, state, elapsed = 0, onAction, anchor, anchorToken, scrollTo }: PageViewProps) {
+export const PageView = memo(function PageView({ doc, page, step = Number.POSITIVE_INFINITY, state, elapsed = 0, onAction, anchor, anchorToken, scrollTo, fluid = false }: PageViewProps) {
   const root = useRef<HTMLDivElement>(null);
   useEffect(() => {
     if (anchor && root.current) scrollToAnchor(root.current, anchor);
@@ -70,7 +71,7 @@ export const PageView = memo(function PageView({ doc, page, step = Number.POSITI
     ...layeredBackground(page.style.bg, page.style.bgImage, solidColor(theme.page.bg) ?? theme.colors["bg"]),
     position: "relative",
     boxSizing: "border-box",
-    width: page.width,
+    ...(fluid && !fixed ? { width: "100%", maxWidth: page.width } : { width: page.width }),
     ...(fixed ? { height: page.height!, overflow: "hidden" } : { minHeight: pad[0] * 2 }),
     ...elementVars(theme.elements),
     ["--ribalta-bg" as string]: solidColor(merged.bg)?.startsWith("#") ? solidColor(merged.bg) : theme.colors["bg"],

@@ -47,6 +47,8 @@ pub struct DataDef {
 pub struct Preamble {
     pub title: Option<String>,
     pub author: Option<String>,
+    pub date: Option<String>,
+    pub description: Option<String>,
     pub theme: Option<Text>,
     pub version: Option<Text>,
     pub page: Option<Text>,
@@ -177,6 +179,20 @@ pub fn parse_preamble(lines: &[Line<'_>], diags: &mut Diagnostics) -> Preamble {
             "author" => {
                 if require_value(diags, &value) {
                     preamble.author = Some(value.value);
+                }
+            }
+            "date" => {
+                if require_value(diags, &value) {
+                    if is_calendar_date(&value.value) {
+                        preamble.date = Some(value.value);
+                    } else {
+                        diags.error("R535", value.span, tr(format!("data inválida: `{}`", value.value), format!("invalid date: `{}`", value.value))).hint(tr("Use o formato AAAA-MM-DD, como @date 2026-10-14", "Use the YYYY-MM-DD format, like @date 2026-10-14"));
+                    }
+                }
+            }
+            "description" => {
+                if require_value(diags, &value) {
+                    preamble.description = Some(value.value);
                 }
             }
             "theme" => {
@@ -427,4 +443,22 @@ fn component_def(header: Line<'_>, body: &[Line<'_>], diags: &mut Diagnostics) -
     }
     let nodes = parse_blocks(body, diags);
     Some(ComponentDef { name, params, body: nodes })
+}
+
+fn is_calendar_date(text: &str) -> bool {
+    let parts: Vec<&str> = text.split('-').collect();
+    let [year, month, day] = parts.as_slice() else { return false };
+    if year.len() != 4 || month.len() != 2 || day.len() != 2 || !text.bytes().all(|b| b.is_ascii_digit() || b == b'-') {
+        return false;
+    }
+    let (Ok(year), Ok(month), Ok(day)) = (year.parse::<u32>(), month.parse::<u32>(), day.parse::<u32>()) else { return false };
+    let leap = year % 4 == 0 && (year % 100 != 0 || year % 400 == 0);
+    let days = match month {
+        1 | 3 | 5 | 7 | 8 | 10 | 12 => 31,
+        4 | 6 | 9 | 11 => 30,
+        2 if leap => 29,
+        2 => 28,
+        _ => return false,
+    };
+    (1..=days).contains(&day)
 }

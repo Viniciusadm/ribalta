@@ -40,6 +40,29 @@ fn preamble_sets_metadata_theme_and_custom_tokens() {
 }
 
 #[test]
+fn preamble_sets_publication_date_and_description() {
+    let value = clean("@title Post\n@date 2024-02-29\n@description Um resumo curto.\n\n# Oi");
+    let meta = &value["document"]["meta"];
+    assert_eq!(meta["date"], "2024-02-29");
+    assert_eq!(meta["description"], "Um resumo curto.");
+
+    let value = clean("# Sem metadados");
+    assert!(value["document"]["meta"].get("date").is_none());
+    assert!(value["document"]["meta"].get("description").is_none());
+}
+
+#[test]
+fn rejects_dates_outside_the_calendar() {
+    for date in ["2026-13-40", "2023-02-29", "14/10/2026", "2026-1-5", "ontem"] {
+        let (value, compilation) = output(&format!("@date {date}\n\n# Oi"));
+        assert_eq!(codes(&compilation), vec!["R535"], "{date}");
+        assert!(value["document"]["meta"].get("date").is_none());
+    }
+    let (_, compilation) = output("@description\n\n# Oi");
+    assert_eq!(codes(&compilation), vec!["R501"]);
+}
+
+#[test]
 fn themes_describe_their_animations_as_data() {
     let motion = &clean("# Oi")["document"]["theme"]["motion"];
     assert_eq!(motion["enter"]["up"], json!({ "duration": 360, "easing": [0.25, 0.1, 0.25, 1.0], "from": { "opacity": 0.0, "dy": { "unit": "px", "value": 16.0 } } }));

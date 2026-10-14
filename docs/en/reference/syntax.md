@@ -28,6 +28,8 @@ A document has two parts, in this order:
 | --- | --- | --- |
 | `@title` | `@title Text` | Document title. |
 | `@author` | `@author Name` | Document author. |
+| `@date` | `@date 2026-10-14` | Publication date, as `YYYY-MM-DD`. It goes in the document metadata for whoever publishes it (a blog, for example); it does not show on the pages. |
+| `@description` | `@description Short summary` | Document summary, in the metadata, for listings and search engines. |
 | `@theme` | `@theme paper` | Built-in theme: `paper` (default), `ink` or `editorial`. |
 | `@version` | `@version 2` | Language version: `1` or `2`. The current version is `2`. |
 | `@page` | `@page 1920x1080` | Page size in pixels: `@page 1920x1080`, `@page 800xauto` or `@page width=800 height=auto`. A height of `auto` grows with the content. Without it, the program showing the document picks the size. See [Page sizes](/en/guides/pages/). |

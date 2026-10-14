@@ -258,7 +258,7 @@ export interface LayoutDefaults {
 
 export interface Document {
   version: number;
-  meta: { title: string | null; author: string | null; page: PageSize; mode?: "game"; random?: boolean };
+  meta: { title: string | null; author: string | null; date?: string; description?: string; page: PageSize; mode?: "game"; random?: boolean };
   theme: Theme;
   state?: Record<string, Scalar>;
   externs?: string[];

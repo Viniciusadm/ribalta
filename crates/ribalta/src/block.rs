@@ -3,7 +3,7 @@ use crate::diagnostic::Diagnostics;
 use crate::text::{tr, Line, Span, Text};
 
 pub const RAW_DIRECTIVES: &[&str] = &["notes"];
-pub const PREAMBLE_DIRECTIVES: &[&str] = &["title", "author", "theme", "version", "page", "color", "font", "style", "component", "header", "footer", "overlay", "let", "state", "extern", "data", "transition", "mode", "persist", "scorm", "end"];
+pub const PREAMBLE_DIRECTIVES: &[&str] = &["title", "author", "date", "description", "theme", "version", "page", "color", "font", "style", "component", "header", "footer", "overlay", "let", "state", "extern", "data", "transition", "mode", "persist", "scorm", "end"];
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, serde::Serialize)]
 #[serde(rename_all = "lowercase")]

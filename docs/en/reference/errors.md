@@ -1216,6 +1216,18 @@ The item was sent with a kind the library does not know. Valid kinds are theme, 
 
 **How to fix:** use `@mode default` (the default) or `@mode game`.
 
+### R535 · Invalid date
+
+**Error.** Message: invalid date: `10/14/2026`.
+
+```ribalta
+@date 10/14/2026
+
+# Opening
+```
+
+**How to fix:** write the date as `YYYY-MM-DD`, with a day that exists in the calendar, like `@date 2026-10-14`.
+
 ## F6xx: variables, expressions and state
 
 ### R601 · Unknown variable

@@ -28,6 +28,8 @@ Um documento tem duas partes, nesta ordem:
 | --- | --- | --- |
 | `@title` | `@title Texto` | Título do documento. |
 | `@author` | `@author Nome` | Autor do documento. |
+| `@date` | `@date 2026-10-14` | Data de publicação, no formato `AAAA-MM-DD`. Fica nos metadados do documento, para quem publica (um blog, por exemplo); não aparece nas páginas. |
+| `@description` | `@description Resumo curto` | Resumo do documento, nos metadados, para listas e mecanismos de busca. |
 | `@theme` | `@theme paper` | Tema embutido: `paper` (padrão), `ink` ou `editorial`. |
 | `@version` | `@version 2` | Versão da linguagem: `1` ou `2`. A versão atual é `2`. |
 | `@page` | `@page 1920x1080`, `@page 800xauto`, `@page width=800 height=auto` | Tamanho das páginas, em pixels: largura `x` altura, de 16 a 16384; `auto` na altura faz a página crescer com o conteúdo. A forma com chaves só muda o que nomeia. Sem `@page`, vale o padrão do programa que compila o documento. Veja [Tamanhos e documentos](/guides/pages/). |
