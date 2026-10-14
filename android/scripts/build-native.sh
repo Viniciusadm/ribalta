@@ -3,7 +3,7 @@ set -euo pipefail
 
 here="$(cd "$(dirname "$0")/.." && pwd)"
 language="$here/.."
-out="${1:-$here/app/build/generated/jniLibs}"
+out="${1:-$here/ribalta/build/generated/jniLibs}"
 api=26
 
 sdk="${ANDROID_HOME:-${ANDROID_SDK_ROOT:-}}"

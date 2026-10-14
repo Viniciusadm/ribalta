@@ -24,4 +24,5 @@ dependencyResolutionManagement {
 
 rootProject.name = "Ribalta Reader"
 include(":app")
+include(":ribalta")
  

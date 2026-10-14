@@ -21,7 +21,7 @@ unsafe fn write_bytes(env: *mut JNIEnv, bytes: &[u8]) -> jbyteArray {
 }
 
 #[unsafe(no_mangle)]
-unsafe extern "system" fn Java_com_archieapps_ribaltareader_compiler_RibaltaCompiler_compileBytes(
+unsafe extern "system" fn Java_com_archieapps_ribalta_compiler_RibaltaCompiler_compileBytes(
     env: *mut JNIEnv,
     _class: jclass,
     prelude: jbyteArray,

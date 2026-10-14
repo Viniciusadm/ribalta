@@ -2,7 +2,7 @@
 set -euo pipefail
 
 here="$(cd "$(dirname "$0")/.." && pwd)"
-out="$here/app/src/main/assets/fonts"
+out="$here/ribalta/src/main/assets/fonts"
 base="https://raw.githubusercontent.com/google/fonts/main/ofl"
 mkdir -p "$out"
 
