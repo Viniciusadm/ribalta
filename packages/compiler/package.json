@@ -1,0 +1,59 @@
+{
+  "name": "@ribaltalang/compiler",
+  "version": "0.2.0",
+  "description": "Ribalta compiler for the browser: compiles Ribalta source into the JSON IR with localized diagnostics (WebAssembly).",
+  "keywords": [
+    "ribalta",
+    "compiler",
+    "webassembly",
+    "visual",
+    "documents",
+    "dsl"
+  ],
+  "license": "MIT OR Apache-2.0",
+  "author": "viniciusam",
+  "homepage": "https://folioslides.com.br/docs/",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Viniciusadm/ribalta.git",
+    "directory": "packages/compiler"
+  },
+  "bugs": "https://github.com/Viniciusadm/ribalta/issues",
+  "type": "module",
+  "sideEffects": false,
+  "exports": {
+    ".": {
+      "source": "./src/index.ts",
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    },
+    "./ribalta.wasm": "./ribalta.wasm"
+  },
+  "files": [
+    "dist",
+    "ribalta.wasm",
+    "README.md",
+    "LICENSE-MIT",
+    "LICENSE-APACHE"
+  ],
+  "scripts": {
+    "wasm": "cargo build --release --target wasm32-unknown-unknown -p ribalta --manifest-path ../../Cargo.toml && cp ../../target/wasm32-unknown-unknown/release/ribalta.wasm ribalta.wasm",
+    "build": "npm run wasm && tsup",
+    "prepack": "npm run build && cp ../../LICENSE-MIT ../../LICENSE-APACHE ."
+  },
+  "tsup": {
+    "entry": {
+      "index": "src/index.ts"
+    },
+    "format": [
+      "esm"
+    ],
+    "dts": true,
+    "clean": true,
+    "sourcemap": true,
+    "target": "es2022"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}

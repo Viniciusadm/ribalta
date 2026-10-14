@@ -1,0 +1,8 @@
+{
+  "description": "Suporte à linguagem Ribalta: diagnósticos, autocompletar, ir para definição, formatação e mapa de rotas",
+  "command.graph": "Mostrar mapa de rotas",
+  "command.restart": "Reiniciar o servidor de linguagem",
+  "config.path": "Caminho do `ribalta`, a ferramenta de linha de comando, instalada com `cargo install ribalta-cli`.",
+  "config.theme": "Tema do projeto aplicado antes de cada documento. Caminhos relativos partem da pasta de cada arquivo. Vazio usa o `theme.ribalta` ao lado do arquivo, se existir.",
+  "config.language": "Idioma das mensagens do compilador. `auto` segue o idioma do editor."
+}

@@ -1,0 +1,860 @@
+{
+  "description": "Expression evaluation cases. Evaluate `expr` with the given `state` and `step`; the result must equal `value`, and printing it (as an inline `expr` node does) must give `printed`. When `seed` is given, `random` and `pick` draw from a mulberry32 generator started at that 32-bit seed, one draw per call, left to right. `elapsed`, when given, is the value of the `elapsed` node (0 otherwise).",
+  "cases": [
+    {
+      "name": "literal number",
+      "expr": {
+        "op": "lit",
+        "value": 3
+      },
+      "value": 3,
+      "printed": "3"
+    },
+    {
+      "name": "unknown state is false",
+      "expr": {
+        "op": "state",
+        "name": "missing"
+      },
+      "value": false,
+      "printed": "false"
+    },
+    {
+      "name": "state value",
+      "expr": {
+        "op": "state",
+        "name": "score"
+      },
+      "state": {
+        "score": 7
+      },
+      "value": 7,
+      "printed": "7"
+    },
+    {
+      "name": "current step",
+      "expr": {
+        "op": "step"
+      },
+      "step": 2,
+      "value": 2,
+      "printed": "2"
+    },
+    {
+      "name": "not",
+      "expr": {
+        "op": "not",
+        "arg": {
+          "op": "lit",
+          "value": true
+        }
+      },
+      "value": false,
+      "printed": "false"
+    },
+    {
+      "name": "negation",
+      "expr": {
+        "op": "neg",
+        "arg": {
+          "op": "lit",
+          "value": 4
+        }
+      },
+      "value": -4,
+      "printed": "-4"
+    },
+    {
+      "name": "and holds only for exactly true",
+      "expr": {
+        "op": "binary",
+        "operator": "and",
+        "left": {
+          "op": "lit",
+          "value": true
+        },
+        "right": {
+          "op": "lit",
+          "value": 1
+        }
+      },
+      "value": false,
+      "printed": "false"
+    },
+    {
+      "name": "or",
+      "expr": {
+        "op": "binary",
+        "operator": "or",
+        "left": {
+          "op": "lit",
+          "value": false
+        },
+        "right": {
+          "op": "lit",
+          "value": true
+        }
+      },
+      "value": true,
+      "printed": "true"
+    },
+    {
+      "name": "equality compares type and value",
+      "expr": {
+        "op": "binary",
+        "operator": "==",
+        "left": {
+          "op": "lit",
+          "value": 1
+        },
+        "right": {
+          "op": "lit",
+          "value": "1"
+        }
+      },
+      "value": false,
+      "printed": "false"
+    },
+    {
+      "name": "inequality",
+      "expr": {
+        "op": "binary",
+        "operator": "!=",
+        "left": {
+          "op": "lit",
+          "value": "a"
+        },
+        "right": {
+          "op": "lit",
+          "value": "b"
+        }
+      },
+      "value": true,
+      "printed": "true"
+    },
+    {
+      "name": "strings compare by code point",
+      "expr": {
+        "op": "binary",
+        "operator": "<",
+        "left": {
+          "op": "lit",
+          "value": "apple"
+        },
+        "right": {
+          "op": "lit",
+          "value": "banana"
+        }
+      },
+      "value": true,
+      "printed": "true"
+    },
+    {
+      "name": "numbers compare",
+      "expr": {
+        "op": "binary",
+        "operator": ">=",
+        "left": {
+          "op": "lit",
+          "value": 2
+        },
+        "right": {
+          "op": "lit",
+          "value": 2
+        }
+      },
+      "value": true,
+      "printed": "true"
+    },
+    {
+      "name": "addition",
+      "expr": {
+        "op": "binary",
+        "operator": "+",
+        "left": {
+          "op": "lit",
+          "value": 2
+        },
+        "right": {
+          "op": "lit",
+          "value": 3
+        }
+      },
+      "value": 5,
+      "printed": "5"
+    },
+    {
+      "name": "concatenation prints numbers",
+      "expr": {
+        "op": "binary",
+        "operator": "+",
+        "left": {
+          "op": "lit",
+          "value": "Total: "
+        },
+        "right": {
+          "op": "lit",
+          "value": 2.5
+        }
+      },
+      "value": "Total: 2.5",
+      "printed": "Total: 2.5"
+    },
+    {
+      "name": "integers concatenate without decimals",
+      "expr": {
+        "op": "binary",
+        "operator": "+",
+        "left": {
+          "op": "lit",
+          "value": 4
+        },
+        "right": {
+          "op": "lit",
+          "value": " slides"
+        }
+      },
+      "value": "4 slides",
+      "printed": "4 slides"
+    },
+    {
+      "name": "subtraction",
+      "expr": {
+        "op": "binary",
+        "operator": "-",
+        "left": {
+          "op": "lit",
+          "value": 10
+        },
+        "right": {
+          "op": "lit",
+          "value": 2.5
+        }
+      },
+      "value": 7.5,
+      "printed": "7.5"
+    },
+    {
+      "name": "multiplication",
+      "expr": {
+        "op": "binary",
+        "operator": "*",
+        "left": {
+          "op": "lit",
+          "value": 6
+        },
+        "right": {
+          "op": "lit",
+          "value": 7
+        }
+      },
+      "value": 42,
+      "printed": "42"
+    },
+    {
+      "name": "division",
+      "expr": {
+        "op": "binary",
+        "operator": "/",
+        "left": {
+          "op": "lit",
+          "value": 1
+        },
+        "right": {
+          "op": "lit",
+          "value": 4
+        }
+      },
+      "value": 0.25,
+      "printed": "0.25"
+    },
+    {
+      "name": "division by zero is zero",
+      "expr": {
+        "op": "binary",
+        "operator": "/",
+        "left": {
+          "op": "lit",
+          "value": 7
+        },
+        "right": {
+          "op": "lit",
+          "value": 0
+        }
+      },
+      "value": 0,
+      "printed": "0"
+    },
+    {
+      "name": "remainder keeps the sign of the dividend",
+      "expr": {
+        "op": "binary",
+        "operator": "%",
+        "left": {
+          "op": "lit",
+          "value": -7
+        },
+        "right": {
+          "op": "lit",
+          "value": 3
+        }
+      },
+      "value": -1,
+      "printed": "-1"
+    },
+    {
+      "name": "remainder by zero is zero",
+      "expr": {
+        "op": "binary",
+        "operator": "%",
+        "left": {
+          "op": "lit",
+          "value": 5
+        },
+        "right": {
+          "op": "lit",
+          "value": 0
+        }
+      },
+      "value": 0,
+      "printed": "0"
+    },
+    {
+      "name": "shortest decimal form",
+      "expr": {
+        "op": "binary",
+        "operator": "+",
+        "left": {
+          "op": "lit",
+          "value": 0.1
+        },
+        "right": {
+          "op": "lit",
+          "value": 0.2
+        }
+      },
+      "value": 0.30000000000000004,
+      "printed": "0.30000000000000004"
+    },
+    {
+      "name": "conditional",
+      "expr": {
+        "op": "cond",
+        "test": {
+          "op": "state",
+          "name": "on"
+        },
+        "then": {
+          "op": "lit",
+          "value": "ligado"
+        },
+        "otherwise": {
+          "op": "lit",
+          "value": "desligado"
+        }
+      },
+      "state": {
+        "on": true
+      },
+      "value": "ligado",
+      "printed": "ligado"
+    },
+    {
+      "name": "conditional needs exactly true",
+      "expr": {
+        "op": "cond",
+        "test": {
+          "op": "state",
+          "name": "on"
+        },
+        "then": {
+          "op": "lit",
+          "value": "ligado"
+        },
+        "otherwise": {
+          "op": "lit",
+          "value": "desligado"
+        }
+      },
+      "state": {
+        "on": 1
+      },
+      "value": "desligado",
+      "printed": "desligado"
+    },
+    {
+      "name": "round half away from zero",
+      "expr": {
+        "op": "call",
+        "name": "round",
+        "args": [
+          {
+            "op": "lit",
+            "value": 2.5
+          }
+        ]
+      },
+      "value": 3,
+      "printed": "3"
+    },
+    {
+      "name": "round negative half away from zero",
+      "expr": {
+        "op": "call",
+        "name": "round",
+        "args": [
+          {
+            "op": "lit",
+            "value": -2.5
+          }
+        ]
+      },
+      "value": -3,
+      "printed": "-3"
+    },
+    {
+      "name": "round to decimal places",
+      "expr": {
+        "op": "call",
+        "name": "round",
+        "args": [
+          {
+            "op": "lit",
+            "value": 3.14159
+          },
+          {
+            "op": "lit",
+            "value": 2
+          }
+        ]
+      },
+      "value": 3.14,
+      "printed": "3.14"
+    },
+    {
+      "name": "round truncates the places",
+      "expr": {
+        "op": "call",
+        "name": "round",
+        "args": [
+          {
+            "op": "lit",
+            "value": 2.567
+          },
+          {
+            "op": "lit",
+            "value": 1.9
+          }
+        ]
+      },
+      "value": 2.6,
+      "printed": "2.6"
+    },
+    {
+      "name": "round clamps negative places to zero",
+      "expr": {
+        "op": "call",
+        "name": "round",
+        "args": [
+          {
+            "op": "lit",
+            "value": 1234.5678
+          },
+          {
+            "op": "lit",
+            "value": -1
+          }
+        ]
+      },
+      "value": 1235,
+      "printed": "1235"
+    },
+    {
+      "name": "min",
+      "expr": {
+        "op": "call",
+        "name": "min",
+        "args": [
+          {
+            "op": "lit",
+            "value": 3
+          },
+          {
+            "op": "lit",
+            "value": -1
+          },
+          {
+            "op": "lit",
+            "value": 2
+          }
+        ]
+      },
+      "value": -1,
+      "printed": "-1"
+    },
+    {
+      "name": "max",
+      "expr": {
+        "op": "call",
+        "name": "max",
+        "args": [
+          {
+            "op": "lit",
+            "value": 3
+          },
+          {
+            "op": "state",
+            "name": "score"
+          },
+          {
+            "op": "lit",
+            "value": 2
+          }
+        ]
+      },
+      "state": {
+        "score": 9
+      },
+      "value": 9,
+      "printed": "9"
+    },
+    {
+      "name": "expressions nest",
+      "expr": {
+        "op": "binary",
+        "operator": "+",
+        "left": {
+          "op": "lit",
+          "value": "Nota: "
+        },
+        "right": {
+          "op": "call",
+          "name": "round",
+          "args": [
+            {
+              "op": "binary",
+              "operator": "/",
+              "left": {
+                "op": "state",
+                "name": "score"
+              },
+              "right": {
+                "op": "lit",
+                "value": 3
+              }
+            },
+            {
+              "op": "lit",
+              "value": 1
+            }
+          ]
+        }
+      },
+      "state": {
+        "score": 10
+      },
+      "value": "Nota: 3.3",
+      "printed": "Nota: 3.3"
+    },
+    {
+      "name": "in finds a text in a list",
+      "expr": {
+        "op": "binary",
+        "operator": "in",
+        "left": {
+          "op": "lit",
+          "value": "chave"
+        },
+        "right": {
+          "op": "state",
+          "name": "mochila"
+        }
+      },
+      "state": {
+        "mochila": [
+          "mapa",
+          "chave"
+        ]
+      },
+      "value": true,
+      "printed": "true"
+    },
+    {
+      "name": "in is false for a missing text",
+      "expr": {
+        "op": "binary",
+        "operator": "in",
+        "left": {
+          "op": "lit",
+          "value": "tocha"
+        },
+        "right": {
+          "op": "state",
+          "name": "mochila"
+        }
+      },
+      "state": {
+        "mochila": [
+          "mapa"
+        ]
+      },
+      "value": false,
+      "printed": "false"
+    },
+    {
+      "name": "len counts the items of a list",
+      "expr": {
+        "op": "call",
+        "name": "len",
+        "args": [
+          {
+            "op": "state",
+            "name": "mochila"
+          }
+        ]
+      },
+      "state": {
+        "mochila": [
+          "mapa",
+          "chave"
+        ]
+      },
+      "value": 2,
+      "printed": "2"
+    },
+    {
+      "name": "len counts characters, not bytes",
+      "expr": {
+        "op": "call",
+        "name": "len",
+        "args": [
+          {
+            "op": "lit",
+            "value": "ação"
+          }
+        ]
+      },
+      "value": 4,
+      "printed": "4"
+    },
+    {
+      "name": "a list prints its items joined by comma",
+      "expr": {
+        "op": "state",
+        "name": "mochila"
+      },
+      "state": {
+        "mochila": [
+          "mapa",
+          "chave"
+        ]
+      },
+      "value": [
+        "mapa",
+        "chave"
+      ],
+      "printed": "mapa, chave"
+    },
+    {
+      "name": "an empty list prints nothing",
+      "expr": {
+        "op": "state",
+        "name": "mochila"
+      },
+      "state": {
+        "mochila": []
+      },
+      "value": [],
+      "printed": ""
+    },
+    {
+      "name": "random draws an integer between the two bounds",
+      "expr": {
+        "op": "call",
+        "name": "random",
+        "args": [
+          {
+            "op": "lit",
+            "value": 1
+          },
+          {
+            "op": "lit",
+            "value": 6
+          }
+        ]
+      },
+      "seed": 1,
+      "value": 4,
+      "printed": "4"
+    },
+    {
+      "name": "random accepts the bounds in any order",
+      "expr": {
+        "op": "call",
+        "name": "random",
+        "args": [
+          {
+            "op": "lit",
+            "value": 6
+          },
+          {
+            "op": "lit",
+            "value": 1
+          }
+        ]
+      },
+      "seed": 1,
+      "value": 4,
+      "printed": "4"
+    },
+    {
+      "name": "random rounds the bounds inwards",
+      "expr": {
+        "op": "call",
+        "name": "random",
+        "args": [
+          {
+            "op": "lit",
+            "value": 1.5
+          },
+          {
+            "op": "lit",
+            "value": 3.2
+          }
+        ]
+      },
+      "seed": 1,
+      "value": 3,
+      "printed": "3"
+    },
+    {
+      "name": "each random call takes the next draw",
+      "expr": {
+        "op": "binary",
+        "operator": "+",
+        "left": {
+          "op": "call",
+          "name": "random",
+          "args": [
+            {
+              "op": "lit",
+              "value": 1
+            },
+            {
+              "op": "lit",
+              "value": 6
+            }
+          ]
+        },
+        "right": {
+          "op": "call",
+          "name": "random",
+          "args": [
+            {
+              "op": "lit",
+              "value": 1
+            },
+            {
+              "op": "lit",
+              "value": 6
+            }
+          ]
+        }
+      },
+      "seed": 1,
+      "value": 5,
+      "printed": "5"
+    },
+    {
+      "name": "pick draws one of its arguments",
+      "expr": {
+        "op": "call",
+        "name": "pick",
+        "args": [
+          {
+            "op": "lit",
+            "value": "a"
+          },
+          {
+            "op": "lit",
+            "value": "b"
+          },
+          {
+            "op": "lit",
+            "value": "c"
+          }
+        ]
+      },
+      "seed": 42,
+      "value": "b",
+      "printed": "b"
+    },
+    {
+      "name": "pick draws an item of a state list",
+      "expr": {
+        "op": "call",
+        "name": "pick",
+        "args": [
+          {
+            "op": "state",
+            "name": "cartas"
+          }
+        ]
+      },
+      "state": {
+        "cartas": [
+          "x",
+          "y"
+        ]
+      },
+      "seed": 1,
+      "value": "y",
+      "printed": "y"
+    },
+    {
+      "name": "pick of an empty list gives an empty text",
+      "expr": {
+        "op": "call",
+        "name": "pick",
+        "args": [
+          {
+            "op": "state",
+            "name": "cartas"
+          }
+        ]
+      },
+      "state": {
+        "cartas": []
+      },
+      "seed": 1,
+      "value": "",
+      "printed": ""
+    },
+    {
+      "name": "elapsed reads the seconds since the page opened",
+      "expr": {
+        "op": "elapsed"
+      },
+      "elapsed": 7,
+      "value": 7,
+      "printed": "7"
+    },
+    {
+      "name": "a countdown subtracts elapsed from the limit",
+      "expr": {
+        "op": "binary",
+        "operator": "-",
+        "left": {
+          "op": "lit",
+          "value": 30
+        },
+        "right": {
+          "op": "elapsed"
+        }
+      },
+      "elapsed": 12,
+      "value": 18,
+      "printed": "18"
+    }
+  ]
+}

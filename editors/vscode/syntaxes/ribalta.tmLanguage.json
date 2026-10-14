@@ -1,0 +1,348 @@
+{
+  "$schema": "https://raw.githubusercontent.com/martinring/tmlanguage/master/tmlanguage.json",
+  "name": "Ribalta",
+  "scopeName": "source.ribalta",
+  "patterns": [
+    {
+      "include": "#fence"
+    },
+    {
+      "include": "#notes"
+    },
+    {
+      "include": "#comment"
+    },
+    {
+      "include": "#separator"
+    },
+    {
+      "include": "#directive"
+    },
+    {
+      "include": "#block"
+    },
+    {
+      "include": "#heading"
+    },
+    {
+      "include": "#quote"
+    },
+    {
+      "include": "#list"
+    },
+    {
+      "include": "#inline"
+    }
+  ],
+  "repository": {
+    "fence": {
+      "name": "markup.fenced_code.block.ribalta",
+      "begin": "^\\s*(```)\\s*([\\w+-]*).*$",
+      "beginCaptures": {
+        "1": {
+          "name": "punctuation.definition.markdown"
+        },
+        "2": {
+          "name": "fenced_code.block.language"
+        }
+      },
+      "end": "^\\s*(```)\\s*$",
+      "endCaptures": {
+        "1": {
+          "name": "punctuation.definition.markdown"
+        }
+      },
+      "contentName": "markup.raw.block.ribalta"
+    },
+    "notes": {
+      "begin": "^\\s*(:::)\\s*(notes)\\b.*$",
+      "beginCaptures": {
+        "1": {
+          "name": "punctuation.definition.block.ribalta"
+        },
+        "2": {
+          "name": "entity.name.type.block.ribalta"
+        }
+      },
+      "end": "^\\s*(:::)\\s*$",
+      "endCaptures": {
+        "1": {
+          "name": "punctuation.definition.block.ribalta"
+        }
+      },
+      "contentName": "comment.block.notes.ribalta"
+    },
+    "comment": {
+      "name": "comment.line.double-slash.ribalta",
+      "match": "^\\s*//.*$"
+    },
+    "separator": {
+      "match": "^(---+)\\s*(\\{.*\\})?\\s*$",
+      "captures": {
+        "1": {
+          "name": "keyword.control.separator.ribalta"
+        },
+        "2": {
+          "patterns": [
+            {
+              "include": "#attributes"
+            }
+          ]
+        }
+      }
+    },
+    "directive": {
+      "begin": "^\\s*(@[A-Za-z]+)\\b",
+      "beginCaptures": {
+        "1": {
+          "name": "keyword.control.directive.ribalta"
+        }
+      },
+      "end": "$",
+      "patterns": [
+        {
+          "match": "#[0-9A-Fa-f]{3,8}\\b",
+          "name": "constant.other.color.ribalta"
+        },
+        {
+          "include": "#strings"
+        },
+        {
+          "include": "#numbers"
+        },
+        {
+          "include": "#inline"
+        }
+      ]
+    },
+    "block": {
+      "begin": "^\\s*(:{2,3})\\s*([\\w-]+)?",
+      "beginCaptures": {
+        "1": {
+          "name": "punctuation.definition.block.ribalta"
+        },
+        "2": {
+          "name": "entity.name.type.block.ribalta"
+        }
+      },
+      "end": "$",
+      "patterns": [
+        {
+          "include": "#inline"
+        }
+      ]
+    },
+    "heading": {
+      "name": "markup.heading.ribalta",
+      "begin": "^\\s*(#{1,6})(?=\\s)",
+      "beginCaptures": {
+        "1": {
+          "name": "punctuation.definition.heading.ribalta"
+        }
+      },
+      "end": "$",
+      "patterns": [
+        {
+          "include": "#inline"
+        }
+      ]
+    },
+    "quote": {
+      "match": "^\\s*(>)",
+      "captures": {
+        "1": {
+          "name": "punctuation.definition.quote.begin.markdown"
+        }
+      }
+    },
+    "list": {
+      "match": "^\\s*([-*+]|\\d{1,9}[.)])(?=\\s)",
+      "captures": {
+        "1": {
+          "name": "punctuation.definition.list.begin.markdown"
+        }
+      }
+    },
+    "inline": {
+      "patterns": [
+        {
+          "match": "\\\\.",
+          "name": "constant.character.escape.ribalta"
+        },
+        {
+          "begin": "(?<=\\])\\{|\\{(?=[^{}]*\\}\\s*$)",
+          "beginCaptures": {
+            "0": {
+              "name": "punctuation.definition.attributes.begin.ribalta"
+            }
+          },
+          "end": "\\}",
+          "endCaptures": {
+            "0": {
+              "name": "punctuation.definition.attributes.end.ribalta"
+            }
+          },
+          "patterns": [
+            {
+              "include": "#attribute-items"
+            }
+          ]
+        },
+        {
+          "match": "`[^`]*`",
+          "name": "markup.inline.raw.ribalta"
+        },
+        {
+          "match": "\\*\\*[^*]+\\*\\*",
+          "name": "markup.bold.ribalta"
+        },
+        {
+          "match": "\\*[^*\\s][^*]*\\*",
+          "name": "markup.italic.ribalta"
+        },
+        {
+          "match": "~~[^~]+~~",
+          "name": "markup.strikethrough.ribalta"
+        },
+        {
+          "match": "(!?\\[)([^\\]]*)(\\])(\\()([^)]*)(\\))",
+          "captures": {
+            "1": {
+              "name": "punctuation.definition.link.title.begin.markdown"
+            },
+            "2": {
+              "name": "string.other.link.title.markdown"
+            },
+            "3": {
+              "name": "punctuation.definition.link.title.end.markdown"
+            },
+            "4": {
+              "name": "punctuation.definition.metadata.markdown"
+            },
+            "5": {
+              "name": "markup.underline.link.ribalta"
+            },
+            "6": {
+              "name": "punctuation.definition.metadata.markdown"
+            }
+          }
+        },
+        {
+          "match": "(!?\\[)([^\\]]*)(\\])(?=\\{)",
+          "captures": {
+            "1": {
+              "name": "punctuation.definition.link.title.begin.markdown"
+            },
+            "2": {
+              "name": "string.other.link.title.markdown"
+            },
+            "3": {
+              "name": "punctuation.definition.link.title.end.markdown"
+            }
+          }
+        },
+        {
+          "include": "#variables"
+        }
+      ]
+    },
+    "attributes": {
+      "match": "\\{(.*)\\}",
+      "captures": {
+        "0": {
+          "name": "meta.attributes.ribalta"
+        },
+        "1": {
+          "patterns": [
+            {
+              "include": "#attribute-items"
+            }
+          ]
+        }
+      }
+    },
+    "attribute-items": {
+      "patterns": [
+        {
+          "match": "\\.[\\w$-]+",
+          "name": "entity.other.attribute-name.class.ribalta"
+        },
+        {
+          "match": "#[\\w-]+",
+          "name": "entity.other.attribute-name.id.ribalta"
+        },
+        {
+          "match": "([A-Za-z$][\\w$-]*)(=)",
+          "captures": {
+            "1": {
+              "name": "entity.other.attribute-name.ribalta"
+            },
+            "2": {
+              "name": "punctuation.separator.key-value.ribalta"
+            }
+          }
+        },
+        {
+          "include": "#strings"
+        },
+        {
+          "include": "#numbers"
+        },
+        {
+          "include": "#variables"
+        },
+        {
+          "match": "[A-Za-z][\\w-]*",
+          "name": "support.constant.ribalta"
+        }
+      ]
+    },
+    "strings": {
+      "patterns": [
+        {
+          "name": "string.quoted.double.ribalta",
+          "begin": "\"",
+          "end": "\"",
+          "patterns": [
+            {
+              "match": "\\\\.",
+              "name": "constant.character.escape.ribalta"
+            },
+            {
+              "match": "\\b(go|back|next|prev|toggle|add|remove|clear|play|stop)\\b",
+              "name": "keyword.other.action.ribalta"
+            },
+            {
+              "match": "#[\\w-]+",
+              "name": "entity.other.attribute-name.id.ribalta"
+            },
+            {
+              "include": "#variables"
+            }
+          ]
+        },
+        {
+          "name": "string.quoted.single.ribalta",
+          "begin": "'",
+          "end": "'"
+        }
+      ]
+    },
+    "numbers": {
+      "match": "(?<![\\w-])-?\\d[\\w.%]*",
+      "name": "constant.numeric.ribalta"
+    },
+    "variables": {
+      "patterns": [
+        {
+          "match": "\\$\\([^)]*\\)?",
+          "name": "variable.other.expression.ribalta"
+        },
+        {
+          "match": "\\$[A-Za-z][\\w-]*(?:\\.[A-Za-z][\\w-]*)*",
+          "name": "variable.other.ribalta"
+        }
+      ]
+    }
+  }
+}

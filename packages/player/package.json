@@ -1,0 +1,109 @@
+{
+  "name": "@ribaltalang/player",
+  "version": "0.2.0",
+  "description": "Headless runtime for Ribalta documents: page navigation, steps, state actions, timers, keys, sounds, persistence, SCORM and host values (@extern).",
+  "keywords": [
+    "ribalta",
+    "runtime",
+    "visual",
+    "documents"
+  ],
+  "license": "MIT OR Apache-2.0",
+  "author": "viniciusam",
+  "homepage": "https://folioslides.com.br/docs/",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Viniciusadm/ribalta.git",
+    "directory": "packages/player"
+  },
+  "bugs": "https://github.com/Viniciusadm/ribalta/issues",
+  "type": "module",
+  "sideEffects": false,
+  "exports": {
+    "./clock": {
+      "source": "./src/clock.ts",
+      "types": "./dist/clock.d.ts",
+      "default": "./dist/clock.js"
+    },
+    "./extern": {
+      "source": "./src/extern.ts",
+      "types": "./dist/extern.d.ts",
+      "default": "./dist/extern.js"
+    },
+    "./keys": {
+      "source": "./src/keys.ts",
+      "types": "./dist/keys.d.ts",
+      "default": "./dist/keys.js"
+    },
+    "./navigation": {
+      "source": "./src/navigation.ts",
+      "types": "./dist/navigation.d.ts",
+      "default": "./dist/navigation.js"
+    },
+    "./persist": {
+      "source": "./src/persist.ts",
+      "types": "./dist/persist.d.ts",
+      "default": "./dist/persist.js"
+    },
+    "./scorm": {
+      "source": "./src/scorm.ts",
+      "types": "./dist/scorm.d.ts",
+      "default": "./dist/scorm.js"
+    },
+    "./shortcuts": {
+      "source": "./src/shortcuts.ts",
+      "types": "./dist/shortcuts.d.ts",
+      "default": "./dist/shortcuts.js"
+    },
+    "./sounds": {
+      "source": "./src/sounds.ts",
+      "types": "./dist/sounds.d.ts",
+      "default": "./dist/sounds.js"
+    },
+    "./useSwipe": {
+      "source": "./src/useSwipe.ts",
+      "types": "./dist/useSwipe.d.ts",
+      "default": "./dist/useSwipe.js"
+    }
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE-MIT",
+    "LICENSE-APACHE"
+  ],
+  "scripts": {
+    "build": "tsup",
+    "prepack": "npm run build && cp ../../LICENSE-MIT ../../LICENSE-APACHE ."
+  },
+  "tsup": {
+    "entry": {
+      "clock": "src/clock.ts",
+      "extern": "src/extern.ts",
+      "keys": "src/keys.ts",
+      "navigation": "src/navigation.ts",
+      "persist": "src/persist.ts",
+      "scorm": "src/scorm.ts",
+      "shortcuts": "src/shortcuts.ts",
+      "sounds": "src/sounds.ts",
+      "useSwipe": "src/useSwipe.ts"
+    },
+    "format": [
+      "esm"
+    ],
+    "dts": true,
+    "clean": true,
+    "sourcemap": true,
+    "target": "es2022"
+  },
+  "dependencies": {
+    "@ribaltalang/compiler": "^0.2.0",
+    "@ribaltalang/renderer": "^0.2.0"
+  },
+  "peerDependencies": {
+    "react": "^18.3.0 || ^19.0.0"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}

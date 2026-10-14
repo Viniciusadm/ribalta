@@ -1,0 +1,109 @@
+@title Ribalta no Android
+@theme ink
+@color marca #349ef4
+@state cliques = 0
+@style card {bg=surface radius=lg pad=lg gap=sm shadow=md}
+
+@footer
+::: columns
+Ribalta Reader
+
+$page / $pages {align=right}
+:::
+@end
+
+--- {valign=bottom bg=bg..#10243d gap=lg}
+:: icon rocket {size=360 color=marca/20 x=1380 y=140}
+
+Ribalta Reader {.kicker color=marca weight=bold uppercase tracking=0.18 size=sm}
+
+# O mesmo IR,[ outra tela]{color=marca} {size=6xl leading=0.95}
+
+Este slide foi compilado no celular e desenhado sem navegador. {size=xl color=muted}
+
+---
+
+# Passo a passo
+
+::: steps
+- Compila o `.ribalta` com o compilador em Rust
+- Lê o IR em Kotlin
+- Desenha com Compose, *sem WebView*
+:::
+
+> Toque à direita para avançar e à esquerda para voltar.
+
+---
+
+# Cartões em grade
+
+::: grid {cols=3 gap=md}
+::: box {.card}
+:: icon zap {size=xl color=marca}
+### Rápido
+Compila em milissegundos.
+:::
+::: box {.card}
+:: icon shield-check {size=xl color=marca}
+### Fiel
+Mesmas regras do web.
+:::
+::: box {.card}
+:: icon heart {size=xl color=marca}
+### Leve
+Sem servidor.
+:::
+:::
+
+---
+
+::: columns {gap=xl widths="3 2"}
+::: stack {gap=md}
+Resultados {color=marca weight=bold uppercase size=sm tracking=0.18}
+# Vendas [+38%]{color=marca}
+O trimestre fechou acima da meta. {size=xl color=muted}
+:::
+::: chart {type=bar colors=marca values}
+| Mês | Vendas |
+| --- | ---: |
+| Jan | 32 |
+| Fev | 41 |
+| Mar | 58 |
+:::
+:::
+
+---
+
+# Tabela e código
+
+::: columns {gap=lg valign=top}
+| Plataforma | Renderer |
+| --- | ---: |
+| Web | React |
+| Android | Compose |
+
+```kotlin
+fun main() {
+    // desenha o slide
+    val deck = RibaltaCompiler.compile(source)
+    println("${deck.slides.size} slides")
+}
+```
+:::
+
+---
+
+# Interação
+
+::: row {gap=md}
+Clique aqui {bg=marca color=bg pad="sm md" radius=full weight=bold click="$cliques = $cliques + 1"}
+Contador: $cliques {size=xl}
+:::
+
+::: chart {type=donut values}
+| Fatia | Valor |
+| --- | --- |
+| Web | 3 |
+| Android | 2 |
+| iOS | 1 |
+:::

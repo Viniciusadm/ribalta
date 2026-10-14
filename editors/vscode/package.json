@@ -1,0 +1,107 @@
+{
+  "name": "ribalta",
+  "displayName": "Ribalta",
+  "description": "%description%",
+  "version": "0.1.0",
+  "publisher": "ribalta",
+  "license": "MIT OR Apache-2.0",
+  "private": true,
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Viniciusadm/ribalta"
+  },
+  "engines": {
+    "vscode": "^1.91.0"
+  },
+  "categories": [
+    "Programming Languages",
+    "Linters",
+    "Formatters"
+  ],
+  "main": "./dist/extension.js",
+  "contributes": {
+    "languages": [
+      {
+        "id": "ribalta",
+        "aliases": [
+          "Ribalta",
+          "ribalta"
+        ],
+        "extensions": [
+          ".ribalta"
+        ],
+        "configuration": "./language-configuration.json"
+      }
+    ],
+    "grammars": [
+      {
+        "language": "ribalta",
+        "scopeName": "source.ribalta",
+        "path": "./syntaxes/ribalta.tmLanguage.json"
+      }
+    ],
+    "commands": [
+      {
+        "command": "ribalta.graph",
+        "title": "%command.graph%",
+        "category": "Ribalta"
+      },
+      {
+        "command": "ribalta.restartServer",
+        "title": "%command.restart%",
+        "category": "Ribalta"
+      }
+    ],
+    "menus": {
+      "commandPalette": [
+        {
+          "command": "ribalta.graph",
+          "when": "editorLangId == ribalta"
+        }
+      ]
+    },
+    "configuration": {
+      "title": "Ribalta",
+      "properties": {
+        "ribalta.path": {
+          "type": "string",
+          "default": "ribalta",
+          "markdownDescription": "%config.path%"
+        },
+        "ribalta.theme": {
+          "type": "string",
+          "default": "",
+          "markdownDescription": "%config.theme%"
+        },
+        "ribalta.language": {
+          "type": "string",
+          "enum": [
+            "auto",
+            "pt",
+            "en"
+          ],
+          "default": "auto",
+          "markdownDescription": "%config.language%"
+        }
+      }
+    }
+  },
+  "scripts": {
+    "build": "esbuild src/extension.ts --bundle --outfile=dist/extension.js --external:vscode --format=cjs --platform=node --target=node20 --minify",
+    "watch": "npm run build -- --watch",
+    "typecheck": "tsc --noEmit -p .",
+    "package": "npm run build && cp ../../LICENSE-MIT ../../LICENSE-APACHE . && vsce package --no-dependencies",
+    "test": "npm run build && node test/run.mjs"
+  },
+  "dependencies": {
+    "vscode-languageclient": "^10.1.2"
+  },
+  "devDependencies": {
+    "@types/node": "^24.0.0",
+    "@types/vscode": "~1.91.0",
+    "@vscode/test-electron": "^3.1.0",
+    "@vscode/vsce": "^4.0.0",
+    "esbuild": "^0.28.2",
+    "typescript": "^7.0.2"
+  }
+}

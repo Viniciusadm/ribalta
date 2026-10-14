@@ -1,0 +1,24 @@
+[package]
+name = "ribalta"
+version = "0.2.0"
+description = "Compiler for Ribalta, a text language for themed visuals: source in, JSON IR and diagnostics out"
+readme = "README.md"
+keywords = ["ribalta", "visual", "documents", "compiler", "dsl"]
+categories = ["compilers", "parser-implementations", "wasm"]
+include = ["src/**", "icons/**", "IR.md", "README.md", "LICENSE-MIT", "LICENSE-APACHE"]
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+repository.workspace = true
+homepage.workspace = true
+authors.workspace = true
+
+[lib]
+crate-type = ["rlib", "cdylib"]
+
+[dependencies]
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+
+[dev-dependencies]
+ribalta-testkit = { path = "../testkit" }

@@ -1,0 +1,15 @@
+[package]
+name = "ribalta-jni"
+publish = false
+version = "0.2.0"
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+
+[lib]
+name = "ribalta_jni"
+crate-type = ["cdylib"]
+
+[dependencies]
+ribalta = { path = "../ribalta" }
+jni-sys = "0.3"

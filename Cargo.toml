@@ -1,0 +1,18 @@
+[workspace]
+resolver = "3"
+members = ["crates/ribalta", "crates/ribalta-jni", "crates/cli", "crates/testkit"]
+
+[workspace.package]
+edition = "2024"
+rust-version = "1.94"
+license = "MIT OR Apache-2.0"
+repository = "https://github.com/Viniciusadm/ribalta"
+homepage = "https://folioslides.com.br"
+authors = ["viniciusam <viniciusam.22@gmail.com>"]
+
+[profile.release.package.ribalta]
+opt-level = "s"
+codegen-units = 1
+
+[profile.release]
+lto = true

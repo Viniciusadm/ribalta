@@ -1,0 +1,950 @@
+{
+  "description": "Navigation cases. Start a session at `start` (step 0 when missing), apply each operation in order and compare the position after it with the matching entry of `expect` (and the full state, when given). Operations: next, prev, go {target}, back, actions {actions} (IR actions run in order). Starting a session and entering a page (next, prev, go, page.next, and the next/prev actions) run the page's onEnter actions after its local state is reset; back and restoring a session do not. On a locked page, next and prev only move through its steps. When `start.seed` is given, the session's random generator starts at that seed and every action draws from it in order. Operation tick adds one second to `elapsed` on pages with `clock`; when it reaches `timeout`, the page's onTimeout actions run once. Entering a page resets `elapsed` to 0. `expect` may also give `elapsed`.",
+  "documents": {
+    "quiz": {
+      "state": {
+        "score": 0
+      },
+      "pages": [
+        {
+          "id": "intro",
+          "steps": 0
+        },
+        {
+          "id": "quiz",
+          "steps": 2,
+          "state": {
+            "answered": false
+          }
+        },
+        {
+          "id": "secret",
+          "steps": 1,
+          "hidden": true
+        },
+        {
+          "id": "end",
+          "steps": 0
+        }
+      ]
+    },
+    "branch": {
+      "pages": [
+        {
+          "id": "a",
+          "steps": 0,
+          "next": "c"
+        },
+        {
+          "id": "b",
+          "steps": 0
+        },
+        {
+          "id": "c",
+          "steps": 0
+        }
+      ]
+    },
+    "game": {
+      "state": {
+        "visitas": 0,
+        "mochila": []
+      },
+      "pages": [
+        {
+          "id": "inicio",
+          "steps": 1,
+          "locked": true,
+          "onEnter": [
+            {
+              "type": "add",
+              "name": "mochila",
+              "value": {
+                "op": "lit",
+                "value": "mapa"
+              }
+            }
+          ]
+        },
+        {
+          "id": "meio",
+          "steps": 0,
+          "onEnter": [
+            {
+              "type": "set",
+              "name": "visitas",
+              "value": {
+                "op": "binary",
+                "operator": "+",
+                "left": {
+                  "op": "state",
+                  "name": "visitas"
+                },
+                "right": {
+                  "op": "lit",
+                  "value": 1
+                }
+              }
+            }
+          ]
+        },
+        {
+          "id": "oculto",
+          "steps": 0,
+          "hidden": true,
+          "locked": true
+        },
+        {
+          "id": "fim",
+          "steps": 0
+        }
+      ]
+    },
+    "dice": {
+      "state": {
+        "dado": 0,
+        "cartas": [
+          "ás",
+          "rei",
+          "dama"
+        ],
+        "carta": ""
+      },
+      "pages": [
+        {
+          "id": "mesa",
+          "steps": 0
+        }
+      ]
+    },
+    "timer": {
+      "state": {
+        "pontos": 0
+      },
+      "pages": [
+        {
+          "id": "pergunta",
+          "steps": 0,
+          "clock": true,
+          "timeout": 2,
+          "onTimeout": [
+            {
+              "type": "set",
+              "name": "pontos",
+              "value": {
+                "op": "lit",
+                "value": -1
+              }
+            },
+            {
+              "type": "go",
+              "target": "esgotado"
+            }
+          ]
+        },
+        {
+          "id": "esgotado",
+          "steps": 0,
+          "hidden": true
+        },
+        {
+          "id": "livre",
+          "steps": 0
+        }
+      ]
+    }
+  },
+  "cases": [
+    {
+      "name": "next walks the steps and skips hidden pages; prev walks back to the last step",
+      "document": "quiz",
+      "start": {
+        "page": "intro"
+      },
+      "ops": [
+        {
+          "op": "next"
+        },
+        {
+          "op": "next"
+        },
+        {
+          "op": "next"
+        },
+        {
+          "op": "next"
+        },
+        {
+          "op": "next"
+        },
+        {
+          "op": "prev"
+        },
+        {
+          "op": "prev"
+        },
+        {
+          "op": "prev"
+        }
+      ],
+      "expect": [
+        {
+          "page": "quiz",
+          "step": 0
+        },
+        {
+          "page": "quiz",
+          "step": 1
+        },
+        {
+          "page": "quiz",
+          "step": 2
+        },
+        {
+          "page": "end",
+          "step": 0
+        },
+        {
+          "page": "end",
+          "step": 0
+        },
+        {
+          "page": "quiz",
+          "step": 2
+        },
+        {
+          "page": "quiz",
+          "step": 1
+        },
+        {
+          "page": "quiz",
+          "step": 0
+        }
+      ]
+    },
+    {
+      "name": "go remembers the place and local state; leaving a hidden page goes back",
+      "document": "quiz",
+      "start": {
+        "page": "quiz"
+      },
+      "ops": [
+        {
+          "op": "actions",
+          "actions": [
+            {
+              "type": "set",
+              "name": "answered",
+              "value": {
+                "op": "lit",
+                "value": true
+              }
+            }
+          ]
+        },
+        {
+          "op": "go",
+          "target": "secret"
+        },
+        {
+          "op": "next"
+        },
+        {
+          "op": "next"
+        },
+        {
+          "op": "next"
+        }
+      ],
+      "expect": [
+        {
+          "page": "quiz",
+          "step": 0,
+          "state": {
+            "score": 0,
+            "answered": true
+          }
+        },
+        {
+          "page": "secret",
+          "step": 0,
+          "state": {
+            "score": 0
+          }
+        },
+        {
+          "page": "secret",
+          "step": 1,
+          "state": {
+            "score": 0
+          }
+        },
+        {
+          "page": "quiz",
+          "step": 0,
+          "state": {
+            "score": 0,
+            "answered": true
+          }
+        },
+        {
+          "page": "quiz",
+          "step": 1,
+          "state": {
+            "score": 0,
+            "answered": true
+          }
+        }
+      ]
+    },
+    {
+      "name": "entering a page resets its local state but keeps global state",
+      "document": "quiz",
+      "start": {
+        "page": "quiz"
+      },
+      "ops": [
+        {
+          "op": "actions",
+          "actions": [
+            {
+              "type": "set",
+              "name": "answered",
+              "value": {
+                "op": "lit",
+                "value": true
+              }
+            },
+            {
+              "type": "set",
+              "name": "score",
+              "value": {
+                "op": "lit",
+                "value": 5
+              }
+            }
+          ]
+        },
+        {
+          "op": "next"
+        },
+        {
+          "op": "next"
+        },
+        {
+          "op": "next"
+        },
+        {
+          "op": "prev"
+        }
+      ],
+      "expect": [
+        {
+          "page": "quiz",
+          "step": 0,
+          "state": {
+            "score": 5,
+            "answered": true
+          }
+        },
+        {
+          "page": "quiz",
+          "step": 1
+        },
+        {
+          "page": "quiz",
+          "step": 2
+        },
+        {
+          "page": "end",
+          "step": 0,
+          "state": {
+            "score": 5
+          }
+        },
+        {
+          "page": "quiz",
+          "step": 2,
+          "state": {
+            "score": 5,
+            "answered": false
+          }
+        }
+      ]
+    },
+    {
+      "name": "back without history goes to the previous step",
+      "document": "quiz",
+      "start": {
+        "page": "quiz",
+        "step": 2
+      },
+      "ops": [
+        {
+          "op": "back"
+        },
+        {
+          "op": "back"
+        },
+        {
+          "op": "back"
+        }
+      ],
+      "expect": [
+        {
+          "page": "quiz",
+          "step": 1
+        },
+        {
+          "page": "quiz",
+          "step": 0
+        },
+        {
+          "page": "intro",
+          "step": 0
+        }
+      ]
+    },
+    {
+      "name": "next follows page.next; prev is linear",
+      "document": "branch",
+      "start": {
+        "page": "a"
+      },
+      "ops": [
+        {
+          "op": "next"
+        },
+        {
+          "op": "next"
+        },
+        {
+          "op": "prev"
+        }
+      ],
+      "expect": [
+        {
+          "page": "c",
+          "step": 0
+        },
+        {
+          "page": "c",
+          "step": 0
+        },
+        {
+          "page": "b",
+          "step": 0
+        }
+      ]
+    },
+    {
+      "name": "actions run in order and see each other's changes",
+      "document": "quiz",
+      "start": {
+        "page": "intro"
+      },
+      "ops": [
+        {
+          "op": "actions",
+          "actions": [
+            {
+              "type": "set",
+              "name": "score",
+              "value": {
+                "op": "binary",
+                "operator": "+",
+                "left": {
+                  "op": "state",
+                  "name": "score"
+                },
+                "right": {
+                  "op": "lit",
+                  "value": 10
+                }
+              }
+            },
+            {
+              "type": "toggle",
+              "name": "flag"
+            },
+            {
+              "type": "toggle",
+              "name": "flag"
+            },
+            {
+              "type": "set",
+              "name": "label",
+              "value": {
+                "op": "binary",
+                "operator": "+",
+                "left": {
+                  "op": "lit",
+                  "value": "pts: "
+                },
+                "right": {
+                  "op": "state",
+                  "name": "score"
+                }
+              }
+            }
+          ]
+        }
+      ],
+      "expect": [
+        {
+          "page": "intro",
+          "step": 0,
+          "state": {
+            "score": 10,
+            "flag": false,
+            "label": "pts: 10"
+          }
+        }
+      ]
+    },
+    {
+      "name": "navigation actions move the session and later actions see the new step",
+      "document": "quiz",
+      "start": {
+        "page": "quiz"
+      },
+      "ops": [
+        {
+          "op": "actions",
+          "actions": [
+            {
+              "type": "next"
+            },
+            {
+              "type": "set",
+              "name": "score",
+              "value": {
+                "op": "step"
+              }
+            }
+          ]
+        },
+        {
+          "op": "actions",
+          "actions": [
+            {
+              "type": "go",
+              "target": "end"
+            },
+            {
+              "type": "back"
+            }
+          ]
+        }
+      ],
+      "expect": [
+        {
+          "page": "quiz",
+          "step": 1,
+          "state": {
+            "score": 1,
+            "answered": false
+          }
+        },
+        {
+          "page": "quiz",
+          "step": 1,
+          "state": {
+            "score": 1,
+            "answered": false
+          }
+        }
+      ]
+    },
+    {
+      "name": "a locked page keeps next and prev inside its steps, but the next action still leaves",
+      "document": "game",
+      "start": {
+        "page": "inicio"
+      },
+      "ops": [
+        {
+          "op": "next"
+        },
+        {
+          "op": "next"
+        },
+        {
+          "op": "prev"
+        },
+        {
+          "op": "prev"
+        },
+        {
+          "op": "actions",
+          "actions": [
+            {
+              "type": "next"
+            }
+          ]
+        },
+        {
+          "op": "actions",
+          "actions": [
+            {
+              "type": "next"
+            }
+          ]
+        }
+      ],
+      "expect": [
+        {
+          "page": "inicio",
+          "step": 1,
+          "state": {
+            "visitas": 0,
+            "mochila": [
+              "mapa"
+            ]
+          }
+        },
+        {
+          "page": "inicio",
+          "step": 1
+        },
+        {
+          "page": "inicio",
+          "step": 0
+        },
+        {
+          "page": "inicio",
+          "step": 0
+        },
+        {
+          "page": "inicio",
+          "step": 1
+        },
+        {
+          "page": "meio",
+          "step": 0,
+          "state": {
+            "visitas": 1,
+            "mochila": [
+              "mapa"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "onEnter runs when entering, not on back, and a locked hidden page does not return on next",
+      "document": "game",
+      "start": {
+        "page": "meio"
+      },
+      "ops": [
+        {
+          "op": "go",
+          "target": "oculto"
+        },
+        {
+          "op": "next"
+        },
+        {
+          "op": "back"
+        },
+        {
+          "op": "prev"
+        },
+        {
+          "op": "next"
+        }
+      ],
+      "expect": [
+        {
+          "page": "oculto",
+          "step": 0,
+          "state": {
+            "visitas": 1,
+            "mochila": []
+          }
+        },
+        {
+          "page": "oculto",
+          "step": 0
+        },
+        {
+          "page": "meio",
+          "step": 0,
+          "state": {
+            "visitas": 1,
+            "mochila": []
+          }
+        },
+        {
+          "page": "inicio",
+          "step": 1,
+          "state": {
+            "visitas": 1,
+            "mochila": [
+              "mapa"
+            ]
+          }
+        },
+        {
+          "page": "inicio",
+          "step": 1
+        }
+      ]
+    },
+    {
+      "name": "add keeps one copy of each text, remove and clear take items out",
+      "document": "game",
+      "start": {
+        "page": "fim"
+      },
+      "ops": [
+        {
+          "op": "actions",
+          "actions": [
+            {
+              "type": "add",
+              "name": "mochila",
+              "value": {
+                "op": "lit",
+                "value": "tocha"
+              }
+            },
+            {
+              "type": "add",
+              "name": "mochila",
+              "value": {
+                "op": "lit",
+                "value": "tocha"
+              }
+            },
+            {
+              "type": "add",
+              "name": "mochila",
+              "value": {
+                "op": "lit",
+                "value": "mapa"
+              }
+            }
+          ]
+        },
+        {
+          "op": "actions",
+          "actions": [
+            {
+              "type": "remove",
+              "name": "mochila",
+              "value": {
+                "op": "lit",
+                "value": "tocha"
+              }
+            }
+          ]
+        },
+        {
+          "op": "actions",
+          "actions": [
+            {
+              "type": "clear",
+              "name": "mochila"
+            }
+          ]
+        }
+      ],
+      "expect": [
+        {
+          "page": "fim",
+          "step": 0,
+          "state": {
+            "visitas": 0,
+            "mochila": [
+              "tocha",
+              "mapa"
+            ]
+          }
+        },
+        {
+          "page": "fim",
+          "step": 0,
+          "state": {
+            "visitas": 0,
+            "mochila": [
+              "mapa"
+            ]
+          }
+        },
+        {
+          "page": "fim",
+          "step": 0,
+          "state": {
+            "visitas": 0,
+            "mochila": []
+          }
+        }
+      ]
+    },
+    {
+      "name": "draws in actions follow the session seed in order",
+      "document": "dice",
+      "start": {
+        "page": "mesa",
+        "seed": 1
+      },
+      "ops": [
+        {
+          "op": "actions",
+          "actions": [
+            {
+              "type": "set",
+              "name": "dado",
+              "value": {
+                "op": "call",
+                "name": "random",
+                "args": [
+                  {
+                    "op": "lit",
+                    "value": 1
+                  },
+                  {
+                    "op": "lit",
+                    "value": 6
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "op": "actions",
+          "actions": [
+            {
+              "type": "set",
+              "name": "carta",
+              "value": {
+                "op": "call",
+                "name": "pick",
+                "args": [
+                  {
+                    "op": "state",
+                    "name": "cartas"
+                  }
+                ]
+              }
+            },
+            {
+              "type": "remove",
+              "name": "cartas",
+              "value": {
+                "op": "state",
+                "name": "carta"
+              }
+            }
+          ]
+        }
+      ],
+      "expect": [
+        {
+          "page": "mesa",
+          "step": 0,
+          "state": {
+            "dado": 4,
+            "cartas": [
+              "ás",
+              "rei",
+              "dama"
+            ],
+            "carta": ""
+          }
+        },
+        {
+          "page": "mesa",
+          "step": 0,
+          "state": {
+            "dado": 4,
+            "cartas": [
+              "rei",
+              "dama"
+            ],
+            "carta": "ás"
+          }
+        }
+      ]
+    },
+    {
+      "name": "tick counts seconds and runs onTimeout once when the time is up",
+      "document": "timer",
+      "start": {
+        "page": "pergunta"
+      },
+      "ops": [
+        {
+          "op": "tick"
+        },
+        {
+          "op": "tick"
+        },
+        {
+          "op": "tick"
+        },
+        {
+          "op": "back"
+        },
+        {
+          "op": "tick"
+        }
+      ],
+      "expect": [
+        {
+          "page": "pergunta",
+          "step": 0,
+          "elapsed": 1,
+          "state": {
+            "pontos": 0
+          }
+        },
+        {
+          "page": "esgotado",
+          "step": 0,
+          "elapsed": 0,
+          "state": {
+            "pontos": -1
+          }
+        },
+        {
+          "page": "esgotado",
+          "step": 0,
+          "elapsed": 0
+        },
+        {
+          "page": "pergunta",
+          "step": 0,
+          "elapsed": 0
+        },
+        {
+          "page": "pergunta",
+          "step": 0,
+          "elapsed": 1
+        }
+      ]
+    },
+    {
+      "name": "pages without a clock do not count",
+      "document": "timer",
+      "start": {
+        "page": "livre"
+      },
+      "ops": [
+        {
+          "op": "tick"
+        }
+      ],
+      "expect": [
+        {
+          "page": "livre",
+          "step": 0,
+          "elapsed": 0
+        }
+      ]
+    }
+  ]
+}

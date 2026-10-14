@@ -1,0 +1,88 @@
+{
+  "name": "@ribaltalang/codemirror",
+  "version": "0.2.0",
+  "description": "CodeMirror 6 support for Ribalta: highlighting, completions with host suggestions, snippets and diagnostics.",
+  "keywords": [
+    "ribalta",
+    "codemirror",
+    "editor",
+    "language"
+  ],
+  "license": "MIT OR Apache-2.0",
+  "author": "viniciusam",
+  "homepage": "https://folioslides.com.br/docs/",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Viniciusadm/ribalta.git",
+    "directory": "packages/codemirror"
+  },
+  "bugs": "https://github.com/Viniciusadm/ribalta/issues",
+  "type": "module",
+  "sideEffects": false,
+  "exports": {
+    "./completions": {
+      "source": "./src/completions.ts",
+      "types": "./dist/completions.d.ts",
+      "default": "./dist/completions.js"
+    },
+    "./diagnostics": {
+      "source": "./src/diagnostics.ts",
+      "types": "./dist/diagnostics.d.ts",
+      "default": "./dist/diagnostics.js"
+    },
+    "./language": {
+      "source": "./src/language.ts",
+      "types": "./dist/language.d.ts",
+      "default": "./dist/language.js"
+    },
+    "./messages": {
+      "source": "./src/messages.ts",
+      "types": "./dist/messages.d.ts",
+      "default": "./dist/messages.js"
+    },
+    "./snippets": {
+      "source": "./src/snippets.ts",
+      "types": "./dist/snippets.d.ts",
+      "default": "./dist/snippets.js"
+    }
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE-MIT",
+    "LICENSE-APACHE"
+  ],
+  "scripts": {
+    "build": "tsup",
+    "prepack": "npm run build && cp ../../LICENSE-MIT ../../LICENSE-APACHE ."
+  },
+  "tsup": {
+    "entry": {
+      "completions": "src/completions.ts",
+      "diagnostics": "src/diagnostics.ts",
+      "language": "src/language.ts",
+      "messages": "src/messages.ts",
+      "snippets": "src/snippets.ts"
+    },
+    "format": [
+      "esm"
+    ],
+    "dts": true,
+    "clean": true,
+    "sourcemap": true,
+    "target": "es2022"
+  },
+  "dependencies": {
+    "@codemirror/autocomplete": "^6.20.3",
+    "@codemirror/language": "^6.13.1",
+    "@codemirror/lint": "^6.9.7",
+    "@codemirror/state": "^6.7.6",
+    "@codemirror/view": "^6.43.14",
+    "@ribaltalang/compiler": "^0.2.0",
+    "@ribaltalang/renderer": "^0.2.0",
+    "@lezer/highlight": "^1.2.5"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}

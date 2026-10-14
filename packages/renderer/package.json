@@ -1,0 +1,149 @@
+{
+  "name": "@ribaltalang/renderer",
+  "version": "0.2.0",
+  "description": "React renderer for Ribalta documents: draws the IR with themes, layouts, charts, icons and host-provided state.",
+  "keywords": [
+    "ribalta",
+    "react",
+    "renderer",
+    "visual",
+    "documents"
+  ],
+  "license": "MIT OR Apache-2.0",
+  "author": "viniciusam",
+  "homepage": "https://folioslides.com.br/docs/",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Viniciusadm/ribalta.git",
+    "directory": "packages/renderer"
+  },
+  "bugs": "https://github.com/Viniciusadm/ribalta/issues",
+  "type": "module",
+  "sideEffects": [
+    "*.css"
+  ],
+  "exports": {
+    "./Icon": {
+      "source": "./src/Icon.tsx",
+      "types": "./dist/Icon.d.ts",
+      "default": "./dist/Icon.js"
+    },
+    "./DocumentView": {
+      "source": "./src/DocumentView.tsx",
+      "types": "./dist/DocumentView.d.ts",
+      "default": "./dist/DocumentView.js"
+    },
+    "./PageView": {
+      "source": "./src/PageView.tsx",
+      "types": "./dist/PageView.d.ts",
+      "default": "./dist/PageView.js"
+    },
+    "./PrintPages": {
+      "source": "./src/PrintPages.tsx",
+      "types": "./dist/PrintPages.d.ts",
+      "default": "./dist/PrintPages.js"
+    },
+    "./StaticPage": {
+      "source": "./src/StaticPage.tsx",
+      "types": "./dist/StaticPage.d.ts",
+      "default": "./dist/StaticPage.js"
+    },
+    "./assets": {
+      "source": "./src/assets.ts",
+      "types": "./dist/assets.d.ts",
+      "default": "./dist/assets.js"
+    },
+    "./css": {
+      "source": "./src/css.ts",
+      "types": "./dist/css.d.ts",
+      "default": "./dist/css.js"
+    },
+    "./expr": {
+      "source": "./src/expr.ts",
+      "types": "./dist/expr.d.ts",
+      "default": "./dist/expr.js"
+    },
+    "./fonts": {
+      "source": "./src/fonts.ts",
+      "types": "./dist/fonts.d.ts",
+      "default": "./dist/fonts.js"
+    },
+    "./host": {
+      "source": "./src/host.ts",
+      "types": "./dist/host.d.ts",
+      "default": "./dist/host.js"
+    },
+    "./icons": {
+      "source": "./src/icons.ts",
+      "types": "./dist/icons.d.ts",
+      "default": "./dist/icons.js"
+    },
+    "./locale": {
+      "source": "./src/locale.ts",
+      "types": "./dist/locale.d.ts",
+      "default": "./dist/locale.js"
+    },
+    "./motion": {
+      "source": "./src/motion.tsx",
+      "types": "./dist/motion.d.ts",
+      "default": "./dist/motion.js"
+    },
+    "./styles.css": "./src/renderer.css"
+  },
+  "files": [
+    "dist",
+    "src/renderer.css",
+    "README.md",
+    "LICENSE-MIT",
+    "LICENSE-APACHE"
+  ],
+  "scripts": {
+    "build": "tsup",
+    "prepack": "npm run build && cp ../../LICENSE-MIT ../../LICENSE-APACHE ."
+  },
+  "tsup": {
+    "entry": {
+      "Icon": "src/Icon.tsx",
+      "DocumentView": "src/DocumentView.tsx",
+      "PageView": "src/PageView.tsx",
+      "PrintPages": "src/PrintPages.tsx",
+      "StaticPage": "src/StaticPage.tsx",
+      "assets": "src/assets.ts",
+      "css": "src/css.ts",
+      "expr": "src/expr.ts",
+      "fonts": "src/fonts.ts",
+      "host": "src/host.ts",
+      "icons": "src/icons.ts",
+      "locale": "src/locale.ts",
+      "motion": "src/motion.tsx"
+    },
+    "format": [
+      "esm"
+    ],
+    "dts": true,
+    "clean": true,
+    "sourcemap": true,
+    "target": "es2022"
+  },
+  "dependencies": {
+    "@ribaltalang/compiler": "^0.2.0",
+    "@fontsource-variable/dm-sans": "^5.3.0",
+    "@fontsource-variable/fraunces": "^5.3.0",
+    "@fontsource-variable/inter": "^5.3.0",
+    "@fontsource-variable/inter-tight": "^5.3.0",
+    "@fontsource-variable/jetbrains-mono": "^5.3.0",
+    "@fontsource-variable/nunito": "^5.3.0",
+    "@fontsource-variable/playfair-display": "^5.3.0",
+    "@fontsource-variable/source-sans-3": "^5.3.0",
+    "@fontsource-variable/space-grotesk": "^5.3.0",
+    "@fontsource/archivo-black": "^5.3.0",
+    "@fontsource/barlow": "^5.3.0"
+  },
+  "peerDependencies": {
+    "react": "^18.3.0 || ^19.0.0",
+    "react-dom": "^18.3.0 || ^19.0.0"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}
