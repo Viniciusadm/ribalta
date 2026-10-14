@@ -59,11 +59,12 @@ const host: RendererHost = {
   asset: (id) => `/media/${id}`,
   fontStylesheet: (families) => `https://fonts.googleapis.com/css2?${googleFontsQuery(families)}&display=swap`,
 };
-const html = renderToHtml(document, { locale: "pt", host, fluid: true });
+const html = renderToHtml(document, { locale: "pt", host, fluid: true, scale: 0.5 });
 const fonts = documentFonts(document, host);
 ```
 
 - The result is an `<article class="ribalta-html">` with one `<section class="ribalta-html-page">` per page, plus the theme's animation styles. Serve it together with `@ribaltalang/renderer/styles.css`, and add a `<link rel="stylesheet">` for `fonts` when it is not `null`.
+- `scale` shrinks or grows the whole document with CSS `zoom`. Themes are sized for slides, so a document laid out at `@page 1440xauto` and drawn with `scale: 0.5` reads like a 720 px article with body text at a comfortable size. With `fluid`, pages still fill the available width, measured in the document's own pixels.
 - `fluid` lets pages with an automatic height (`@page 720xauto`) shrink to the available width, up to their own width, so the text reflows on small screens. Fixed-height pages keep their size.
 - `meta.date` and `meta.description` come from `@date` and `@description`, ready for listings and `<meta>` tags.
 - The output is static: `@state`, clicks and reveal steps show their initial state with every step visible. Use `PageView` on the client for interactive documents.

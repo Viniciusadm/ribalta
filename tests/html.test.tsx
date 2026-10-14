@@ -39,6 +39,12 @@ describe("renderToHtml", () => {
     expect(fluid).toContain("max-width:720px");
   });
 
+  it("scales the whole document with zoom", () => {
+    const doc = documentOf("# Olá", { width: 1440, height: null });
+    expect(renderToHtml(doc)).toContain('<article class="ribalta-html">');
+    expect(renderToHtml(doc, { scale: 0.5 })).toContain('<article class="ribalta-html" style="zoom:0.5">');
+  });
+
   it("ignores fluid on fixed-height pages", () => {
     const html = renderToHtml(documentOf("# Olá", { width: 1920, height: 1080 }), { fluid: true });
     expect(html).toContain("width:1920px");
