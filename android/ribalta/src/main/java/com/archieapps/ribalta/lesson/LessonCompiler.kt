@@ -8,6 +8,7 @@ import com.archieapps.ribalta.ir.IrParser
 data class CompileResult(val document: Document, val diagnostics: List<Diagnostic>)
 
 fun compileLesson(source: String, widthPx: Int): CompileResult {
+    require(widthPx > 0) { "widthPx must be positive" }
     val options = """{"page":{"width":$widthPx,"height":null},"profile":"lesson"}"""
     val compilation = IrParser.compilation(RibaltaCompiler.compileJson(source, options = options))
     return CompileResult(compilation.document, compilation.diagnostics)

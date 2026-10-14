@@ -18,6 +18,7 @@ import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.Density
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.archieapps.ribalta.ir.Document
 import com.archieapps.ribalta.render.Fonts
@@ -31,6 +32,8 @@ import com.archieapps.ribalta.render.anchored
 import com.archieapps.ribalta.render.pageBackground
 import com.archieapps.ribalta.runtime.Navigation
 import com.archieapps.ribalta.runtime.Scope
+
+private const val PAGE_HIGHLIGHT_HEIGHT = 120
 
 @Composable
 fun LessonView(document: Document, state: LessonViewState, modifier: Modifier = Modifier) {
@@ -49,17 +52,17 @@ fun LessonView(document: Document, state: LessonViewState, modifier: Modifier = 
             .onSizeChanged { state.viewportHeight = it.height },
     ) {
         val outer = LocalDensity.current
-        val scale = with(outer) { maxWidth.toPx() / pageWidth }
-        CompositionLocalProvider(LocalAnchors provides state.anchors, LocalDensity provides Density(scale, 1f)) {
+        val scale = if (maxWidth == Dp.Infinity) 1f else with(outer) { maxWidth.toPx() / pageWidth }
+        CompositionLocalProvider(LocalAnchors provides state.anchors, LocalDensity provides Density(scale, outer.fontScale)) {
             Column(Modifier.fillMaxWidth().verticalScroll(state.scrollState)) {
-                for (page in document.pages) {
-                    val session = remember(document, page) { Navigation.start(document, document.pages.indexOf(page)).copy(step = page.steps) }
+                document.pages.forEachIndexed { index, page ->
+                    val session = remember(document, page) { Navigation.start(document, index).copy(step = page.steps) }
                     val render = remember(document, page, fontsLoaded) {
                         RenderContext(document.theme, fonts, document.icons, images, pageBackground(document, page), false)
                     }
                     val interaction = remember(session) { Interaction(Scope(session.state, session.step), live = false) {} }
                     CompositionLocalProvider(LocalInteraction provides interaction) {
-                        Column(Modifier.width(pageWidth.dp).anchored(page.id, key = LessonViewState.pageKey(page.id), highlight = false)) {
+                        Column(Modifier.width(pageWidth.dp).anchored(page.id, key = LessonViewState.pageKey(page.id), highlightHeight = PAGE_HIGHLIGHT_HEIGHT.dp)) {
                             PageView(document, page, render)
                         }
                     }

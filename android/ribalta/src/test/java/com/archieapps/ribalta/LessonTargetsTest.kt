@@ -47,4 +47,25 @@ class LessonTargetsTest {
         assertEquals(document.pages[0].id, page.label)
         assertEquals(null, page.pageTitle)
     }
+
+    @Test
+    fun listsListItemAnchors() {
+        val document = compileLesson("# Lista\n\n- primeiro {#item-um}\n- segundo", 400).document
+        val option = document.targets().first { it.target == LessonTarget.Anchor("item-um") }
+        assertEquals("primeiro", option.label)
+        assertEquals("Lista", option.pageTitle)
+    }
+
+    @Test
+    fun invalidLessonStillReturnsDocumentAndErrors() {
+        val result = compileLesson("# Titulo\n\nTexto. {#a}\n\n:: sound https://exemplo.com/a.mp3", 400)
+        assertTrue(result.diagnostics.any { it.severity == "error" })
+        assertTrue(result.document.pages.isNotEmpty())
+        assertTrue(result.document.targets().any { it.target == LessonTarget.Anchor("a") })
+    }
+
+    @Test
+    fun rejectsNonPositiveWidth() {
+        assertTrue(runCatching { compileLesson("# a", 0) }.exceptionOrNull() is IllegalArgumentException)
+    }
 }

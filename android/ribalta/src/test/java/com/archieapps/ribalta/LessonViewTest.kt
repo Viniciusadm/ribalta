@@ -1,6 +1,9 @@
 package com.archieapps.ribalta
 
+import android.graphics.Bitmap
+import android.graphics.Canvas
 import androidx.activity.ComponentActivity
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
@@ -57,6 +60,29 @@ class LessonViewTest {
         }
         compose.waitForIdle()
         return document to state!!
+    }
+
+    private fun snapshot(): IntArray {
+        val bitmap = Bitmap.createBitmap(400, 800, Bitmap.Config.ARGB_8888)
+        compose.runOnIdle { compose.activity.window.decorView.draw(Canvas(bitmap)) }
+        return IntArray(400 * 800).also { bitmap.getPixels(it, 0, 400, 0, 0, 400, 800) }
+    }
+
+    private fun showWithEarlyScroll(source: String, target: LessonTarget): LessonViewState {
+        val document = compileLesson(source, 400).document
+        var state: LessonViewState? = null
+        compose.mainClock.autoAdvance = false
+        compose.setContent {
+            val created = rememberLessonViewState()
+            state = created
+            LaunchedEffect(Unit) { created.scrollTo(target) }
+            CompositionLocalProvider(LocalDensity provides Density(1f)) {
+                Box(Modifier.width(400.dp).height(800.dp)) { LessonView(document, created, Modifier.fillMaxSize()) }
+            }
+        }
+        compose.mainClock.advanceTimeBy(1_000)
+        compose.waitForIdle()
+        return state!!
     }
 
     private fun scrollTo(state: LessonViewState, target: LessonTarget) {
@@ -119,5 +145,34 @@ class LessonViewTest {
         scrollTo(state, LessonTarget.Anchor("nao-existe"))
         assertEquals(0, state.scrollOffset)
         assertNull(state.highlighted)
+    }
+
+    @Test
+    fun scrollToBeforeFirstLayoutStillScrollsAndHighlights() {
+        val state = showWithEarlyScroll(longLesson(), LessonTarget.Anchor("alvo"))
+        assertEquals("alvo", state.highlighted)
+        assertTrue(state.scrollOffset > 0)
+        assertTrue(state.reachedEnd)
+    }
+
+    @Test
+    fun scrollToPageDrawsAVisibleHighlightThatClears() {
+        val (document, state) = show(longLesson())
+        scrollTo(state, LessonTarget.Page(document.pages[1].id))
+        val highlighted = snapshot()
+        compose.mainClock.advanceTimeBy(2_000)
+        compose.waitForIdle()
+        assertNull(state.highlighted)
+        val cleared = snapshot()
+        assertFalse(highlighted.contentEquals(cleared))
+    }
+
+    @Test
+    fun scrollToListItemAnchorScrollsAndHighlights() {
+        val source = longLesson() + "\n\n- primeiro item\n- segundo item {#item-final}"
+        val (_, state) = show(source)
+        scrollTo(state, LessonTarget.Anchor("item-final"))
+        assertEquals("item-final", state.highlighted)
+        assertTrue(state.scrollOffset > 0)
     }
 }

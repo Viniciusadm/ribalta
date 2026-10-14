@@ -9,6 +9,10 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.layout.LayoutCoordinates
 import androidx.compose.ui.layout.positionInRoot
+import androidx.compose.runtime.snapshotFlow
+import kotlinx.coroutines.flow.filterNotNull
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.withTimeoutOrNull
 import com.archieapps.ribalta.render.AnchorRegistry
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
@@ -17,6 +21,7 @@ import kotlinx.coroutines.launch
 import kotlin.math.roundToInt
 
 private const val HIGHLIGHT_MILLIS = 1_500L
+private const val REGISTRATION_TIMEOUT_MILLIS = 2_000L
 private const val PAGE_KEY_PREFIX = "page:"
 
 class LessonViewState internal constructor(private val scope: CoroutineScope) {
@@ -27,11 +32,11 @@ class LessonViewState internal constructor(private val scope: CoroutineScope) {
 
     val reachedEnd: Boolean get() = !scrollState.canScrollForward
 
-    val highlighted: String? get() = anchors.highlighted
+    val highlighted: String? get() = anchors.highlightedId
 
-    val scrollOffset: Int get() = scrollState.value
+    internal val scrollOffset: Int get() = scrollState.value
 
-    val contentHeight: Int get() = if (scrollState.maxValue == Int.MAX_VALUE) 0 else scrollState.maxValue + viewportHeight
+    internal val contentHeight: Int get() = if (scrollState.maxValue == Int.MAX_VALUE) 0 else scrollState.maxValue + viewportHeight
 
     internal var viewportHeight by mutableStateOf(0)
 
@@ -40,19 +45,27 @@ class LessonViewState internal constructor(private val scope: CoroutineScope) {
             is LessonTarget.Page -> target.id to PAGE_KEY_PREFIX + target.id
             is LessonTarget.Anchor -> target.id to target.id
         }
-        val coordinates = anchors.coordinates(key) ?: return
-        val origin = container?.takeIf { it.isAttached } ?: return
+        val (coordinates, origin) = withTimeoutOrNull(REGISTRATION_TIMEOUT_MILLIS) {
+            snapshotFlow {
+                anchors.version
+                val found = anchors.coordinates(key)
+                val outer = container?.takeIf { it.isAttached }
+                if (found != null && outer != null) found to outer else null
+            }.filterNotNull().first()
+        } ?: return
         val offset = scrollState.value + (coordinates.positionInRoot().y - origin.positionInRoot().y)
-        highlight(id)
+        highlight(id, key)
         scrollState.animateScrollTo(offset.roundToInt().coerceAtLeast(0))
     }
 
-    private fun highlight(id: String) {
+    private fun highlight(id: String, key: String) {
         clearing?.cancel()
-        anchors.highlighted = id
+        anchors.highlightedId = id
+        anchors.highlightedKey = key
         clearing = scope.launch {
             delay(HIGHLIGHT_MILLIS)
-            if (anchors.highlighted == id) anchors.highlighted = null
+            anchors.highlightedId = null
+            anchors.highlightedKey = null
         }
     }
 
