@@ -47,6 +47,10 @@ Every page has a width and a height, and a `null` height means the page grows wi
 # A vertical page
 ```
 
+### Lesson profile
+
+`CompileOptions { profile: Profile::Lesson, .. }` (in the options JSON: `{"profile": "lesson"}`; on the command line: `ribalta check --profile lesson`) turns a document into a text-only lesson: it rejects external `http(s)` images, `sound`, `input`, `@persist` and `next`/`hidden` on pages with error `R212`. `ribalta graph --format json` also lists the block anchors (`{#id}`) in `anchors`. Without a profile nothing changes.
+
 Check a file from the command line:
 
 ```bash

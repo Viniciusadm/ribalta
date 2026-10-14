@@ -238,6 +238,16 @@ A line that starts with `//` (with or without leading spaces) is ignored, both i
 
 A backslash escapes any ASCII punctuation mark. Before other characters, it shows up as is.
 
+## Lesson profile
+
+A lesson is a text-only document. The `lesson` profile rejects what belongs to slides and games: images from `http://` or `https://` addresses (stored `asset:` images still work), `sound`, `input`, `@persist` and the `next` and `hidden` attributes on pages. Each use becomes the error [R212](errors.md#r212--feature-outside-the-lesson-profile).
+
+```bash
+ribalta check lesson.ribalta --profile lesson
+```
+
+When compiling through the library, pick the profile in the options: `{"profile": "lesson"}`, next to `page`. Without a profile nothing changes. `ribalta graph --format json` also lists the document's anchors in `anchors`, each with its `id` and the `page` it is on.
+
 ## Complete example
 
 ```ribalta preview

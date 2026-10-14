@@ -747,7 +747,7 @@ fn pages_default_to_a_fixed_width_and_automatic_height() {
 
 #[test]
 fn page_size_follows_host_then_prelude_then_document_then_separator() {
-    let host = ribalta::CompileOptions { page: ribalta::PageSize { width: 1920, height: Some(1080) } };
+    let host = ribalta::CompileOptions { page: ribalta::PageSize { width: 1920, height: Some(1080) }, ..Default::default() };
     let size = |prelude: &str, source: &str| {
         let compilation = ribalta::compile_with_options(prelude, source, ribalta::Locale::Pt, host);
         assert!(compilation.diagnostics.is_empty(), "{:#?}", compilation.diagnostics);
@@ -817,4 +817,49 @@ fn anchor_syntax_in_the_middle_of_a_line_stays_literal() {
     assert!(block.get("id").is_none());
     assert!(value["document"].get("anchors").is_none());
     assert_eq!(block["content"][0]["value"], "Texto {#a} mais texto");
+}
+
+fn lesson_codes(source: &str) -> Vec<&'static str> {
+    let options = ribalta::CompileOptions { profile: ribalta::Profile::Lesson, ..Default::default() };
+    let compilation = ribalta::compile_with_options("", source, ribalta::Locale::Pt, options);
+    compilation.diagnostics.iter().map(|d| d.code).collect()
+}
+
+#[test]
+fn lesson_profile_rejects_slide_and_interactive_features() {
+    let rejected = [
+        "![Foto](https://exemplo.com/foto.png)",
+        "![Foto](http://exemplo.com/foto.png)",
+        "Texto {image=https://exemplo.com/foto.png}",
+        ":: sound https://exemplo.com/porta.mp3 {name=porta}",
+        "@state nome = \"\"\n\n:: input {bind=$nome}",
+        "@state n = 0\n@persist n\n\nTexto",
+        "--- {#a next=b}\nUm\n--- {#b}\nDois",
+        "--- {#a}\nUm\n--- {#b hidden}\nDois",
+    ];
+    for source in rejected {
+        assert!(lesson_codes(source).contains(&"R212"), "{source}: {:?}", lesson_codes(source));
+    }
+}
+
+#[test]
+fn lesson_profile_keeps_plain_content_valid() {
+    assert!(lesson_codes("# Aula {#topo}\n\nTexto **forte**.\n\n![Foto](asset:123e4567-e89b-12d3-a456-426614174000)\n---\n## Dois").is_empty());
+}
+
+#[test]
+fn without_a_profile_nothing_is_restricted() {
+    let source = "@state n = 0\n@persist n\n\n![Foto](https://exemplo.com/foto.png)\n\n:: sound https://exemplo.com/porta.mp3 {name=porta}\n--- {#a next=b}\nUm\n--- {#b hidden}\nDois";
+    let compilation = compile(source);
+    assert!(!codes(&compilation).contains(&"R212"), "{:?}", compilation.diagnostics);
+}
+
+#[test]
+fn profile_is_read_from_the_options_json() {
+    let json = ribalta::compile_with_options_to_json("", "![F](https://a.com/b.png)", ribalta::Locale::Pt, "{\"profile\":\"lesson\"}");
+    let value: Value = serde_json::from_str(&json).unwrap();
+    assert_eq!(value["diagnostics"][0]["code"], "R212");
+    let json = ribalta::compile_with_options_to_json("", "![F](https://a.com/b.png)", ribalta::Locale::Pt, "{\"page\":{\"width\":800,\"height\":null}}");
+    let value: Value = serde_json::from_str(&json).unwrap();
+    assert!(value["diagnostics"].as_array().unwrap().is_empty());
 }

@@ -8,7 +8,7 @@ use crate::eval::{self, Binding, Folded, MAX_ITEMS, Scope};
 use crate::expr::{self, Ast, AstKind, ExprError, RawAction, path_at};
 use crate::inline::{RawInline, parse_inline};
 use crate::ir::{Field, 
-    Action, Behavior, BinaryOp, Block, BlockKind, ChartKind, Expr, FontFamily, HAlign, ImageFit, Inline, LayoutKind, ListItem, Mode, PageSize, Paint, Scalar, Scorm, Series, Page, SourceRange, Style,
+    Action, Behavior, BinaryOp, Block, BlockKind, ChartKind, Expr, FontFamily, HAlign, ImageFit, ImageSource, Inline, LayoutKind, ListItem, Mode, PageSize, Paint, Scalar, Scorm, Series, Page, SourceRange, Style,
     ThemeIr, Transition, VAlign, Variant,
 };
 use crate::chart::{self, ChartData};
@@ -18,7 +18,7 @@ use crate::text::{tr, Line, Span, Text, suggest};
 use crate::theme::{BUILTIN_STYLES, FontSpec, THEMES, Theme, builtin, standard_elements, standard_layout, standard_motion};
 use crate::value::{Record, Type, Value, format_number, parse_number};
 use crate::icons;
-use crate::LANGUAGE_VERSION;
+use crate::{LANGUAGE_VERSION, Profile};
 
 pub const REGION_FIELDS: &[&str] = &["page", "pages", "title", "author", "date"];
 
@@ -215,6 +215,7 @@ pub struct Lowerer<'d> {
     comparisons: Vec<(String, String, Span)>,
     targets: Vec<(String, Span, bool)>,
     hidden: Vec<(String, Span)>,
+    pub profile: Profile,
     transition: Option<Transition>,
     pub mode: Mode,
     in_action: bool,
@@ -322,6 +323,7 @@ impl<'d> Lowerer<'d> {
             comparisons: Vec::new(),
             targets: Vec::new(),
             hidden: Vec::new(),
+            profile: Profile::Default,
             transition: None,
             mode: Mode::Default,
             in_action: false,
@@ -773,6 +775,11 @@ impl<'d> Lowerer<'d> {
             None => !cover,
         };
         let (show_header, show_footer, show_overlay) = (show(self, "header"), show(self, "footer"), show(self, "overlay"));
+        for key in ["hidden", "next"] {
+            if let Some(pair) = resolved.extra(key) {
+                self.forbid_in_lesson(&format!("`{key}`"), pair.key.span);
+            }
+        }
         let hidden = match resolved.extra("hidden") {
             Some(pair) => self.switch(pair, "hidden").unwrap_or(false),
             None => false,
@@ -1803,6 +1810,9 @@ impl<'d> Lowerer<'d> {
                     Ok(())
                 }
             };
+            if key == "image" && outcome.is_ok() && matches!(resolved.style.bg_image, Some(ImageSource::Url { .. })) {
+                self.forbid_in_lesson("external images", span);
+            }
             if let Err(invalid) = outcome {
                 self.report(span, invalid);
             }
@@ -1927,7 +1937,12 @@ impl<'d> Lowerer<'d> {
                         continue;
                     }
                     match style::image_source(src) {
-                        Ok(src) => out.push(Inline::Image { src, alt: alt.clone(), style: resolved.style, source_attrs: attrs.as_ref().map(|attrs| attrs.raw.clone()).unwrap_or_default() }),
+                        Ok(src) => {
+                            if matches!(src, ImageSource::Url { .. }) {
+                                self.forbid_in_lesson("external images", *span);
+                            }
+                            out.push(Inline::Image { src, alt: alt.clone(), style: resolved.style, source_attrs: attrs.as_ref().map(|attrs| attrs.raw.clone()).unwrap_or_default() });
+                        }
                         Err(invalid) => {
                             self.report(*span, invalid);
                             out.push(Inline::Text { value: alt.clone() });
@@ -2156,7 +2171,12 @@ impl<'d> Lowerer<'d> {
                 let alt = self.interpolated(alt, false);
                 let src = self.interpolated(src, false);
                 match style::image_source(&src.value) {
-                    Ok(source) => vec![self.make(BlockKind::Image { src: source, alt: alt.value.clone(), fit }, resolved, *line)],
+                    Ok(source) => {
+                        if matches!(source, ImageSource::Url { .. }) {
+                            self.forbid_in_lesson("external images", src.span);
+                        }
+                        vec![self.make(BlockKind::Image { src: source, alt: alt.value.clone(), fit }, resolved, *line)]
+                    }
                     Err(invalid) => {
                         self.report(src.span, invalid);
                         Vec::new()
@@ -2397,7 +2417,23 @@ impl<'d> Lowerer<'d> {
         Some(self.make(BlockKind::Icon { name: value.value.clone() }, resolved, directive.line))
     }
 
+    pub fn forbid_persist_in_lesson(&mut self, preamble: &Preamble) {
+        for name in &preamble.persist {
+            self.forbid_in_lesson("`@persist`", Span::new(name.span.line, name.span.from, name.span.from + name.value.len()));
+        }
+    }
+
+    fn forbid_in_lesson(&mut self, what: &str, span: Span) {
+        if self.profile != Profile::Lesson {
+            return;
+        }
+        self.diags
+            .error("R212", span, tr(format!("{what} não é permitido em aulas"), format!("{what} is not allowed in lessons")))
+            .hint(tr("Aulas são texto: sem imagens externas, sons, campos de texto, `@persist`, `next` nem `hidden`", "Lessons are text: no external images, sounds, text inputs, `@persist`, `next` or `hidden`"));
+    }
+
     fn sound(&mut self, directive: &Directive) -> Option<Block> {
+        self.forbid_in_lesson("`sound`", directive.name.span);
         let resolved = self.resolve(directive.attrs.as_ref(), Kind::Sound);
         let Some(value) = &directive.value else {
             self.diags
@@ -2454,6 +2490,7 @@ impl<'d> Lowerer<'d> {
     }
 
     fn input(&mut self, directive: &Directive) -> Option<Block> {
+        self.forbid_in_lesson("`input`", directive.name.span);
         let resolved = self.resolve(directive.attrs.as_ref(), Kind::Input);
         let Some(bind) = resolved.extra("bind").cloned() else {
             self.diags

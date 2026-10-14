@@ -30,10 +30,17 @@ pub struct Edge {
     pub conditional: bool,
 }
 
+#[derive(Debug, Clone, Serialize)]
+pub struct Anchor {
+    pub id: String,
+    pub page: String,
+}
+
 #[derive(Debug, Serialize)]
 pub struct Graph {
     pub pages: Vec<Node>,
     pub edges: Vec<Edge>,
+    pub anchors: Vec<Anchor>,
 }
 
 pub fn run(args: &GraphArgs, lang: Lang) -> CliResult<Outcome> {
@@ -138,7 +145,15 @@ pub fn build(document: &Value) -> Graph {
                 && edges.iter().all(|edge| edge.from != ids[index] || position(&edge.to).is_some_and(|target| target < index)),
         })
         .collect();
-    Graph { pages: nodes, edges }
+    let anchors = document["anchors"]
+        .as_object()
+        .map(|map| {
+            map.iter()
+                .filter_map(|(id, index)| Some(Anchor { id: id.clone(), page: ids.get(usize::try_from(index.as_u64()?).ok()?)?.clone() }))
+                .collect()
+        })
+        .unwrap_or_default();
+    Graph { pages: nodes, edges, anchors }
 }
 
 enum Reference {

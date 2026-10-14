@@ -238,6 +238,16 @@ Uma linha que começa com `//` (com ou sem espaços antes) é ignorada, tanto no
 
 A barra invertida escapa qualquer sinal de pontuação ASCII. Antes de outros caracteres, ela aparece normalmente.
 
+## Perfil de aula
+
+Uma aula é um documento só de texto. O perfil `lesson` recusa o que pertence a apresentações e jogos: imagens de endereços `http://` ou `https://` (as guardadas, `asset:`, continuam valendo), `sound`, `input`, `@persist` e os atributos `next` e `hidden` nas páginas. Cada uso vira o erro [R212](errors.md#r212--recurso-fora-do-perfil-de-aula).
+
+```bash
+ribalta check aula.ribalta --profile lesson
+```
+
+Quem compila pela biblioteca escolhe o perfil nas opções: `{"profile": "lesson"}`, junto de `page`. Sem perfil, nada muda. `ribalta graph --format json` lista também as âncoras do documento, em `anchors`, cada uma com o `id` e a `page` onde está.
+
 ## Exemplo completo
 
 ```ribalta preview

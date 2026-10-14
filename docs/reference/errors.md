@@ -406,6 +406,20 @@ Segundo {#fase}
 
 **Como corrigir:** dê um id diferente a cada bloco.
 
+### R212 · Recurso fora do perfil de aula
+
+**Erro.** Só aparece com o perfil `lesson` (`ribalta check --profile lesson` ou `"profile": "lesson"` nas opções). Mensagem: `sound` não é permitido em aulas.
+
+Uma aula é só texto. O perfil recusa imagens de endereços `http://` ou `https://`, `sound`, `input`, `@persist` e os atributos `next` e `hidden` das páginas.
+
+```ribalta
+# Fotossíntese
+
+![Cloroplasto](https://exemplo.com/cloroplasto.png)
+```
+
+**Como corrigir:** guarde a imagem no programa em que você escreve (`asset:`) ou remova o recurso.
+
 ### R301 · Valor inválido
 
 **Erro.** Mensagem: depende do atributo, por exemplo tamanho inválido: `gigante` ou cor desconhecida: `corall`.

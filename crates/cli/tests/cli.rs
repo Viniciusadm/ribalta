@@ -218,3 +218,34 @@ fn check_assets_skips_asset_ids_without_an_asset_base() {
     let report: serde_json::Value = serde_json::from_str(&stdout(&output)).unwrap();
     assert_eq!(report["diagnostics"], serde_json::json!([]));
 }
+
+#[test]
+fn check_with_lesson_profile_rejects_slide_features() {
+    let dir = workdir(WORKDIR, "lesson-profile");
+    std::fs::write(dir.join("aula.ribalta"), "# Aula\n\n![Foto](https://exemplo.com/foto.png)\n").unwrap();
+
+    let plain = ribalta(&dir, &["check", "aula.ribalta"]);
+    assert_eq!(plain.status.code(), Some(0), "{}", stderr(&plain));
+
+    let lesson = ribalta(&dir, &["check", "aula.ribalta", "--json", "--profile", "lesson"]);
+    assert_eq!(lesson.status.code(), Some(2), "{}", stderr(&lesson));
+    let report: serde_json::Value = serde_json::from_str(&stdout(&lesson)).unwrap();
+    assert_eq!(report["diagnostics"][0]["code"], "R212");
+
+    let invalid = ribalta(&dir, &["check", "aula.ribalta", "--profile", "outro"]);
+    assert_eq!(invalid.status.code(), Some(2), "{}", stderr(&invalid));
+}
+
+#[test]
+fn graph_json_lists_block_anchors_with_their_page() {
+    let dir = workdir(WORKDIR, "graph-anchors");
+    std::fs::write(dir.join("aula.ribalta"), "--- {#intro}\n# Intro {#topo}\n\nTexto {#detalhe}\n\n--- {#fim}\n## Fim\n\n- Item {#item}\n").unwrap();
+    let output = ribalta(&dir, &["graph", "aula.ribalta", "--format", "json"]);
+    assert!(output.status.success(), "{}", stderr(&output));
+    let graph: serde_json::Value = serde_json::from_str(&stdout(&output)).unwrap();
+    assert_eq!(
+        graph["anchors"],
+        serde_json::json!([{ "id": "detalhe", "page": "intro" }, { "id": "item", "page": "fim" }, { "id": "topo", "page": "intro" }])
+    );
+    assert_eq!(graph["pages"].as_array().unwrap().len(), 2);
+}

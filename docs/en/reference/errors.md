@@ -406,6 +406,20 @@ Second {#phase}
 
 **How to fix:** give each block a different id.
 
+### R212 · Feature outside the lesson profile
+
+**Error.** Only appears with the `lesson` profile (`ribalta check --profile lesson` or `"profile": "lesson"` in the options). Message: `sound` is not allowed in lessons.
+
+A lesson is text only. The profile rejects images from `http://` or `https://` addresses, `sound`, `input`, `@persist` and the `next` and `hidden` page attributes.
+
+```ribalta
+# Photosynthesis
+
+![Chloroplast](https://example.com/chloroplast.png)
+```
+
+**How to fix:** store the image in the program you write in (`asset:`) or remove the feature.
+
 ### R301 · Invalid value
 
 **Error.** Message: depends on the attribute, for example invalid size: `huge` or unknown color: `corall`.

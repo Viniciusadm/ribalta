@@ -21,6 +21,23 @@ impl Lang {
     }
 }
 
+#[derive(Debug, Clone, Copy, PartialEq, Eq, ValueEnum)]
+pub enum Profile {
+    #[value(help = "Sem restrições adicionais")]
+    Default,
+    #[value(help = "Aula em texto: sem imagens externas, sons, campos, @persist, next nem hidden")]
+    Lesson,
+}
+
+impl Profile {
+    pub fn compiler(self) -> ribalta::Profile {
+        match self {
+            Self::Default => ribalta::Profile::Default,
+            Self::Lesson => ribalta::Profile::Lesson,
+        }
+    }
+}
+
 #[derive(Debug, Subcommand)]
 pub enum LanguageCommand {
     #[command(about = "Compila um arquivo .ribalta localmente e mostra os diagnósticos")]
@@ -52,6 +69,9 @@ pub struct CheckArgs {
 
     #[arg(long, value_name = "LARGURAxALTURA", value_parser = parse_page, help = "Tamanho de página padrão, como faria o host: 1920x1080 ou 800xauto (padrão: 1920xauto)")]
     pub page: Option<ribalta::PageSize>,
+
+    #[arg(long, value_enum, default_value_t = Profile::Default, help = "Perfil de validação: `lesson` recusa imagens externas, sons, campos, @persist, next e hidden")]
+    pub profile: Profile,
 
     #[arg(long, help = "Trata avisos como erros")]
     pub strict: bool,

@@ -338,4 +338,5 @@ export type ItemKind = "theme" | "component" | "style" | "palette";
 
 export interface CompileOptions {
   page?: { width: number; height?: number | null };
+  profile?: "default" | "lesson";
 }

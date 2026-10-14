@@ -27,7 +27,7 @@ pub fn run(args: &CheckArgs, lang: Lang, asset_base: Option<&Url>) -> CliResult<
     } else {
         ribalta::check_prelude_localized(&theme, lang.locale()).iter().map(Into::into).collect()
     };
-    let options = ribalta::CompileOptions { page: args.page.unwrap_or_default() };
+    let options = ribalta::CompileOptions { page: args.page.unwrap_or_default(), profile: args.profile.compiler() };
     let compilation = ribalta::compile_with_options(&theme, &source, lang.locale(), options);
     let mut file_diagnostics: Vec<Diagnostic> = compilation.diagnostics.iter().map(Into::into).collect();
     if args.check_assets {

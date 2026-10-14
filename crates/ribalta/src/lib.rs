@@ -70,6 +70,25 @@ pub fn compile_with_prelude(prelude: &str, source: &str) -> Compilation {
 #[serde(default, rename_all = "camelCase")]
 pub struct CompileOptions {
     pub page: PageSize,
+    pub profile: Profile,
+}
+
+#[derive(Debug, Clone, Copy, Default, PartialEq, Eq, Deserialize)]
+#[serde(rename_all = "lowercase")]
+pub enum Profile {
+    #[default]
+    Default,
+    Lesson,
+}
+
+impl Profile {
+    pub fn from_name(name: &str) -> Option<Self> {
+        match name {
+            "default" => Some(Self::Default),
+            "lesson" => Some(Self::Lesson),
+            _ => None,
+        }
+    }
 }
 
 pub fn parse_page_size(text: &str) -> Option<PageSize> {
@@ -97,6 +116,8 @@ fn compile_inner(prelude: &str, source: &str, options: CompileOptions) -> Compil
     let prelude = (!prelude.trim().is_empty()).then_some(&prelude_preamble);
     let mut lowerer = Lowerer::new(options.page, prelude, &preamble, &mut diags);
     lowerer.total_pages = page_sources.len();
+    lowerer.profile = options.profile;
+    lowerer.forbid_persist_in_lesson(&preamble);
     let mut pages = Vec::with_capacity(page_sources.len());
     for (index, source) in page_sources.iter().enumerate() {
         pages.push(lowerer.page(index, source));
