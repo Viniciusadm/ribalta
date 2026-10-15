@@ -160,6 +160,17 @@ pub fn weight(value: &str) -> Parsed<u16> {
     }
 }
 
+pub fn shrink(value: Option<&str>) -> Parsed<Option<f32>> {
+    match value {
+        None | Some("true") | Some("yes") | Some("sim") => Ok(Some(SIZE_SCALE[0].1)),
+        Some("false") | Some("no") | Some("não") => Ok(None),
+        Some(value) => size(value).map(Some).map_err(|_| Invalid {
+            message: tr(format!("tamanho mínimo inválido: `{value}`"), format!("invalid minimum size: `{value}`")),
+            hint: Some(tr("Use só `shrink` para encolher até xs, ou um tamanho mínimo como `shrink=xl` ou `shrink=40`", "Use just `shrink` to shrink down to xs, or a minimum size such as `shrink=xl` or `shrink=40`")),
+        }),
+    }
+}
+
 pub fn flag(value: Option<&str>) -> Parsed<bool> {
     match value {
         None | Some("true") | Some("yes") | Some("sim") => Ok(true),

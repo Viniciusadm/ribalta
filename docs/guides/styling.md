@@ -133,6 +133,22 @@ Entrelinha folgada para textos que ocupam
 mais de uma linha na página. {leading=loose size=md}
 ```
 
+
+## Texto que encolhe
+
+Com `shrink`, o texto começa no tamanho dele e encolhe até caber na página e nos blocos em volta. É útil quando o texto vem de uma variável e pode ser curto ou longo, como uma pergunta, um nome ou um título.
+
+```ribalta
+# $pergunta {size=5xl shrink=2xl}
+```
+
+- Sem valor, o texto pode encolher até `xs`. Com um valor, como `shrink=2xl`, ele nunca fica menor que esse tamanho.
+- O tamanho de partida é o `size` do elemento ou, nos títulos, o tamanho do tema.
+- Todos os textos com `shrink` da mesma página encolhem juntos, na mesma proporção, até a página caber. Cada um respeita o próprio mínimo.
+- Se nem no mínimo o texto couber, ele fica no mínimo e o resto é cortado, como qualquer conteúdo que não cabe numa página de altura fixa.
+- `shrink=false` desliga o encolhimento herdado de um estilo.
+- O encolhimento é medido enquanto o documento é mostrado. Em HTML gerado no servidor, sem navegador, o texto aparece no tamanho de partida.
+
 ## Bordas, sombras e opacidade
 
 | Atributo | Valores |

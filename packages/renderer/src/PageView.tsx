@@ -1,4 +1,4 @@
-import { memo, useEffect, useMemo, useRef, useState, type CSSProperties, type ReactNode } from "react";
+import { memo, useEffect, useLayoutEffect, useMemo, useRef, useState, type CSSProperties, type ReactNode } from "react";
 import type { Action, Document, ImageSource, Page, Paint, Scalar } from "@ribaltalang/compiler";
 import { useResolveSource } from "./assets";
 import { Blocks, IconsContext, ThemeContext } from "./Blocks";
@@ -6,6 +6,7 @@ import { scrollToAnchor } from "./anchors";
 import { columnFlow, elementVars, solidColor, visualCss } from "./css";
 import { InteractionContext } from "./interaction";
 import { MotionStyles } from "./motion";
+import { fitShrink } from "./shrink";
 import { StepContext } from "./step";
 
 function layeredBackground(bg: Paint | undefined, image: ImageSource | undefined, base: string | undefined): CSSProperties {
@@ -33,6 +34,18 @@ export const PageView = memo(function PageView({ doc, page, step = Number.POSITI
   useEffect(() => {
     if (anchor && root.current) scrollToAnchor(root.current, anchor);
   }, [anchor, anchorToken, page]);
+  useLayoutEffect(() => {
+    if (root.current) fitShrink(root.current);
+  });
+  useEffect(() => {
+    let active = true;
+    document.fonts?.ready.then(() => {
+      if (active && root.current) fitShrink(root.current);
+    });
+    return () => {
+      active = false;
+    };
+  }, [doc]);
   const { theme } = doc;
   const fixed = page.height !== null;
   const resolve = useResolveSource();

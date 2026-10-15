@@ -5,7 +5,7 @@ import { icons } from "@ribaltalang/renderer/icons";
 import type { CompletionMessages } from "./messages";
 import { snippetsFor } from "./snippets";
 
-const attributeNames = ["color", "bg", "image", "font", "size", "weight", "italic", "uppercase", "align", "valign", "pad", "gap", "radius", "border", "shadow", "w", "h", "x", "y", "opacity", "leading", "tracking", "step", "fit", "widths", "cols", "type", "header", "footer", "overlay", "cover", "enter", "if", "click", "data", "label", "series", "columns", "hidden", "next", "steps", "transition", "on-enter", "nav", "width", "height"];
+const attributeNames = ["color", "bg", "image", "font", "size", "weight", "italic", "uppercase", "align", "valign", "pad", "gap", "radius", "border", "shadow", "w", "h", "x", "y", "opacity", "leading", "tracking", "shrink", "step", "fit", "widths", "cols", "type", "header", "footer", "overlay", "cover", "enter", "if", "click", "data", "label", "series", "columns", "hidden", "next", "steps", "transition", "on-enter", "nav", "width", "height"];
 
 const directives: Completion[] = ["title", "author", "date", "description", "theme", "version", "page", "color", "font", "style", "component", "let", "data", "state", "extern", "transition", "mode", "persist", "scorm", "header", "footer", "overlay", "end"].map(
   (label) => ({ label, type: "keyword" }),
@@ -15,6 +15,7 @@ const enumValues: Record<string, string[]> = {
   align: ["left", "center", "right"],
   valign: ["top", "center", "bottom"],
   size: ["xs", "sm", "md", "lg", "xl", "2xl", "3xl", "4xl", "5xl", "6xl", "7xl"],
+  shrink: ["xs", "sm", "md", "lg", "xl", "2xl", "3xl", "4xl", "5xl", "6xl", "7xl"],
   pad: ["none", "xs", "sm", "md", "lg", "xl", "2xl"],
   gap: ["none", "xs", "sm", "md", "lg", "xl", "2xl"],
   radius: ["none", "sm", "md", "lg", "xl", "full"],

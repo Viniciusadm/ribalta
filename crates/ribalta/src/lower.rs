@@ -29,7 +29,7 @@ pub const BUILTIN_BLOCKS: &[&str] = &["stack", "row", "columns", "grid", "box", 
 
 const STYLE_KEYS: &[&str] = &[
     "color", "bg", "image", "font", "size", "weight", "italic", "uppercase", "underline", "align", "valign", "pad", "gap", "radius", "border",
-    "shadow", "w", "h", "x", "y", "opacity", "leading", "tracking", "enter", "step", "if", "click", "key",
+    "shadow", "w", "h", "x", "y", "opacity", "leading", "tracking", "shrink", "enter", "step", "if", "click", "key",
 ];
 
 const EXPRESSION_KEYS: &[&str] = &["if", "click", "data", "on-enter", "on-timeout", "bind", "on-submit"];
@@ -1781,6 +1781,7 @@ impl<'d> Lowerer<'d> {
                 "opacity" => needs(value, key).and_then(style::opacity).map(|v| style.opacity = Some(v)),
                 "leading" => needs(value, key).and_then(style::leading).map(|v| style.leading = Some(v)),
                 "tracking" => needs(value, key).and_then(style::tracking).map(|v| style.tracking = Some(v)),
+                "shrink" => style::shrink(value).map(|v| style.shrink = v),
                 "enter" => needs(value, key).and_then(style::enter).map(|v| style.enter = Some(v)),
                 "step" => needs(value, key)
                     .and_then(|v| {

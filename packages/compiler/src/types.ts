@@ -138,6 +138,7 @@ export interface Style {
   opacity?: number;
   leading?: number;
   tracking?: number;
+  shrink?: number;
   enter?: Enter;
 }
 

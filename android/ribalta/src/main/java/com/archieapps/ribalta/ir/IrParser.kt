@@ -96,6 +96,7 @@ object IrParser {
             opacity = json.floatOrNull("opacity"),
             leading = json.floatOrNull("leading"),
             tracking = json.floatOrNull("tracking"),
+            shrink = json.floatOrNull("shrink"),
             enter = enumOf(EnterKind.entries.toTypedArray(), json.stringOrNull("enter")),
         )
     }
@@ -239,6 +240,7 @@ object IrParser {
         timeout = (json["timeout"] as? JsonPrimitive)?.doubleOrNull,
         onTimeout = actions(json.arrayOrNull("onTimeout")),
         clock = json.boolOrNull("clock") == true,
+        shrinks = json.toString().contains("\"shrink\":"),
     )
 
     private fun timing(json: JsonObject) = Timing(json.int("duration"), json.array("easing").map { it.jsonPrimitive.doubleOrNull?.toFloat() ?: 0f })

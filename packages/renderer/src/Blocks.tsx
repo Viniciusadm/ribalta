@@ -8,6 +8,7 @@ import { evaluate, formatScalar, holds } from "./expr";
 import { Inlines } from "./Inlines";
 import { behaviorCss, enterClass, InteractionContext, interactiveProps, useHover, useInteraction, withVariants } from "./interaction";
 import { revealCss, useStep } from "./step";
+import { shrinkFontSize } from "./shrink";
 
 export const ThemeContext = createContext<Theme | null>(null);
 
@@ -113,10 +114,12 @@ function BlockView({ block }: { block: Block }) {
 
   switch (block.type) {
     case "heading": {
-      const defaults = visualCss(theme.headings[block.level - 1] ?? {}, resolve);
+      const heading = theme.headings[block.level - 1] ?? {};
+      const defaults = visualCss(heading, resolve);
       const Tag = `h${Math.min(block.level, 6)}` as "h1";
+      const shrink = style.shrink !== undefined && style.size === undefined ? { fontSize: shrinkFontSize(heading.size, style.shrink) } : {};
       return (
-        <Tag data-line={line} data-anchor={block.id} data-block={range} data-editable={block.source ? "heading" : undefined} data-source={sourceAttr(block.source)} className={`ribalta-heading${enter}`} style={{ ...defaults, ...base }} {...interactive}>
+        <Tag data-line={line} data-anchor={block.id} data-block={range} data-editable={block.source ? "heading" : undefined} data-source={sourceAttr(block.source)} className={`ribalta-heading${enter}`} style={{ ...defaults, ...base, ...shrink }} {...interactive}>
           <Inlines nodes={block.content} />
         </Tag>
       );

@@ -133,6 +133,22 @@ Loose line height for text that takes
 more than one line on the page. {leading=loose size=md}
 ```
 
+
+## Text that shrinks
+
+With `shrink`, text starts at its own size and shrinks until it fits the page and the blocks around it. It is useful when the text comes from a variable and may be short or long, such as a question, a name or a title.
+
+```ribalta
+# $question {size=5xl shrink=2xl}
+```
+
+- Without a value, the text may shrink down to `xs`. With a value, such as `shrink=2xl`, it never gets smaller than that size.
+- The starting size is the element's `size` or, for headings, the theme size.
+- Every text with `shrink` on the same page shrinks together, by the same proportion, until the page fits. Each one respects its own minimum.
+- If the text does not fit even at the minimum, it stays at the minimum and the rest is clipped, like any content that does not fit a page of fixed height.
+- `shrink=false` turns off shrinking inherited from a style.
+- Shrinking is measured while the document is shown. In HTML generated on the server, without a browser, the text appears at its starting size.
+
 ## Borders, shadows and opacity
 
 | Attribute | Values |
