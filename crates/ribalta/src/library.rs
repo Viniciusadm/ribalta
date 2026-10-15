@@ -1066,7 +1066,7 @@ fn sample_value(analysis: &Analysis, usages: &[Usage], depth: usize) -> &'static
                 "x" | "y" => "0",
                 "opacity" | "step" => "1",
                 "leading" | "tracking" => "normal",
-                "italic" | "uppercase" | "legend" | "stacked" | "values" | "wrap" => "true",
+                "italic" | "uppercase" | "shrink" | "legend" | "stacked" | "values" | "wrap" => "true",
                 "type" => "bar",
                 "cols" => "2",
                 "fit" => "cover",

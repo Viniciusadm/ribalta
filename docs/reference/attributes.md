@@ -35,6 +35,7 @@ Valem em qualquer bloco, no separador de página (`--- {…}`), em trechos de te
 | `opacity` | Número de 0 a 1 ou porcentagem de 0% a 100% | `opacity=0.6`, `opacity=60%` | Transparência do bloco inteiro. |
 | `leading` | `tight`, `normal`, `loose` ou número de 0.6 a 3 | `leading=tight` | Altura da linha. Veja [entrelinha](#entrelinha-e-espaçamento-entre-letras). |
 | `tracking` | `tight`, `normal`, `wide` ou número de -0.2 a 1 (em `em`) | `tracking=0.1` | Espaço entre letras. |
+| `shrink` | Sem valor, ou o tamanho mínimo: [escala de tamanhos](#tamanhos) ou pixels de 8 a 400 | `shrink`, `shrink=xl` | Encolhe o texto até ele caber. Sem valor, o mínimo é `xs`. Veja [Texto que encolhe](/guides/styling/#texto-que-encolhe). |
 | `step` | Número inteiro de 1 a 99 | `step=2` | Etapa em que o bloco ou trecho aparece. Veja [Revelação](/guides/reveal/). |
 | `enter` | `fade`, `up`, `down`, `left`, `right`, `zoom`, `none` | `enter=zoom` | Como o elemento aparece numa etapa ou quando um `if` fica verdadeiro. Padrão nas etapas: `up`. |
 | `if` | Condição | `if=$detalhes`, `if="$n > 2"` | Mostra o elemento só quando a condição é verdadeira. Veja [Variáveis](/guides/data/#condições-com--if). |

@@ -54,9 +54,11 @@ data class TextEnv(
     val align: HAlign,
     val leading: Float,
     val trackingPx: Float,
+    val shrink: Float = 1f,
 ) {
     fun with(style: Style): TextEnv {
-        val size = style.size ?: size
+        val start = style.size ?: size
+        val size = style.shrink?.let { minimum -> maxOf(minOf(minimum, start), start * shrink) } ?: start
         return TextEnv(
             color = style.color?.let(::color) ?: color,
             font = style.font ?: font,
@@ -68,6 +70,7 @@ data class TextEnv(
             align = style.align ?: align,
             leading = style.leading ?: leading,
             trackingPx = style.tracking?.let { it * size } ?: trackingPx,
+            shrink = shrink,
         )
     }
 

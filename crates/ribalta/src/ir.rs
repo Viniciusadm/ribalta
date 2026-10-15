@@ -113,6 +113,8 @@ pub struct Style {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tracking: Option<f32>,
     #[serde(skip_serializing_if = "Option::is_none")]
+    pub shrink: Option<f32>,
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub enter: Option<Enter>,
 }
 

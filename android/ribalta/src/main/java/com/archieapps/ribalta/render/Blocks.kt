@@ -170,10 +170,15 @@ fun BlockView(block: Block, env: TextEnv, absolute: Boolean = false) {
         is BlockKind.Chart, BlockKind.Divider -> true
         else -> false
     }
-    val shrinkable = block.kind is BlockKind.Layout || block.kind is BlockKind.Image
     val box = Modifier
         .anchored(block.id)
-        .then(if (shrinkable) Modifier.layoutId(Shrinkable) else Modifier)
+        .then(
+            when (block.kind) {
+                is BlockKind.Layout -> Modifier.layoutId(Shrinkable)
+                is BlockKind.Image -> Modifier.layoutId(ShrinkableImage)
+                else -> Modifier
+            },
+        )
         .reveal(block.step, style.enter, theme.motion, interaction.step)
         .entrance(enter)
         .cssSize(style, null)

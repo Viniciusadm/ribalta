@@ -21,12 +21,13 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Constraints
 import kotlin.math.roundToInt
 
-private class CssTextPolicy(private val excess: Int, private val softWrap: Boolean, private val align: TextAlign?) : MeasurePolicy {
+private class CssTextPolicy(private val excess: Int, private val softWrap: Boolean, private val align: TextAlign?, private val probe: OverflowProbe?) : MeasurePolicy {
     override fun MeasureScope.measure(measurables: List<Measurable>, constraints: Constraints): MeasureResult {
         val text = measurables[0]
         val widest = if (softWrap && constraints.hasBoundedWidth) text.minIntrinsicWidth(Constraints.Infinity) else 0
         val inner = if (widest > constraints.maxWidth) constraints.copy(maxWidth = widest, minWidth = minOf(constraints.minWidth, widest)) else constraints.copy(minHeight = 0)
         val placeable = text.measure(inner)
+        if (constraints.hasBoundedWidth) probe?.check(placeable.width, constraints.maxWidth)
         val width = placeable.width.coerceIn(constraints.minWidth, constraints.maxWidth)
         val height = (placeable.height - excess).coerceIn(constraints.minHeight, constraints.maxHeight)
         val overflow = placeable.width - width
@@ -66,7 +67,8 @@ fun CssText(
         val natural = measurer.measure(AnnotatedString("Hg"), style).size.height
         (natural - lineHeight * density.density).roundToInt().coerceAtLeast(0)
     }
-    val policy = remember(excess, softWrap, style.textAlign) { CssTextPolicy(excess, softWrap, style.textAlign) }
+    val probe = LocalOverflowProbe.current
+    val policy = remember(excess, softWrap, style.textAlign, probe) { CssTextPolicy(excess, softWrap, style.textAlign, probe) }
     Layout(
         content = { Text(text, style = style, inlineContent = inlineContent, softWrap = softWrap, maxLines = maxLines, overflow = TextOverflow.Visible) },
         modifier = modifier,

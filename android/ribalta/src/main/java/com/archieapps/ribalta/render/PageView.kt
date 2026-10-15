@@ -91,24 +91,27 @@ fun PageView(document: Document, page: Page, render: RenderContext) {
                 }
             },
         ) {
-            if (banded) {
-                Column(
-                    area.padding(
-                        start = pad.second.dp,
-                        end = pad.second.dp,
-                        top = (if (page.header != null) pad.first * band.edgeScale else pad.first).dp,
-                        bottom = (if (page.footer != null) pad.first * band.edgeScale else pad.first).dp,
-                    ),
-                ) {
-                    Band(page.header, env, if (page.header != null) bandHeight else 0f)
-                    Box(Modifier.padding(vertical = band.gap.dp).let { if (fixed) it.weight(1f) else it }.fillMaxWidth()) {
-                        FlowColumn(gap, merged.align, merged.valign, area, fillHeight = fixed) { Blocks(page.children, env) }
+            ShrinkToFit(fixed && page.shrinks, area) { factor ->
+                val flowEnv = env.copy(shrink = factor)
+                if (banded) {
+                    Column(
+                        area.padding(
+                            start = pad.second.dp,
+                            end = pad.second.dp,
+                            top = (if (page.header != null) pad.first * band.edgeScale else pad.first).dp,
+                            bottom = (if (page.footer != null) pad.first * band.edgeScale else pad.first).dp,
+                        ),
+                    ) {
+                        Band(page.header, flowEnv, if (page.header != null) bandHeight else 0f)
+                        Box(Modifier.padding(vertical = band.gap.dp).let { if (fixed) it.weight(1f) else it }.fillMaxWidth()) {
+                            FlowColumn(gap, merged.align, merged.valign, area, fillHeight = fixed) { Blocks(page.children, flowEnv) }
+                        }
+                        Band(page.footer, flowEnv, if (page.footer != null) bandHeight else 0f)
                     }
-                    Band(page.footer, env, if (page.footer != null) bandHeight else 0f)
-                }
-            } else {
-                FlowColumn(gap, merged.align, merged.valign, area.padding(horizontal = pad.second.dp, vertical = pad.first.dp), fillHeight = fixed) {
-                    Blocks(page.children, env)
+                } else {
+                    FlowColumn(gap, merged.align, merged.valign, area.padding(horizontal = pad.second.dp, vertical = pad.first.dp), fillHeight = fixed) {
+                        Blocks(page.children, flowEnv)
+                    }
                 }
             }
             page.overlay?.let { overlay ->

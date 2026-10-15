@@ -102,6 +102,7 @@ All fields are optional; a block style is merged over the defaults of its kind.
 | `opacity` | 0 to 1. |
 | `leading` | Line height as a multiple of the font size. |
 | `tracking` | Letter spacing in em. |
+| `shrink` | Minimum font size in px. When present, the renderer may scale the text down from its starting size (`size`, or the theme heading size) until the page fits, never below this value. |
 | `enter` | Entry animation: `fade`, `up`, `down`, `left`, `right`, `zoom` or `none`. |
 
 ## Layout
@@ -120,7 +121,7 @@ Layout blocks. The gap is `style.gap`, or `theme.layout.gaps[layout]` when missi
 | `columns` | Children side by side, sharing the full width in proportion to `widths` (equal shares when missing), each one a column of its own. `valign` aligns columns vertically (center when missing). |
 | `grid` | `cols` equal columns (`theme.layout.gridColumns` when missing), filled row by row. Cells stretch to the row height unless `valign` says otherwise. |
 
-Children shrink before they overflow; content that still does not fit is clipped by a page of fixed height (a page of automatic height grows instead; there the content row takes the height of its children and `valign` has no room to act). A chart without `h` is at most `theme.layout.chartMaxHeight` tall.
+Children shrink before they overflow. Text with `style.shrink` does not shrink as a flex child; it is scaled down instead: every such text on a page shares one factor between 0 and 1, applied as `max(shrink, start × factor)`, and the renderer picks the largest factor for which neither the page, nor any ancestor of a shrinking text, nor the text itself overflows. Content that still does not fit is clipped by a page of fixed height (a page of automatic height grows instead; there the content row takes the height of its children and `valign` has no room to act). A chart without `h` is at most `theme.layout.chartMaxHeight` tall.
 
 ## Behavior
 

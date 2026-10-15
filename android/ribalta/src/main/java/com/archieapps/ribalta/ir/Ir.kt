@@ -61,6 +61,7 @@ data class Style(
     val opacity: Float? = null,
     val leading: Float? = null,
     val tracking: Float? = null,
+    val shrink: Float? = null,
     val enter: EnterKind? = null,
 ) {
     infix fun over(base: Style) = Style(
@@ -87,6 +88,7 @@ data class Style(
         opacity = opacity ?: base.opacity,
         leading = leading ?: base.leading,
         tracking = tracking ?: base.tracking,
+        shrink = shrink ?: base.shrink,
         enter = enter ?: base.enter,
     )
 
@@ -208,6 +210,7 @@ data class Page(
     val timeout: Double? = null,
     val onTimeout: List<Action> = emptyList(),
     val clock: Boolean = false,
+    val shrinks: Boolean = false,
 )
 
 data class Timing(val duration: Int, val easing: List<Float>)

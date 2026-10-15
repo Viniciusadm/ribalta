@@ -524,7 +524,7 @@ fn every_message_has_an_english_version() {
         "{.}", "{a=\"b}", "{a=}", "{!}", ":::", "::: x", "```", "| a |\n| b |", "@title", "@color", "@style x", "@component", "@nope",
         "@font a \"B@d\"", "@font a \"B\" 150", "{size=gigante}", "{pad=\"a b c\"}", "{color=x/200}", "{color=#zz}", "{color=nope}",
         "{font=nope}", "{weight=fat}", "{italic=talvez}", "{align=up}", "{valign=up}", "{shadow=huge}", "{border=\"99 x\"}",
-        "{w=200%}", "{w=abc}", "{opacity=3}", "{leading=9}", "{tracking=9}", "[a](javascript:x)", "@theme nope", "@version 9",
+        "{w=200%}", "{w=abc}", "{opacity=3}", "{leading=9}", "{tracking=9}", "{shrink=enorme}", "[a](javascript:x)", "@theme nope", "@version 9",
         "@page 2:1", "@color Bad #fff", "@font Bad \"A\"", "@style Bad {a=1}", "@component stack\n@end", "--- {#a}\n---{#a}",
         "{#id}", "@style a {.a}\n\n{.a}", "{.nope}", "{step=0}", "{nope}", "![a](https://x.com/a.png){fit=stretch}", "$content",
         ":: icon\n\n:: icon nope\n\n:: spacer huge\n\n::: divider x\n:::", "::: slot x\n:::", "::: nope\n:::",
@@ -713,6 +713,25 @@ fn underline_is_a_boolean_style() {
     let paragraph = &value["document"]["pages"][0]["children"][0];
     assert_eq!(paragraph["style"]["underline"], false);
     assert_eq!(paragraph["content"][1]["style"]["underline"], true);
+}
+
+#[test]
+fn shrink_stores_the_minimum_size() {
+    let value = clean("@style encolhe {shrink=lg}\n\n# Título {shrink}\n\n## Outro {size=5xl shrink=2xl}\n\nTexto [curto]{shrink=40} {shrink=false}\n\nMais {.encolhe}");
+    let children = &value["document"]["pages"][0]["children"];
+    assert_eq!(children[0]["style"]["shrink"], 20.0);
+    assert_eq!(children[1]["style"]["shrink"], 64.0);
+    assert_eq!(children[1]["style"]["size"], 150.0);
+    assert!(children[2]["style"].get("shrink").is_none());
+    assert_eq!(children[2]["content"][1]["style"]["shrink"], 40.0);
+    assert_eq!(children[3]["style"]["shrink"], 40.0);
+}
+
+#[test]
+fn shrink_rejects_an_invalid_minimum() {
+    let (_, compilation) = output("# Título {shrink=enorme}");
+    assert_eq!(codes(&compilation), ["R301"]);
+    assert!(compilation.diagnostics[0].message.contains("enorme"));
 }
 
 #[test]

@@ -27,6 +27,8 @@ private fun offset(free: Int, align: VAlign?) = when (align) {
 
 object Shrinkable
 
+object ShrinkableImage
+
 @Composable
 fun FlowColumn(
     gap: Float,
@@ -36,6 +38,7 @@ fun FlowColumn(
     fillHeight: Boolean = false,
     content: @Composable () -> Unit,
 ) {
+    val probe = LocalOverflowProbe.current
     Layout(content, modifier) { measurables, constraints ->
         val gapPx = gap.dp.roundToPx()
         val stretch = align == null && constraints.hasBoundedWidth
@@ -43,8 +46,12 @@ fun FlowColumn(
         val placeables = measurables.map { it.measure(childConstraints) }
         val gaps = gapPx * (placeables.size - 1).coerceAtLeast(0)
         val allocated = placeables.map { it.height }.toMutableList()
+        if (constraints.hasBoundedHeight) {
+            val images = measurables.indices.filter { measurables[it].layoutId == ShrinkableImage }.sumOf { allocated[it] }
+            probe?.check(allocated.sum() + gaps - images, constraints.maxHeight)
+        }
         if (fillHeight && constraints.hasBoundedHeight) {
-            val shrinkable = measurables.indices.filter { measurables[it].layoutId == Shrinkable }
+            val shrinkable = measurables.indices.filter { measurables[it].layoutId == Shrinkable || measurables[it].layoutId == ShrinkableImage }
             val overflow = allocated.sum() + gaps - constraints.maxHeight
             val weight = shrinkable.sumOf { allocated[it] }
             if (overflow > 0 && weight > 0) {
@@ -69,6 +76,7 @@ private class Line(val items: MutableList<Int> = mutableListOf())
 
 @Composable
 fun FlexRow(gap: Float, justify: HAlign?, valign: VAlign?, wrap: Boolean, modifier: Modifier = Modifier, content: @Composable () -> Unit) {
+    val probe = LocalOverflowProbe.current
     Layout(content, modifier) { measurables, constraints ->
         val gapPx = gap.dp.roundToPx()
         val available = if (constraints.hasBoundedWidth) constraints.maxWidth else Int.MAX_VALUE
@@ -94,7 +102,10 @@ fun FlexRow(gap: Float, justify: HAlign?, valign: VAlign?, wrap: Boolean, modifi
         val lineHeights = lines.map { line -> line.items.maxOfOrNull { placeables[it]!!.height } ?: 0 }
         val lineWidths = lines.map { line -> line.items.sumOf { widths[it] } + gapPx * (line.items.size - 1).coerceAtLeast(0) }
         val width = (lineWidths.maxOrNull() ?: 0).coerceIn(constraints.minWidth, constraints.maxWidth)
-        val height = (lineHeights.sum() + gapPx * (lines.size - 1).coerceAtLeast(0)).coerceIn(constraints.minHeight, constraints.maxHeight)
+        val natural = lineHeights.sum() + gapPx * (lines.size - 1).coerceAtLeast(0)
+        if (constraints.hasBoundedHeight) probe?.check(natural, constraints.maxHeight)
+        if (constraints.hasBoundedWidth) probe?.check(lineWidths.maxOrNull() ?: 0, constraints.maxWidth)
+        val height = natural.coerceIn(constraints.minHeight, constraints.maxHeight)
         layout(max(width, 0), height) {
             var y = 0
             lines.forEachIndexed { lineIndex, line ->
@@ -133,6 +144,7 @@ private fun shrink(items: List<Int>, basis: List<Int>, minimum: List<Int>, space
 
 @Composable
 fun ColumnsRow(gap: Float, weights: List<Float>, valign: VAlign?, modifier: Modifier = Modifier, content: @Composable () -> Unit) {
+    val probe = LocalOverflowProbe.current
     Layout(content, modifier) { measurables, constraints ->
         val gapPx = gap.dp.roundToPx()
         val count = measurables.size
@@ -145,6 +157,7 @@ fun ColumnsRow(gap: Float, weights: List<Float>, valign: VAlign?, modifier: Modi
             width
         }
         val placeables = measurables.mapIndexed { index, measurable -> measurable.measure(Constraints.fixedWidth(widths[index])) }
+        if (constraints.hasBoundedHeight) probe?.check(placeables.maxOfOrNull { it.height } ?: 0, constraints.maxHeight)
         val height = (placeables.maxOfOrNull { it.height } ?: 0).coerceIn(constraints.minHeight, constraints.maxHeight)
         layout(constraints.maxWidth, height) {
             var x = 0
@@ -158,6 +171,7 @@ fun ColumnsRow(gap: Float, weights: List<Float>, valign: VAlign?, modifier: Modi
 
 @Composable
 fun GridLayout(columns: Int, gap: Float, valign: VAlign?, count: Int, modifier: Modifier = Modifier, item: @Composable (Int) -> Unit) {
+    val probe = LocalOverflowProbe.current
     SubcomposeLayout(modifier) { constraints ->
         val gapPx = gap.dp.roundToPx()
         val cols = columns.coerceAtLeast(1)
@@ -174,7 +188,9 @@ fun GridLayout(columns: Int, gap: Float, valign: VAlign?, count: Int, modifier: 
         } else {
             natural
         }
-        val height = (rowHeights.sum() + gapPx * (rows.size - 1).coerceAtLeast(0)).coerceIn(constraints.minHeight, constraints.maxHeight)
+        val contentHeight = rowHeights.sum() + gapPx * (rows.size - 1).coerceAtLeast(0)
+        if (constraints.hasBoundedHeight) probe?.check(contentHeight, constraints.maxHeight)
+        val height = contentHeight.coerceIn(constraints.minHeight, constraints.maxHeight)
         layout(constraints.maxWidth, height) {
             var y = 0
             rows.forEachIndexed { rowIndex, row ->

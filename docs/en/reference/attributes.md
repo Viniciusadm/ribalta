@@ -35,6 +35,7 @@ They work on any block, on the page separator (`--- {…}`), on text spans (`[te
 | `opacity` | Number from 0 to 1 or percentage from 0% to 100% | `opacity=0.6`, `opacity=60%` | Transparency of the whole block. |
 | `leading` | `tight`, `normal`, `loose` or a number from 0.6 to 3 | `leading=tight` | Line height. See [line height](#line-height-and-letter-spacing). |
 | `tracking` | `tight`, `normal`, `wide` or a number from -0.2 to 1 (in `em`) | `tracking=0.1` | Letter spacing. |
+| `shrink` | No value, or the minimum size: [size scale](#sizes) or pixels from 8 to 400 | `shrink`, `shrink=xl` | Shrinks the text until it fits. Without a value, the minimum is `xs`. See [Text that shrinks](/en/guides/styling/#text-that-shrinks). |
 | `step` | Whole number from 1 to 99 | `step=2` | Step at which the block or span appears. See [Reveal](/en/guides/reveal/). |
 | `enter` | `fade`, `up`, `down`, `left`, `right`, `zoom`, `none` | `enter=zoom` | How the element appears on a step or when an `if` becomes true. Steps default to `up`. |
 | `if` | Condition | `if=$details`, `if="$n > 2"` | Shows the element only when the condition is true. See [Variables](/en/guides/data/#conditions-with--if). |

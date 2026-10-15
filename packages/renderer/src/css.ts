@@ -2,6 +2,7 @@ import type { CSSProperties } from "react";
 import type { HAlign, LayoutDefaults, LayoutKind, Length, Paint, ShadowSpec, Style, ThemeElements, VAlign } from "@ribaltalang/compiler";
 import type { SourceResolver } from "./assets";
 import { localFontFace } from "./bundledFonts";
+import { shrinkFontSize } from "./shrink";
 
 
 const start = { left: "flex-start", center: "center", right: "flex-end" } as const;
@@ -85,6 +86,10 @@ export function visualCss(style: Style, resolve: SourceResolver): CSSProperties 
   if (images.length) css.backgroundImage = images.join(", ");
   if (style.font) css.fontFamily = fontStack(style.font);
   if (style.size !== undefined) css.fontSize = style.size;
+  if (style.shrink !== undefined) {
+    css.fontSize = shrinkFontSize(style.size, style.shrink);
+    css.flexShrink = 0;
+  }
   if (style.weight !== undefined) css.fontWeight = style.weight;
   if (style.italic !== undefined) css.fontStyle = style.italic ? "italic" : "normal";
   if (style.uppercase !== undefined) css.textTransform = style.uppercase ? "uppercase" : "none";

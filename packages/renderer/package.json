@@ -98,6 +98,11 @@
       "types": "./dist/motion.d.ts",
       "default": "./dist/motion.js"
     },
+    "./shrink": {
+      "source": "./src/shrink.ts",
+      "types": "./dist/shrink.d.ts",
+      "default": "./dist/shrink.js"
+    },
     "./styles.css": "./src/renderer.css"
   },
   "files": [
@@ -127,7 +132,8 @@
       "html": "src/html.tsx",
       "icons": "src/icons.ts",
       "locale": "src/locale.ts",
-      "motion": "src/motion.tsx"
+      "motion": "src/motion.tsx",
+      "shrink": "src/shrink.ts"
     },
     "format": [
       "esm"
