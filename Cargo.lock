@@ -812,7 +812,7 @@ dependencies = [
 
 [[package]]
 name = "ribalta"
-version = "0.4.0"
+version = "0.5.0"
 dependencies = [
  "ribalta-testkit",
  "serde",
@@ -821,7 +821,7 @@ dependencies = [
 
 [[package]]
 name = "ribalta-cli"
-version = "0.4.0"
+version = "0.5.0"
 dependencies = [
  "clap",
  "lsp-server",
@@ -835,7 +835,7 @@ dependencies = [
 
 [[package]]
 name = "ribalta-jni"
-version = "0.4.0"
+version = "0.5.0"
 dependencies = [
  "jni-sys 0.3.1",
  "ribalta",
@@ -843,7 +843,7 @@ dependencies = [
 
 [[package]]
 name = "ribalta-testkit"
-version = "0.4.0"
+version = "0.5.0"
 
 [[package]]
 name = "ring"

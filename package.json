@@ -12,7 +12,8 @@
     "build": "npm run build -ws",
     "test": "npm run wasm && vitest run",
     "typecheck": "tsc --noEmit -p tests",
-    "site": "npm run build -w ribalta-site"
+    "site": "npm run build -w ribalta-site",
+    "release": "npm publish -w packages"
   },
   "devDependencies": {
     "@testing-library/react": "^16.3.3",
